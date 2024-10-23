@@ -2,18 +2,18 @@
 
 @section('root-content')
     <div class="pagetitle">
-        <h1>Pangkat & Golongan</h1>
+        <h1>Ruangan</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                <li class="breadcrumb-item active">Pangkat & Golongan</li>
+                <li class="breadcrumb-item active">Data Ruangan</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section pangkat_golongan">
+    <section class="section ruangan">
         <div class="col-lg-12">
-            <a href="#" class="btn btn-primary">Tambah</a>
+            <a href="{{ route('ruangan.create') }}" class="btn btn-primary">Tambah</a>
 
             @if (session('success'))
                 <div class="alert alert-success mt-3">
@@ -25,21 +25,27 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Golongan</th>
-                        <th>Pangkat</th>
+                        <th>Thumbnail</th>
+                        <th>Nama</th>
+                        <th>Kapasitas</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                {{-- <tbody>
+                <tbody>
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $data->golongan }}</td>
-                            <td>{{ $data->pangkat }}</td>
+                            <td>{{ $data->thumbnail }}</td>
+                            <td>{{ $data->nama_ruangan }}</td>
+                            <td>{{ $data->kapasitas }}</td>
+                            <td>{{ $data->status }}</td>
                             <td>
-                                <a href="{{ route('golongan_guru.edit', $data->id) }}" class="btn btn-warning">Edit</a>
+                                <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
                                 <button class="btn btn-danger" onclick="confirmDelete('{{ $data->id }}')">Hapus</button>
-                                <form id="delete-form-{{ $data->id }}" action="{{ route('golongan_guru.destroy', $data->id) }}" method="POST" style="display: none;">
+                                <form id="delete-form-{{ $data->id }}"
+                                    action="{{ route('ruangan.destroy', $data->id) }}" method="POST"
+                                    style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
@@ -47,11 +53,10 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="text-center alert alert-danger">Data Golongan & Pangkat masih
-                                Kosong</td>
+                            <td colspan="6" class="text-center alert alert-danger">Data Ruangan masih Kosong</td>
                         </tr>
                     @endforelse
-                </tbody> --}}
+                </tbody>
             </table>
         </div>
 
