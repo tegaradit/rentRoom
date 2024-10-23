@@ -2,47 +2,45 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // The table associated with the model
+    protected $table = 'users';
+
+    // The attributes that are mass assignable
     protected $fillable = [
-        'name',
+        'nama_lengkap',
+        'nis',
+        'jurusan_id',
         'email',
+        'no_hp',
+        'role_id',
         'password',
+        'photo',
+        'ttd',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // The attributes that should be hidden for arrays
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    // Relationship to the `roles` table
+    public function role()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Roles::class);
+    }
+
+    // Relationship to the `data_jurusan` table
+    public function jurusan()
+    {
+        return $this->belongsTo(data_jurusan::class, 'jurusan_id');
     }
 }
