@@ -13,7 +13,7 @@
 
     <section class="section ruangan">
         <div class="col-lg-12">
-            <a href="{{ route('ruangan.create') }}" class="btn btn-primary">Tambah</a>
+            <a href="{{ route('ruangan.create') }}" class="btn btn-primary">Tambah </a>
 
             @if (session('success'))
                 <div class="alert alert-success mt-3">
@@ -41,25 +41,27 @@
                             <td>{{ $data->nama_ruangan }}</td>
                             <td>{{ $data->kapasitas }} orang</td>
                             <td>{{ $data->deskripsi }}</td>
-                            <<td>
+                            <td>
                                 @if ($data->status === 'tersedia')
                                     <span class="badge bg-success">Tersedia</span>
                                 @elseif ($data->status === 'terpinjam')
                                     <span class="badge bg-warning">Terpinjam</span>
                                 @else
-                                    <span class="badge bg-secondary">Tidak diketahui</span> <!-- opsi tambahan jika status tidak sesuai -->
+                                    <span class="badge bg-secondary">Tidak diketahui</span>
+                                    <!-- opsi tambahan jika status tidak sesuai -->
                                 @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
-                                <button class="btn btn-danger" onclick="confirmDelete('{{ $data->id }}')">Hapus</button>
-                                <form id="delete-form-{{ $data->id }}"
-                                    action="{{ route('ruangan.destroy', $data->id) }}" method="POST"
-                                    style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </td>
+                                </td>
+                                <td>
+                                    <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
+                                    <button class="btn btn-danger"
+                                        onclick="confirmDelete('{{ $data->id }}')">Hapus</button>
+                                    <form id="delete-form-{{ $data->id }}"
+                                        action="{{ route('ruangan.destroy', $data->id) }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
                         </tr>
                     @empty
                         <tr>
