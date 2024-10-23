@@ -15,7 +15,6 @@ Route::get('/register', function(){
 //Admin
 Route::resource('admin/ruangan', RuanganController::class);
 
-
 // data jurusan
 Route::resource('admin/data_jurusan', DataJurusanController::class);
 
