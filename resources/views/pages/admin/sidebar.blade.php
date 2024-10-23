@@ -27,15 +27,15 @@
         </li><!-- End Document jenis Page Nav -->
 
         
-        {{-- <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/jenis_diklat') ? 'active' : 'collapsed' }}"
-                href="{{ route('jenis_diklat.index') }}">
+         <li class="nav-item">
+            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_jurusan') ? 'active' : 'collapsed' }}"
+                href="{{ route('data_jurusan.index') }}">
                 <i class="bi-files"></i>    
-                <span>Jenis Diklat</span>
+                <span>Data Jurusan</span>
             </a>
         </li><!-- End Jenis Diklat Page Nav -->
 
-        <li class="nav-item">
+        {{--<li class="nav-item">
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/golongan_guru') ? 'active' : 'collapsed' }}"
                 href="{{ route('golongan_guru.index') }}">
                 <i class="bi-view-stacked"></i>
