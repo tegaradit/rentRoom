@@ -36,7 +36,7 @@
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $data->thumbnail }}</td>
+                            <td><img src="{{ Storage::url($data->thumbnail) }}" style="width: 200px"></td>
                             <td>{{ $data->nama_ruangan }}</td>
                             <td>{{ $data->kapasitas }}</td>
                             <td>{{ $data->status }}</td>

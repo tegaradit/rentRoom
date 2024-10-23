@@ -25,17 +25,24 @@ class RuanganController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'ruangan' => 'required|min:3|max:5',
-            'pangkat' => 'required|min:2',
+        $validatedData = $request->validate([
+            'nama_ruangan' => 'required|string|max:50',
+            'kapasitas' => 'required|integer',
+            'deskripsi' => 'nullable|string',
+            'thumbnail' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        ruangan::create([
-            'ruangan' => $request->ruangan,
-            'pangkat' => $request->pangkat,
-        ]);
+        // Set default status to 'tersedia'
+        $validatedData['status'] = 'tersedia';
 
-        return redirect()->route('ruangan_guru.index')->with('success', 'Data ruangan berhasil disimpan');
+        // Handle thumbnail upload if file is provided
+        if ($request->hasFile('thumbnail')) {
+            $validatedData['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
+        Ruangan::create($validatedData);
+
+        return redirect()->route('ruangan.index')->with('success', 'Ruangan berhasil ditambahkan.');
     }
 
     public function edit(string $id)
@@ -43,23 +50,29 @@ class RuanganController extends Controller
         $menu = 'data';
         $submenu = 'ruangan';
         $ruangan = ruangan::find($id);
-        return view('pages.admin.ruangan_guru.form_edit', compact('ruangan', 'menu', 'submenu'));
+        return view('pages.admin.ruangan.form', compact('ruangan', 'menu', 'submenu'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Ruangan $ruangan)
     {
-
-        $request->validate([
-            'ruangan' => 'required|min:3|max:5',
-            'pangkat' => 'required|min:2',
-        ]);
-        $gol = ruangan::findOrFail($id);
-        $gol->update([
-            'ruangan' => $request->ruangan,
-            'pangkat' => $request->pangkat,
+        $validatedData = $request->validate([
+            'nama_ruangan' => 'required|string|max:50',
+            'kapasitas' => 'required|integer',
+            'deskripsi' => 'nullable|string',
+            'thumbnail' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        return redirect()->route('ruangan_guru.index')->with('success', 'Data berhasil diubah');
+        // Set default status to 'tersedia' (if status needs to remain unchanged)
+        $validatedData['status'] = $ruangan->status ?? 'tersedia';
+
+        // Handle thumbnail upload if file is provided
+        if ($request->hasFile('thumbnail')) {
+            $validatedData['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
+        $ruangan->update($validatedData);
+
+        return redirect()->route('ruangan.index')->with('success', 'Ruangan berhasil diperbarui.');
     }
 
     public function destroy(string $id)
