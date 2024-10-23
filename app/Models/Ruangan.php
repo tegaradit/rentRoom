@@ -18,11 +18,17 @@ class Ruangan extends Model
         'kapasitas',
         'deskripsi',
         'thumbnail',
+        'status',
     ];
 
     // Menentukan jika 'id' bersifat auto-increment
     public $incrementing = true;
 
-    // Menentukan tipe kunci utama jika menggunakan non-integer (disesuaikan dengan kebutuhan)
+    // Menentukan tipe kunci utama sebagai integer
     protected $keyType = 'int';
+
+    // Nilai default untuk kolom status
+    protected $attributes = [
+        'status' => 'tersedia',
+    ];
 }
