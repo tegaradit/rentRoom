@@ -98,11 +98,8 @@
             </ul>
         </nav><!-- End Icons Navigation -->
     </header><!-- End Header --> --}}
-    @yield('sidebar', View::make('pages.admin.sidebar'))
-
-    <main id="main" class="main">
-        @yield('root-content')
-    </main><!-- End #main -->
+    @yield('root-content')
+    <!-- End #main -->
     <!-- Vendor JS Files -->
     <script src="/assets/themes/nice/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="/assets/themes/nice/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
