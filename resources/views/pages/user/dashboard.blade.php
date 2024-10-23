@@ -1,8 +1,8 @@
-@extends('layouts.root')
+@extends('layouts.page')
 
-@section('root-content')
+@section('page-content')
 <section class="section dashboard">
-   <div class="container mt-4">
+   <div>
       <div class="col-lg-8 w-100 mb-3">
          <div class="row">
             <div class="col-xxl-3 col-md-6">
@@ -11,7 +11,7 @@
                      <h5 class="card-title">Peminjaman</h5>
                      <div class="d-flex align-items-center">
                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                           <i class="bi bi-people"></i>
+                           <i class="bi bi-book"></i>
                         </div>
                         <div class="ps-3">
                            <h6>117</h6>
@@ -27,7 +27,7 @@
                      <h5 class="card-title">Disetujui</h5>
                      <div class="d-flex align-items-center">
                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                           <i class="bi bi-book"></i>
+                           <i class="bi bi-box"></i>
                         </div>
                         <div class="ps-3">
                            <h6>4</h6>
@@ -44,7 +44,7 @@
 
                      <div class="d-flex align-items-center">
                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                           <i class="bi bi-graph-up"></i>
+                           <i class="bi bi-circle"></i>
                         </div>
                         <div class="ps-3">
                            <h6>0</h6>
@@ -60,8 +60,8 @@
                      <h5 class="card-title">Di Batalkan</h5>
 
                      <div class="d-flex align-items-center">
-                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                           <i class="bi bi-graph-up"></i>
+                        <div style="background-color: rgba(255,0,0,.1);" class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
+                           <i class="bi bi-trash"></i>
                         </div>
                         <div class="ps-3">
                            <h6>0</h6>

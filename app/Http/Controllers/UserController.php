@@ -67,7 +67,7 @@ class UserController extends Controller
 
         // Authentication failed
         return redirect('/')->withErrors([
-            'email' => 'password atau username salah',
+            'error' => 'password atau username salah',
         ]);
     }
 
@@ -75,5 +75,9 @@ class UserController extends Controller
     {
         Auth::logout();
         return redirect('/');
+    }
+
+    public function dashboard () {
+        return view('pages.user.dashboard');
     }
 }
