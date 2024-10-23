@@ -21,7 +21,7 @@ class RuanganController extends Controller
     {
         $menu = 'datas';
         $submenu = 'ruangan';
-        return view('pages.admin.ruangan.form', compact('datas', 'menu', 'submenu'));
+        return view('pages.admin.ruangan.form', compact('menu', 'submenu'));
     }
 
     public function store(Request $request)
@@ -51,7 +51,7 @@ class RuanganController extends Controller
         $menu = 'datas';
         $submenu = 'ruangan';
         $ruangan = ruangan::find($id);
-        return view('pages.admin.ruangan.form', compact('ruangan', 'datas', 'menu', 'submenu'));
+        return view('pages.admin.ruangan.form', compact('ruangan', 'menu', 'submenu'));
     }
 
     public function update(Request $request, Ruangan $ruangan)

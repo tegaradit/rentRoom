@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
+use App\Models\Ruangan;
 class PinjamRuanganController extends Controller
 {
     public function index()
     {
         $menu = 'data';
         $submenu = 'pinjam-ruangan';
-        return view('pages.admin.pinjam_ruangan.index', compact('menu', 'submenu'));
+        $datas = Ruangan::latest()->paginate(10);
+        return view('pages.admin.pinjam_ruangan.index', compact('menu', 'submenu', 'datas'));
     }
 }

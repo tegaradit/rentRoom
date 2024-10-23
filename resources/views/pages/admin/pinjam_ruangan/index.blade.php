@@ -14,14 +14,6 @@
     <section class="section ruangan">
         <div class="col-lg-12">
 
-            {{-- @if (session('success'))
-                <div class="alert alert-success mt-3">
-                    {{ session('success') }}
-                </div>
-            @endif --}}
-
-
-
             <div class="row">
                 @foreach ($datas as $ruangan)
                     <div class="col-md-4 mb-4">
@@ -39,7 +31,6 @@
                                 </div>
                                 <div class="card-actions mt-3">
                                     <a href="#" class="btn btn-primary">Pinjam</a>
-                                    <a href="#" class="btn btn-secondary">Detail</a>
                                 </div>
                             </div>
                         </div>
@@ -49,30 +40,9 @@
 
             {{ $datas->links() }}
         </div>
+
     </section>
 
-    {{-- <form id="delete-form-{{ $data->id }}" action="{{ route('golongan_guru.destroy', $data->id) }}" method="POST" style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form> 
-        <script>
-            function confirmDelete(id) {
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Anda tidak akan dapat mengembalikan ini!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('delete-form-' + id).submit();
-                    }
-                });
-            }
-        </script> --}}
     <style>
         .card {
             border: 1px solid #ccc;
