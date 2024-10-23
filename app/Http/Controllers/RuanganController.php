@@ -79,6 +79,6 @@ class RuanganController extends Controller
     {
         $gol = ruangan::findOrFail($id);
         $gol->delete();
-        return redirect()->route('ruangan_guru.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('ruangan.index')->with('success', 'Data berhasil dihapus');
     }
 }

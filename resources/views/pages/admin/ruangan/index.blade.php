@@ -5,7 +5,7 @@
         <h1>Ruangan</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item">Data Master</li>
                 <li class="breadcrumb-item active">Data Ruangan</li>
             </ol>
         </nav>
@@ -28,6 +28,7 @@
                         <th>Thumbnail</th>
                         <th>Nama</th>
                         <th>Kapasitas</th>
+                        <th>Deskripsi</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -38,8 +39,17 @@
                             <td>{{ $index + 1 }}</td>
                             <td><img src="{{ Storage::url($data->thumbnail) }}" style="width: 200px"></td>
                             <td>{{ $data->nama_ruangan }}</td>
-                            <td>{{ $data->kapasitas }}</td>
-                            <td>{{ $data->status }}</td>
+                            <td>{{ $data->kapasitas }} orang</td>
+                            <td>{{ $data->deskripsi }}</td>
+                            <<td>
+                                @if ($data->status === 'tersedia')
+                                    <span class="badge bg-success">Tersedia</span>
+                                @elseif ($data->status === 'terpinjam')
+                                    <span class="badge bg-warning">Terpinjam</span>
+                                @else
+                                    <span class="badge bg-secondary">Tidak diketahui</span> <!-- opsi tambahan jika status tidak sesuai -->
+                                @endif
+                            </td>
                             <td>
                                 <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
                                 <button class="btn btn-danger" onclick="confirmDelete('{{ $data->id }}')">Hapus</button>
