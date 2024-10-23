@@ -10,8 +10,7 @@ Route::get('/', function () {
 });
 
 //Admin
-Route::resource('admin/ruangan', RuanganController::class);
-
+Route::get('admin/ruangan', [RuanganController::class, 'index'])->name('ruangan.index');
 
 // data jurusan
 Route::get('admin/data_jurusan', [DataJurusanController::class,'index'])->name('data_jurusan.index');

@@ -16,11 +16,12 @@ class RuanganController extends Controller
         return view('pages.admin.ruangan.index', compact('datas', 'menu', 'submenu'));
     }
 
+
     public function create()
     {
-        $menu = 'data';
+        $menu = 'datas';
         $submenu = 'ruangan';
-        return view('pages.admin.ruangan.form', compact('menu', 'submenu'));
+        return view('pages.admin.ruangan.form', compact('datas', 'menu', 'submenu'));
     }
 
     public function store(Request $request)
@@ -47,10 +48,10 @@ class RuanganController extends Controller
 
     public function edit(string $id)
     {
-        $menu = 'data';
+        $menu = 'datas';
         $submenu = 'ruangan';
         $ruangan = ruangan::find($id);
-        return view('pages.admin.ruangan.form', compact('ruangan', 'menu', 'submenu'));
+        return view('pages.admin.ruangan.form', compact('ruangan', 'datas', 'menu', 'submenu'));
     }
 
     public function update(Request $request, Ruangan $ruangan)
