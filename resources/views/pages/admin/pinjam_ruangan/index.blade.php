@@ -29,6 +29,7 @@
                                     <span class="status {{ $ruangan->status }}">{{ ucfirst($ruangan->status) }}</span>
                                     <span class="kapasitas">Kapasitas: {{ $ruangan->kapasitas }} orang</span>
                                 </div>
+                                <p class="deskripsi">{{ $ruangan->deskripsi }}</p> <!-- Menambahkan deskripsi di sini -->
                                 <div class="card-actions mt-3">
                                     <a href="#" class="btn btn-primary">Pinjam</a>
                                 </div>
@@ -40,7 +41,6 @@
 
             {{ $datas->links() }}
         </div>
-
     </section>
 
     <style>
@@ -87,7 +87,16 @@
         .kapasitas {
             padding: 2px 8px;
             border-radius: 12px;
-            background-color: rgba(0, 0, 0, 0.1);
+            background-color: rgba(176, 202, 48, 0.3);
+            align-content: space-between;
+        }
+
+        .deskripsi {
+            font-size: 0.9rem;
+            color: #333;
+            text-align: left;
+            margin: 12px 0;
+            /* Memberikan jarak antara deskripsi dan tombol */
         }
 
         .card-actions {
