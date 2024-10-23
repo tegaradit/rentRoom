@@ -41,7 +41,7 @@
                             <td>{{ $data->nama_ruangan }}</td>
                             <td>{{ $data->kapasitas }} orang</td>
                             <td>{{ $data->deskripsi }}</td>
-                            <<td>
+                            <td>
                                 @if ($data->status === 'tersedia')
                                     <span class="badge bg-success">Tersedia</span>
                                 @elseif ($data->status === 'terpinjam')
