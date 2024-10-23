@@ -52,9 +52,10 @@
                                 @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
-                                    <button class="btn btn-danger"
-                                        onclick="confirmDelete('{{ $data->id }}')">Hapus</button>
+                                    <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning btn-sm edit ms-1">
+                                    <i data-feather="edit"></i></a>
+                                    <button class="btn btn-danger btn-sm delete ms-1"
+                                        onclick="confirmDelete('{{ $data->id }}')"><i data-feather="trash-2"></i></button>
                                     <form id="delete-form-{{ $data->id }}"
                                         action="{{ route('ruangan.destroy', $data->id) }}" method="POST"
                                         style="display: none;">
