@@ -6,7 +6,7 @@ use App\Http\Controllers\RuanganController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('pages.user.dashboard');
+    return view('pages.login');
 });
 
 //Admin
@@ -18,3 +18,6 @@ Route::resource('admin/data_jurusan', DataJurusanController::class);
 
 //pinjam ruangan
 Route::resource('admin/pinjam-ruangan', PinjamRuanganController::class);
+Route::get('/register', function(){
+    return view('pages.register');
+});
