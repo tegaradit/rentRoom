@@ -13,4 +13,4 @@ Route::resource('admin/ruangan', RuanganController::class);
 
 
 // data jurusan
-Route::get('/data_jurusan', [DataJurusanController::class,'index'])->name('data_jurusan.index');
+Route::get('admin/data_jurusan', [DataJurusanController::class,'index'])->name('data_jurusan.index');

@@ -22,7 +22,7 @@
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/ruangan') ? 'active' : 'collapsed' }}"
                 href="{{ route('ruangan.index') }}">
                 <i class="bi-file-earmark-text"></i>
-                <span>Jenis Dokumen</span>
+                <span>Data Ruangan</span>
             </a>
         </li><!-- End Document jenis Page Nav -->
 
