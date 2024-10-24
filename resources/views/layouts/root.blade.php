@@ -113,6 +113,8 @@
     <script src="https://unpkg.com/feather-icons"></script>
     <!-- Template Main JS File -->
     <script src="/assets/themes/nice/js/main.js"></script>
+
+    @yield('javascript')
     <!-- Feather Icons script -->
 
     <script>
