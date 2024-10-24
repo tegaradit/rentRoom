@@ -28,7 +28,7 @@
                         <th>Thumbnail</th>
                         <th>Nama</th>
                         <th>Kapasitas</th>
-                        <th>Deskripsi</th>
+                        {{-- <th>Deskripsi</th> --}}
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -37,10 +37,10 @@
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td><img src="{{ Storage::url($data->thumbnail) }}" style="width: 200px"></td>
+                            <td><img src="{{ Storage::url($data->thumbnail) }}" style="width: 150px"></td>
                             <td>{{ $data->nama_ruangan }}</td>
                             <td>{{ $data->kapasitas }} orang</td>
-                            <td>{{ $data->deskripsi }}</td>
+                            {{-- <td>{{ $data->deskripsi }}</td> --}}
                             <td>
                                 @if ($data->status === 'tersedia')
                                     <span class="badge bg-success">Tersedia</span>
