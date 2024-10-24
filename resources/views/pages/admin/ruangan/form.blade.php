@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Data Master</li>
                 <li class="breadcrumb-item"><a href="{{ route('ruangan.index') }}">Data Ruangan</a></li>
-                <li class="breadcrumb-item active">Tambah</li>
+                <li class="breadcrumb-item active">{{ isset($ruangan) ? 'Edit' : 'Tambah' }}</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
