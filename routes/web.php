@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DataJurusanController;
 use App\Http\Controllers\PinjamRuanganController;
 use App\Http\Controllers\RuanganController;
@@ -17,6 +18,7 @@ Route::get('/register', function(){
 Route::get('user/', [UserController::class, 'dashboard'])->name('user.dashboard');
 
 //Admin
+Route::get('admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::resource('admin/ruangan', RuanganController::class);
 
 // data jurusan
