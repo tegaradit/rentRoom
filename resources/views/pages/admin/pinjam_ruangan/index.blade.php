@@ -5,7 +5,7 @@
         <h1>Ruangan Pinjam</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="#">Peminjaman</a></li>
                 <li class="breadcrumb-item active">Data Ruangan Pinjam</li>
             </ol>
         </nav>
@@ -35,7 +35,7 @@
                                 @if (strtolower($ruangan->status) == 'terpinjam')
                                     <a href="#" class="btn btn-secondary">Sedang Dipinjam</a>
                                 @else
-                                    <a href="#" class="btn btn-primary">Pinjam</a>
+                                    <a href="{{ route('ruangan.pinjam', $ruangan->id) }}" class="btn btn-primary">Pinjam</a>
                                 @endif
                             </div>
                         </div>
