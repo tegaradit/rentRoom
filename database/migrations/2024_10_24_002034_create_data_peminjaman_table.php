@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('data_peminjaman', function (Blueprint $table) {
                 $table->bigIncrements('id'); // Primary key
+                $table->unsignedBigInteger('user_id'); // Foreign key ke tabel users
                 $table->unsignedBigInteger('ruangan_id'); // Foreign key ke tabel ruangan
                 $table->date('tgl_peminjaman');
-                $table->unsignedBigInteger('user_id'); // Foreign key ke tabel users
                 $table->time('waktu_mulai');
                 $table->time('waktu_selesai');
                 $table->text('keperluan');
