@@ -13,7 +13,7 @@
 
     <section class="section data_jurusan">
         <div class="col-lg-12">
-            <a href="{{route('data_jurusan.create')}}" class="btn btn-primary">Tambah</a>
+            <a href="{{ route('data_jurusan.create') }}" class="btn btn-primary">Tambah</a>
             @if (session('success'))
                 <div class="alert alert-success mt-3">
                     {{ session('success') }}
@@ -36,9 +36,15 @@
                             <td>{{ $data->nama_jurusan }}</td>
                             <td>{{ $data->ketua_jurusan }}</td>
                             <td>
-                                <a href="{{ route('data_jurusan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
-                                <button class="btn btn-danger" onclick="confirmDelete('{{ $data->id }}')">Hapus</button>
-                                <form id="delete-form-{{ $data->id }}" action="{{ route('data_jurusan.destroy', $data->id) }}" method="POST" style="display: none;">
+                                <a href="{{ route('data_jurusan.edit', $data->id) }}" class="btn btn-warning btn-sm edit ms-1">
+                                    <i data-feather="edit"></i>
+                                </a>
+                                <button class="btn btn-danger btn-sm delete ms-1" onclick="confirmDelete('{{ $data->id }}')">
+                                    <i data-feather="trash-2"></i>
+                                </button>
+                                <form id="delete-form-{{ $data->id }}"
+                                    action="{{ route('data_jurusan.destroy', $data->id) }}" method="POST"
+                                    style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>

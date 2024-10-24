@@ -29,6 +29,7 @@
     <link href="/assets/themes/nice/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="/assets/themes/nice/vendor/simple-datatables/style.css" rel="stylesheet">
 
+
     <!-- Template Main CSS File -->
     <link href="/assets/themes/nice/css/style.css" rel="stylesheet">
 
@@ -109,10 +110,16 @@
     <script src="/assets/themes/nice/vendor/tinymce/tinymce.min.js"></script>
     <script src="/assets/themes/nice/vendor/php-email-form/validate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
     <!-- Template Main JS File -->
     <script src="/assets/themes/nice/js/main.js"></script>
 
     @yield('javascript')
+    <!-- Feather Icons script -->
+
+    <script>
+        feather.replace(); // Inisialisasi Feather Icons setelah DOM selesai dimuat
+    </script>
 </body>
 
 </html>
