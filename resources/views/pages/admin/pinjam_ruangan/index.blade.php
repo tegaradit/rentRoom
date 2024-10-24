@@ -1,6 +1,6 @@
-@extends('layouts.root')
+@extends('layouts.page')
 
-@section('root-content')
+@section('page-content')
     <div class="pagetitle">
         <h1>Ruangan Pinjam</h1>
         <nav>

@@ -1,6 +1,6 @@
-@extends('layouts.root')
+@extends('layouts.page')
 
-@section('root-content')
+@section('page-content')
 <div class="pagetitle">
 	<h1>Edit Data Jurusan</h1>
     <nav>
@@ -15,7 +15,7 @@
 	<section class="section data_jurusan">
 		<div class="col-lg-12">
 				{{-- <a href="{{route('data_jurusan.create')}}" class="btn btn-primary">Tambah</a> --}}
-	        <form action="{{route('data_jurusan.update', $data_jurusan->id)}}" method="post" class="row g-3 needs-validation"
+        <form action="{{route('data_jurusan.update', $data_jurusan->id)}}" method="post" class="row g-3 needs-validation"
                     novalidate>
                     @csrf
                     @method('PUT')

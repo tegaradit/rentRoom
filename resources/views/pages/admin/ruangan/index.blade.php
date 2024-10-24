@@ -1,6 +1,6 @@
-@extends('layouts.root')
+@extends('layouts.page')
 
-@section('root-content')
+@section('page-content')
     <div class="pagetitle">
         <h1>Ruangan</h1>
         <nav>
@@ -13,7 +13,7 @@
 
     <section class="section ruangan">
         <div class="col-lg-12">
-            <a href="{{ route('ruangan.create') }}" class="btn btn-primary">Tambah</a>
+            <a href="{{ route('ruangan.create') }}" class="btn btn-primary">Tambah </a>
 
             @if (session('success'))
                 <div class="alert alert-success mt-3">
@@ -28,7 +28,7 @@
                         <th>Thumbnail</th>
                         <th>Nama</th>
                         <th>Kapasitas</th>
-                        <th>Deskripsi</th>
+                        {{-- <th>Deskripsi</th> --}}
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -37,29 +37,32 @@
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td><img src="{{ Storage::url($data->thumbnail) }}" style="width: 200px"></td>
+                            <td><img src="{{ Storage::url($data->thumbnail) }}" style="width: 150px"></td>
                             <td>{{ $data->nama_ruangan }}</td>
                             <td>{{ $data->kapasitas }} orang</td>
-                            <td>{{ $data->deskripsi }}</td>
+                            {{-- <td>{{ $data->deskripsi }}</td> --}}
                             <td>
                                 @if ($data->status === 'tersedia')
                                     <span class="badge bg-success">Tersedia</span>
                                 @elseif ($data->status === 'terpinjam')
                                     <span class="badge bg-warning">Terpinjam</span>
                                 @else
-                                    <span class="badge bg-secondary">Tidak diketahui</span> <!-- opsi tambahan jika status tidak sesuai -->
+                                    <span class="badge bg-secondary">Tidak diketahui</span>
+                                    <!-- opsi tambahan jika status tidak sesuai -->
                                 @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
-                                <button class="btn btn-danger" onclick="confirmDelete('{{ $data->id }}')">Hapus</button>
-                                <form id="delete-form-{{ $data->id }}"
-                                    action="{{ route('ruangan.destroy', $data->id) }}" method="POST"
-                                    style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </td>
+                                </td>
+                                <td>
+                                    <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning btn-sm edit ms-1">
+                                    <i data-feather="edit"></i></a>
+                                    <button class="btn btn-danger btn-sm delete ms-1"
+                                        onclick="confirmDelete('{{ $data->id }}')"><i data-feather="trash-2"></i></button>
+                                    <form id="delete-form-{{ $data->id }}"
+                                        action="{{ route('ruangan.destroy', $data->id) }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
                         </tr>
                     @empty
                         <tr>
