@@ -15,61 +15,78 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
-        // Validate the input
+        // Validasi input dari form register
         $validator = Validator::make($request->all(), [
-            'nama_lengkap' => 'required|string|max:100',
-            'nis' => 'nullable|integer|unique:users,nis',
-            'jurusan_id' => 'required|exists:data_jurusan,id',
+            'name' => 'required|string|max:100',
+            'nis' => 'required|integer|unique:users,nis',
+            'jurusan' => 'required|string',
+            'noTelepon' => 'required|string|max:15',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'no_hp' => 'required|string|max:15',
-            'role_id' => 'required|exists:roles,id',
             'password' => 'required|string|min:6|confirmed',
+            'terms' => 'accepted',
         ]);
 
-        // If validation fails, return errors
+        // Jika validasi gagal, return dengan error
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Create the user
+        // Buat user baru
         $user = User::create([
-            'nama_lengkap' => $request->nama_lengkap,
+            'nama_lengkap' => $request->name,
             'nis' => $request->nis,
-            'jurusan_id' => $request->jurusan_id,
+            'jurusan_id' => $this->getJurusanId($request->jurusan), // Ambil jurusan_id dari nama jurusan
             'email' => $request->email,
-            'no_hp' => $request->no_hp,
-            'role_id' => $request->role_id,
+            'no_hp' => $request->noTelepon,
             'password' => Hash::make($request->password),
         ]);
 
-        // Return the created user
-        return response()->json(['message' => 'User registered successfully!', 'user' => $user], 201);
+        // Redirect atau berikan pesan sukses
+        return redirect('/')->with('success', 'Akun berhasil dibuat. Silakan login.');
     }
+
+    // Helper untuk mengambil ID jurusan dari nama jurusan
+    private function getJurusanId($jurusan)
+    {
+        // Misalnya ada mapping jurusan, Anda bisa sesuaikan dengan data jurusan di database
+        $jurusanMap = [
+            'X AKL 1' => 1,
+            'X AKL 2' => 2,
+            'X AKL 3' => 3,
+            'X AKL 4' => 4,
+        ];
+
+        return $jurusanMap[$jurusan] ?? null;
+    }
+
     public function login(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
+        // Ambil data email dan password
         $credentials = $request->only('email', 'password');
 
+        // Coba autentikasi user
         if (Auth::attempt($credentials)) {
+            // Autentikasi berhasil
             $user = Auth::user();
             if ($user->role_id == 1) {
-                return redirect()->intended('admin/')->with('username', $user->name);
-            } elseif ($user->role_id == 2) {
-                return redirect()->intended('user/');
+                return redirect()->intended('admin/')->with('username', $user->nama_lengkap);
             } else {
-                return redirect()->intended('/');
+                return redirect()->intended('user/')->with('username', $user->nama_lengkap);
             }
         }
 
-        // Authentication failed
+        // Autentikasi gagal
         return redirect('/')->withErrors([
-            'error' => 'password atau username salah',
+            'error' => 'Email atau password salah',
         ]);
     }
+
 
     public function logout()
     {
@@ -77,7 +94,8 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    public function dashboard () {
+    public function dashboard()
+    {
         return view('pages.user.dashboard');
     }
 }

@@ -14,6 +14,7 @@ Route::post('/login', [UserController::class, 'login'])->name('login.post');
 Route::get('/register', function(){
     return view('pages.register');
 });
+Route::post('/register', [UserController::class, 'register'])->name('register.post');
 
 Route::get('user/', [UserController::class, 'dashboard'])->name('user.dashboard');
 

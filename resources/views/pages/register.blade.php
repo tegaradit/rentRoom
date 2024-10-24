@@ -14,17 +14,24 @@
                             <span class="d-none d-lg-block">Rent Room Smenza</span>
                         </a>
                     </div><!-- End Logo -->
-
                     <div class="card mb-3">
-
                         <div class="card-body">
+                            @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
 
                             <div class="pt-4 pb-2">
                                 <h5 class="card-title text-center pb-0 fs-4">Buat Akun</h5>
                                 <p class="text-center small">Masukan Data diri Pribadi kamu untuk mendaftar akun</p>
                             </div>
-
-                            <form class="row g-3 needs-validation" novalidate>
+                            <form class="row g-3 needs-validation" novalidate method="post" action="{{ route('register.post') }}">
+                                @csrf
                                 <div class="col-12">
                                     <label for="yourName" class="form-label">Nama Lengkap Kamu</label>
                                     <input type="text" name="name" class="form-control" id="yourName" required>
@@ -36,7 +43,7 @@
                                     <input type="number" name="nis" class="form-control" id="yourNis" required>
                                     <div class="invalid-feedback">NIS Kamu Belum di Isi!</div>
                                 </div>
-                                
+
                                 <div class="col-12">
                                     <label for="yourPhone" class="form-label">No Telepon</label>
                                     <input type="number" name="noTelepon" class="form-control" id="yourPhone" required>
@@ -47,10 +54,10 @@
                                     <label for="yourJurusan" class="form-label">Jurusan</label>
                                     <select name="jurusan" id="yourJurusan" class="form-select" required>
                                         <option value="">Pilih Jurusan</option>
-                                        <option>X AKL 1</option>
-                                        <option>X AKL 2</option>
-                                        <option>X AKL 3</option>
-                                        <option>X AKL 4</option>
+                                        <option value="X AKL 1">X AKL 1</option>
+                                        <option value="X AKL 2">X AKL 2</option>
+                                        <option value="X AKL 3">X AKL 3</option>
+                                        <option value="X AKL 4">X AKL 4</option>
                                     </select>
                                     <div class="invalid-feedback">Jurusan Belum di Isi!</div>
                                 </div>
@@ -72,27 +79,23 @@
 
                                 <div class="col-12">
                                     <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
-                                    <input type="password" name="confirm_password" class="form-control" id="confirmPassword" required>
+                                    <input type="password" name="password_confirmation" class="form-control" id="confirmPassword" required>
                                     <div class="invalid-feedback">Konfirmasi Password belum di Isi!</div>
                                 </div>
-
                                 <div class="col-12">
                                     <div class="form-check">
                                         <input class="form-check-input" name="terms" type="checkbox" id="acceptTerms" required>
-                                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                                        <div class="invalid-feedback">You must agree before submitting.</div>
+                                        <label class="form-check-label" for="acceptTerms">Saya setuju dengan <a href="#">syarat dan ketentuan</a></label>
+                                        <div class="invalid-feedback">Anda harus menyetujui sebelum mendaftar.</div>
                                     </div>
                                 </div>
-                                
                                 <div class="col-12">
-                                    <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                                    <button class="btn btn-primary w-100" type="submit">Buat Akun</button>
                                 </div>
-
                                 <div class="col-12">
-                                    <p class="small mb-0">Already have an account? <a href="/">Log in</a></p>
+                                    <p class="small mb-0">Sudah punya akun? <a href="/">Login</a></p>
                                 </div>
                             </form>
-
                         </div>
                     </div>
                 </div>

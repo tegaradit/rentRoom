@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->foreign('jurusan_id')->references('id')->on('data_jurusan')->onDelete('cascade');
             $table->string('email', 255)->unique();
             $table->string('no_hp', 15); 
-            $table->unsignedBigInteger('role_id');
+            $table->unsignedBigInteger('role_id')->default(2);
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->string('password'); 
             $table->string('photo')->nullable(); 
