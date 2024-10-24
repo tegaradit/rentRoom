@@ -8,12 +8,19 @@ use Illuminate\Http\Request;
 
 class RuanganController extends Controller
 {
-    public function index(): View
+    public function index()
     {
         $menu = 'ruangan';
         $submenu = 'ruangan';
-        $datas = Ruangan::latest()->paginate(10);
-        return view('pages.admin.ruangan.index', compact('datas', 'menu', 'submenu'));
+        // Mengambil total ruangan
+        $totalRuangan = Ruangan::count();
+        // Menghitung jumlah ruangan yang tersedia
+        $ruanganTersedia = Ruangan::where('status', 'tersedia')->count();
+        // Menghitung jumlah ruangan yang terpinjam
+        $ruanganTerpinjam = Ruangan::where('status', 'terpinjam')->count();
+
+        $datas = Ruangan::all();
+        return view('pages.admin.ruangan.index', compact('totalRuangan', 'ruanganTersedia', 'ruanganTerpinjam', 'datas'));
     }
 
 
