@@ -12,6 +12,11 @@
     </div><!-- End Page Title -->
 
     <section class="section ruangan">
+        @if (session('success'))
+            <div class="alert alert-success mt-3">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="col-lg-12">
             <div class="grid-container">
                 @foreach ($datas as $ruangan)
@@ -33,7 +38,7 @@
                             <p class="deskripsi">{{ $ruangan->deskripsi }}</p>
                             <div class="card-actions mt-3">
                                 @if (strtolower($ruangan->status) == 'terpinjam')
-                                    <a href="#" class="btn btn-secondary">Sedang Dipinjam</a>
+                                    <a href="#" class="btn btn-secondary no-pointer">Sedang Dipinjam</a>
                                 @else
                                     <a href="{{ route('ruangan.pinjam', $ruangan->id) }}" class="btn btn-primary">Pinjam</a>
                                 @endif
@@ -149,8 +154,11 @@
             text-decoration: none;
         }
 
-        .btn-secondary:hover {
-            background-color: #5a6268;
+        .no-pointer {
+            cursor: default;
+            pointer-events: none;
+            text-decoration: none;
+            color: white;
         }
     </style>
 @endsection
