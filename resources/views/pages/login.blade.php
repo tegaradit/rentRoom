@@ -16,6 +16,11 @@
                     </div><!-- End Logo -->
 
                     <div class="card mb-3">
+                        @if (session('success'))
+                            <div class="alert alert-success">{{session('success')}}</div>
+                        @endif
+                            
+                        @endif
                         <div class="card-body">
                             @if($errors->any())
                             <div class="alert alert-danger">
