@@ -103,7 +103,7 @@
                                 @if ($data->status === 'tersedia')
                                     <span class="badge bg-success">Tersedia</span>
                                 @elseif ($data->status === 'terpinjam')
-                                    <span class="badge bg-warning">Terpinjam</span>
+                                    <span class="badge bg-danger">Terpinjam</span>
                                 @else
                                     <span class="badge bg-secondary">Tidak diketahui</span>
                                 @endif
