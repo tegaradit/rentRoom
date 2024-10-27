@@ -43,8 +43,8 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_jurusan') ? 'active' : 'collapsed' }}"
-                href="#">
+            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_peminjaman') ? 'active' : 'collapsed' }}"
+                href="{{route('data_peminjaman.index') }}">
                 <i class="bi-files"></i>
                 <span>Data Peminjaman</span>
             </a>
