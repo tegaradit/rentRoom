@@ -20,7 +20,6 @@
                             <div class="alert alert-success">{{session('success')}}</div>
                         @endif
                             
-                        @endif
                         <div class="card-body">
                             @if($errors->any())
                             <div class="alert alert-danger">
