@@ -12,7 +12,11 @@ class DataPeminjamanController extends Controller
     {
         $menu = 'data_peminjaman';
         $submenu = 'data_peminjaman';
-        $datas = data_peminjaman::latest()->paginate(10);
-        return view('pages.admin.data_peminjaman.index', compact('menu', 'submenu', 'datas'));
+        $totalPeminjaman = data_peminjaman::count();
+        $disetujui = data_peminjaman::where('status', 'disetujui')->count();
+        $ditolak = data_peminjaman::where('status', 'ditolak')->count();
+        $dibatalkan = data_peminjaman::where('status', 'dibatalkan')->count();
+        $datas = data_peminjaman::all();
+        return view('pages.admin.data_peminjaman.index', compact('menu','submenu', 'totalPeminjaman', 'disetujui', 'ditolak', 'dibatalkan', 'datas'));
     }
 }

@@ -11,7 +11,82 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section data_peminjaman">
+    <section class="section dashboard">
+        <div class="col-lg-8 w-100 mb-3">
+            <div class="row">
+                {{-- Total Peminjaman --}}
+                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                    <div class="card info-card h-100 sales-card px-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Peminjaman</h5>
+                            <div class="d-flex align-items-center">
+                                <div style="background-color: rgba(63, 15, 235, 0.116);"
+                                    class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-building-fill"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $totalPeminjaman }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Disetujui --}}
+                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                    <div class="card info-card h-100 revenue-card px-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Disetujui</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-building-fill-check"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $disetujui }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Ditolak --}}
+                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                    <div class="card info-card h-100 customers-card px-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Ditolak</h5>
+                            <div class="d-flex align-items-center">
+                                <div style="background-color: rgba(255,0,0,.1);"
+                                    class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-building-fill-x"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $ditolak }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Dibatalkan --}}
+                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                    <div class="card info-card h-100 customers-card px-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Dibatalkan</h5>
+                            <div class="d-flex align-items-center">
+                                <div style="background-color: rgba(255,0,0,.1);"
+                                    class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-building-fill-exclamation"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $dibatalkan }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-12">
             @if (session('success'))
                 <div class="alert alert-success mt-3">

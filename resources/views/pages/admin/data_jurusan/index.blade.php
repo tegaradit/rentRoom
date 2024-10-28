@@ -11,7 +11,29 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section data_jurusan">
+    <section class="section dashboard">
+        {{-- card --}}
+        <div class="col-lg-8 w-100 mb-3">
+            <div class="row">
+                {{-- Jurusan --}}
+                <div class="col-xxl-12 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
+                    <div class="card info-card h-100 sales-card px-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Total jurusan</h5>
+                            <div class="d-flex align-items-center">
+                                <div style="background-color: rgba(63, 15, 235, 0.116);" class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-journal-text"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $totalJurusan }}</h6> <!-- jurusan dari database -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- end card --}}
         <div class="col-lg-12">
             <a href="{{ route('data_jurusan.create') }}" class="btn btn-primary">Tambah</a>
             @if (session('success'))

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\data_jurusan;
+use App\Models\data_peminjaman;
 // use App\Models\DataJurusan;  
 use Illuminate\Http\Request;
 
@@ -12,8 +13,9 @@ class DataJurusanController extends Controller
     {
         $menu = 'data_jurusan';
         $submenu = 'data_jurusan';
-        $datas = data_jurusan::latest()->paginate(10);
-        return view('pages.admin.data_jurusan.index', compact('menu', 'submenu', 'datas'));
+        $totalJurusan = data_jurusan::count();
+        $datas = data_jurusan::all();
+        return view('pages.admin.data_jurusan.index', compact('totalJurusan','menu', 'submenu', 'datas'));
     }
 
     public function create()
