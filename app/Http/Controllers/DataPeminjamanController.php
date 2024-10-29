@@ -13,7 +13,7 @@ class DataPeminjamanController extends Controller
         $menu = 'data_peminjaman';
         $submenu = 'data_peminjaman';
         $totalPeminjaman = data_peminjaman::count();
-        $disetujui = data_peminjaman::where('status', 'disetujui')->count();
+        $disetujui = data_peminjaman::where('status', 'diterima')->count();
         $ditolak = data_peminjaman::where('status', 'ditolak')->count();
         $dibatalkan = data_peminjaman::where('status', 'dibatalkan')->count();
         $datas = data_peminjaman::all();
@@ -23,7 +23,7 @@ class DataPeminjamanController extends Controller
     public function setuju($id)
     {
         $peminjaman = data_peminjaman::findOrFail($id);
-        $peminjaman->status = 'disetujui';
+        $peminjaman->status = 'diterima';
         $peminjaman->save();
 
         return redirect()->back()->with('success', 'Peminjaman berhasil disetujui.');
