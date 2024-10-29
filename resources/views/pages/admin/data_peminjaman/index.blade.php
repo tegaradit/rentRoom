@@ -111,17 +111,37 @@
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $data->peminjam }}</td>
-                            <td>{{ $data->ruangan }}</td>
-                            <td>{{ $data->tanggal_peminjaman }}</td>
+                            <td>{{ $data->user->nama_lengkap }}</td>
+                            <td>{{ $data->ruangan->nama_ruangan }}</td>
+                            <td>{{ $data->tgl_peminjaman }}</td>
                             <td>{{ $data->waktu_mulai }}</td>
                             <td>{{ $data->waktu_selesai }}</td>
                             <td>{{ $data->keperluan }}</td>
-                            <td>{{ $data->status }}</td>
+                            <td>
+                                @if ($data->status == 'pending')
+                                    <span class="badge bg-warning">{{ $data->status }}</span>
+                                @elseif ($data->status == 'disetujui')
+                                    <span class="badge bg-success">{{ $data->status }}</span>
+                                @else
+                                    <span class="badge bg-danger">{{ $data->status }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                <form action="{{ route('peminjaman.setuju', $data->id) }}" method="POST"
+                                    style="display: inline-block;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm">Setuju</button>
+                                </form>
+                                <form action="{{ route('peminjaman.tolak', $data->id) }}" method="POST"
+                                    style="display: inline-block;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm">Tidak Setuju</button>
+                                </form>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center alert alert-danger">Data Peminjaman masih
+                            <td colspan="9" class="text-center alert alert-danger">Data Peminjaman masih
                                 Kosong</td>
                         </tr>
                     @endforelse

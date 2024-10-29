@@ -37,3 +37,5 @@ Route::post('/admin/pinjam-ruangan/store', [PinjamRuanganController::class, 'sto
 
 //data peminjaman
 Route::resource('admin/data_peminjaman', DataPeminjamanController::class);
+Route::post('/data_peminjaman/{id}/setuju', [DataPeminjamanController::class, 'setuju'])->name('peminjaman.setuju');
+Route::post('/data_peminjaman/{id}/tolak', [DataPeminjamanController::class, 'tolak'])->name('peminjaman.tolak');
