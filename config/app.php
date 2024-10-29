@@ -1,6 +1,7 @@
 <?php
 
 return [
+    RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
     /*
     |--------------------------------------------------------------------------

@@ -2,66 +2,83 @@
 
 @section('page-content')
     <div class="pagetitle">
-        <h1>Ruangan</h1>
+        <h1>Data Peminjaman</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">Data Master</li>
-                <li class="breadcrumb-item active">Data Ruangan</li>
+                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item active"> Data Peminjaman</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-        {{-- card --}}
         <div class="col-lg-8 w-100 mb-3">
             <div class="row">
-                {{-- Total Ruangan --}}
-                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
+                {{-- Total Peminjaman --}}
+                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 sales-card px-3">
                         <div class="card-body">
-                            <h5 class="card-title">Total Ruangan</h5>
+                            <h5 class="card-title">Total Peminjaman</h5>
                             <div class="d-flex align-items-center">
-                                <div style="background-color: rgba(63, 15, 235, 0.116);" class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <div style="background-color: rgba(63, 15, 235, 0.116);"
+                                    class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-building-fill"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>{{ $totalRuangan }}</h6> <!-- Total ruangan dari database -->
+                                    <h6>{{ $totalPeminjaman }}</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Tersedia --}}
-                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
+                {{-- Disetujui --}}
+                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 revenue-card px-3">
                         <div class="card-body">
-                            <h5 class="card-title">Tersedia</h5>
+                            <h5 class="card-title">Disetujui</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-building-fill-check"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>{{ $ruanganTersedia }}</h6> <!-- Jumlah ruangan tersedia -->
+                                    <h6>{{ $disetujui }}</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Tidak Tersedia --}}
-                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
+                {{-- Ditolak --}}
+                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 customers-card px-3">
                         <div class="card-body">
-                            <h5 class="card-title">Tidak Tersedia</h5>
-
+                            <h5 class="card-title">Ditolak</h5>
                             <div class="d-flex align-items-center">
                                 <div style="background-color: rgba(255,0,0,.1);"
                                     class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill-slash"></i>
+                                    <i class="bi bi-building-fill-x"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>{{ $ruanganTerpinjam }}</h6> <!-- Jumlah ruangan terpinjam -->
+                                    <h6>{{ $ditolak }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Dibatalkan --}}
+                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                    <div class="card info-card h-100 customers-card px-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Dibatalkan</h5>
+                            <div class="d-flex align-items-center">
+                                <div style="background-color: rgba(255,0,0,.1);"
+                                    class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-building-fill-exclamation"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $dibatalkan }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -69,12 +86,8 @@
                 </div>
             </div>
         </div>
-        {{-- end card --}}
 
-        {{-- Tabel Data --}}
         <div class="col-lg-12">
-            <a href="{{ route('ruangan.create') }}" class="btn btn-primary">Tambah </a>
-
             @if (session('success'))
                 <div class="alert alert-success mt-3">
                     {{ session('success') }}
@@ -85,45 +98,31 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Thumbnail</th>
-                        <th>Nama</th>
-                        <th>Kapasitas</th>
+                        <th>Peminjam</th>
+                        <th>Ruangan</th>
+                        <th>Tanggal peminjaman</th>
+                        <th>Waktu mulai</th>
+                        <th>Waktu selesai</th>
+                        <th>Keperluan</th>
                         <th>Status</th>
-                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td><img src="{{ Storage::url($data->thumbnail) }}" style="width: 150px"></td>
-                            <td>{{ $data->nama_ruangan }}</td>
-                            <td>{{ $data->kapasitas }} orang</td>
-                            <td>
-                                @if ($data->status === 'tersedia')
-                                    <span class="badge bg-success">Tersedia</span>
-                                @elseif ($data->status === 'terpinjam')
-                                    <span class="badge bg-danger">Terpinjam</span>
-                                @else
-                                    <span class="badge bg-secondary">Tidak diketahui</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning btn-sm edit ms-1">
-                                    <i data-feather="edit"></i></a>
-                                <button class="btn btn-danger btn-sm delete ms-1"
-                                    onclick="confirmDelete('{{ $data->id }}')"><i data-feather="trash-2"></i></button>
-                                <form id="delete-form-{{ $data->id }}"
-                                    action="{{ route('ruangan.destroy', $data->id) }}" method="POST"
-                                    style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </td>
+                            <td>{{ $data->peminjam }}</td>
+                            <td>{{ $data->ruangan }}</td>
+                            <td>{{ $data->tanggal_peminjaman }}</td>
+                            <td>{{ $data->waktu_mulai }}</td>
+                            <td>{{ $data->waktu_selesai }}</td>
+                            <td>{{ $data->keperluan }}</td>
+                            <td>{{ $data->status }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center alert alert-danger">Data Ruangan masih Kosong</td>
+                            <td colspan="8" class="text-center alert alert-danger">Data Peminjaman masih
+                                Kosong</td>
                         </tr>
                     @endforelse
                 </tbody>

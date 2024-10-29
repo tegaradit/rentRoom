@@ -20,7 +20,7 @@ class RuanganController extends Controller
         $ruanganTerpinjam = Ruangan::where('status', 'terpinjam')->count();
 
         $datas = Ruangan::all();
-        return view('pages.admin.ruangan.index', compact('totalRuangan', 'ruanganTersedia', 'ruanganTerpinjam', 'datas'));
+        return view('pages.admin.ruangan.index', compact('menu','submenu','totalRuangan', 'ruanganTersedia', 'ruanganTerpinjam', 'datas'));
     }
 
 

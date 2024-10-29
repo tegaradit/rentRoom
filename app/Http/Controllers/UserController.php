@@ -28,7 +28,7 @@ class UserController extends Controller
 
         // Jika validasi gagal, return dengan error
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'akun gagal di buat');
         }
 
         // Buat user baru
@@ -61,7 +61,6 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        // Validasi input
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
