@@ -39,6 +39,6 @@ class PeminjamanSayaController extends Controller
     {
         $gol = data_peminjaman::findOrFail($id);
         $gol->delete();
-        return redirect()->route('peminjaman_saya.index')->with('success', 'Peminjaman berhasil dibatalkan');
+        return redirect()->back()->with('success', 'Peminjaman berhasil dibatalkan');
     }
 }
