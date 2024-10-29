@@ -15,7 +15,7 @@
         <div class="col-lg-8 w-100 mb-3">
             <div class="row">
                 {{-- Total Peminjaman --}}
-                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 sales-card px-3">
                         <div class="card-body">
                             <h5 class="card-title">Total Peminjaman</h5>
@@ -33,7 +33,7 @@
                 </div>
 
                 {{-- Disetujui --}}
-                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 revenue-card px-3">
                         <div class="card-body">
                             <h5 class="card-title">Diterima</h5>
@@ -50,7 +50,7 @@
                 </div>
 
                 {{-- Ditolak --}}
-                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 customers-card px-3">
                         <div class="card-body">
                             <h5 class="card-title">Ditolak</h5>
@@ -61,24 +61,6 @@
                                 </div>
                                 <div class="ps-3">
                                     <h6>{{ $ditolak }}</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Dibatalkan --}}
-                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
-                    <div class="card info-card h-100 customers-card px-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Dibatalkan</h5>
-                            <div class="d-flex align-items-center">
-                                <div style="background-color: rgba(255,0,0,.1);"
-                                    class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-calendar2-minus-fill"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>{{ $dibatalkan }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -104,6 +86,7 @@
                         <th>Tanggal peminjaman</th>
                         <th>Waktu mulai</th>
                         <th>Waktu selesai</th>
+                        <th>Sisa Waktu</th>
                         <th>Keperluan</th>
                         <th>Status</th>
                     </tr>
@@ -114,33 +97,42 @@
                             <td>
                                 <!-- Tombol lingkaran -->
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary rounded-circle" type="button"
-                                        id="dropdownMenuButton{{ $index }}" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <i class="bi bi-three-dots"></i> <!-- Icon atau teks pada tombol -->
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $index }}">
-                                        <li>
-                                            <form action="{{ route('peminjaman.setuju', $data->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="dropdown-item text-success">Diterima</button>
-                                            </form>
-                                        </li>
-                                        <li>
-                                            <form action="{{ route('peminjaman.tolak', $data->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="dropdown-item text-danger">Ditolak</button>
-                                            </form>
-                                        </li>
-                                    </ul>
+                                    @if ($data->status == 'pending')
+                                        <button class="btn btn-outline-secondary rounded-circle" type="button"
+                                            id="dropdownMenuButton{{ $index }}" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="bi bi-three-dots"></i> <!-- Icon atau teks pada tombol -->
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $index }}">
+                                            <li>
+                                                <form action="{{ route('peminjaman.setuju', $data->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="dropdown-item text-success">Terima</button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form action="{{ route('peminjaman.tolak', $data->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="dropdown-item text-danger">Tolak</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    @else
+                                        <!-- Jika status sudah tidak pending, tampilkan keterangan statusnya -->
+                                        <span class="text-muted"> <i class="bi bi-lock-fill text-danger"></i></span>
+                                    @endif
                                 </div>
                             </td>
+
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $data->user->nama_lengkap }}</td>
                             <td>{{ $data->ruangan->nama_ruangan }}</td>
                             <td>{{ $data->tgl_peminjaman }}</td>
                             <td>{{ $data->waktu_mulai }}</td>
                             <td>{{ $data->waktu_selesai }}</td>
+                            <td>{{ $data->sisa_waktu }}</td>
                             <td>{{ $data->keperluan }}</td>
                             <td>
                                 @if ($data->status == 'pending')
