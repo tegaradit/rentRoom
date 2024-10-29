@@ -19,4 +19,23 @@ class DataPeminjamanController extends Controller
         $datas = data_peminjaman::all();
         return view('pages.admin.data_peminjaman.index', compact('menu','submenu', 'totalPeminjaman', 'disetujui', 'ditolak', 'dibatalkan', 'datas'));
     }
+
+    public function setuju($id)
+    {
+        $peminjaman = data_peminjaman::findOrFail($id);
+        $peminjaman->status = 'disetujui';
+        $peminjaman->save();
+
+        return redirect()->back()->with('success', 'Peminjaman berhasil disetujui.');
+    }
+
+    public function tolak($id)
+    {
+        $peminjaman = data_peminjaman::findOrFail($id);
+        $peminjaman->status = 'ditolak';
+        $peminjaman->save();
+
+        return redirect()->back()->with('success', 'Peminjaman berhasil ditolak.');
+    }
+
 }
