@@ -32,6 +32,6 @@ class data_peminjaman extends Model
     // Relasi ke model Ruangan
     public function ruangan()
     {
-        return $this->belongsTo(Ruangan::class);
+        return $this->belongsTo(Ruangan::class, 'ruangan_id');
     }
 }
