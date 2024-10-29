@@ -89,4 +89,5 @@ class RuanganController extends Controller
         $gol->delete();
         return redirect()->route('ruangan.index')->with('success', 'Data berhasil dihapus');
     }
+
 }

@@ -15,7 +15,7 @@ class PeminjamanSayaController extends Controller
 
         if ($user->role_id == 2) {
             $datas = data_peminjaman::where('user_id', $user->id)
-                ->with('ruangan') 
+                ->with('ruangan')
                 ->get();
 
             return view('pages.user.peminjaman_saya.index', compact('datas', 'menu', 'submenu'));
@@ -28,7 +28,10 @@ class PeminjamanSayaController extends Controller
     {
         $menu = 'data';
         $submenu = 'pinjam-ruangan';
-        $riwayat = data_peminjaman::where('user_id', auth()->id())->get();
+        $riwayat = data_peminjaman::where('user_id', auth()->id())
+            ->where('status', '!=', 'pending')
+            ->get();
+
         return view('pages.user.peminjaman_saya.riwayat', compact('menu', 'submenu', 'riwayat'));
     }
 
