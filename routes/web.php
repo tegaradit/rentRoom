@@ -32,8 +32,9 @@ Route::resource('admin/data_jurusan', DataJurusanController::class);
 
 //pinjam ruangan
 Route::resource('admin/pinjam-ruangan', PinjamRuanganController::class);
-Route::get('/admin/pinjam-ruangan/pinjam/{id}', [PinjamRuanganController::class, 'pinjam'])->name('ruangan.pinjam');
-Route::post('/admin/pinjam-ruangan/store', [PinjamRuanganController::class, 'store'])->name('ruangan.peminjaman.store');
+Route::resource('user/pinjam-ruangan', PinjamRuanganController::class);
+Route::get('/user/pinjam-ruangan/pinjam/{id}', [PinjamRuanganController::class, 'pinjam'])->name('ruangan.pinjam');
+Route::post('/user/pinjam-ruangan/store', [PinjamRuanganController::class, 'store'])->name('ruangan.peminjaman.store');
 
 //data peminjaman
 Route::resource('admin/data_peminjaman', DataPeminjamanController::class);

@@ -36,13 +36,6 @@
                             </div>
 
                             <p class="deskripsi">{{ $ruangan->deskripsi }}</p>
-                            <div class="card-actions mt-3">
-                                @if (strtolower($ruangan->status) == 'terpinjam')
-                                    <a href="#" class="btn btn-secondary no-pointer">Sedang Dipinjam</a>
-                                @else
-                                    <a href="{{ route('ruangan.pinjam', $ruangan->id) }}" class="btn btn-primary">Pinjam</a>
-                                @endif
-                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -126,39 +119,6 @@
             text-align: left;
             margin: 12px 0;
             padding-bottom: 50px;
-        }
-
-        .card-actions {
-            position: absolute;
-            bottom: 16px;
-            right: 16px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .no-pointer {
-            cursor: default;
-            pointer-events: none;
-            text-decoration: none;
-            color: white;
         }
     </style>
 @endsection
