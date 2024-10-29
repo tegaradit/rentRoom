@@ -5,6 +5,7 @@ use App\Http\Controllers\DataJurusanController;
 use App\Http\Controllers\DataPeminjamanController;
 use App\Http\Controllers\PeminjamanSayaController;
 use App\Http\Controllers\PinjamRuanganController;
+use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,6 @@ Route::resource('user/peminjaman_saya', PeminjamanSayaController::class);
 
 // data jurusan
 Route::resource('admin/data_jurusan', DataJurusanController::class);
-Route::resource('admin/riwayat-peminjaman', DataJurusanController::class);
 
 //pinjam ruangan
 Route::resource('admin/pinjam-ruangan', PinjamRuanganController::class);
