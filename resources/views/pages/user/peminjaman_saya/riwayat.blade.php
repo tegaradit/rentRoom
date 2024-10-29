@@ -23,7 +23,7 @@
                         <span class="timeline-date">{{ \Carbon\Carbon::parse($item->updated_at)->format('Y-m-d') }}</span>
                     </div>
                     <div class="timeline-content">
-                        <p>Telah meminjam ruangan {{ $item->ruangan->nama_ruangan }} dari jam {{ $item->waktu_mulai }} -
+                        <p>Telah meminjam ruangan {{ $item->ruangan->nama_ruangan }} pada tanggal {{ $item->tgl_peminjaman }} dari jam {{ $item->waktu_mulai }} -
                             {{ $item->waktu_selesai }}</p>
                         <div class="ruangan-info">
                             <img src="{{ asset('storage/' . $item->ruangan->thumbnail) }}" alt="Thumbnail Ruangan"
