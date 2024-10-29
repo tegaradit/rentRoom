@@ -15,10 +15,10 @@
     <section class="section riwayat-peminjaman">
         <div class="timeline">
             @foreach ($riwayat as $item)
-                <div class="timeline-item">
+                <div class="timeline-item {{ $item->status == 'diterima' ? 'bg-accepted' : 'bg-rejected' }}">
                     <div class="timeline-status">
-                        <span class="status-label {{ $item->status == 'disetujui' ? 'approved' : 'rejected' }}">
-                            {{ $item->status == 'disetujui' ? 'Peminjaman Disetujui' : 'Peminjaman Ditolak' }}
+                        <span class="status-label {{ $item->status == 'diterima' ? 'approved' : 'rejected' }}">
+                            {{ $item->status == 'diterima' ? 'Peminjaman Diterima' : 'Peminjaman Ditolak' }}
                         </span>
                         <span
                             class="timeline-date">{{ \Carbon\Carbon::parse($item->tgl_peminjaman)->format('Y-m-d') }}</span>
@@ -31,7 +31,6 @@
                                 class="ruangan-thumbnail" />
                             <div class="ruangan-details">
                                 <h3>{{ $item->ruangan->nama_ruangan }}</h3>
-                                <p>{{ $item->ruangan->deskripsi }}</p>
                                 <span class="kapasitas">Kapasitas: {{ $item->ruangan->kapasitas }} Orang</span>
                             </div>
                         </div>
@@ -109,6 +108,14 @@
         .kapasitas {
             font-size: 0.9rem;
             color: #777;
+        }
+
+        .bg-accepted {
+            background-color: rgba(144, 238, 144, 0.2);
+        }
+
+        .bg-rejected {
+            background-color: rgba(255, 99, 71, 0.2);
         }
     </style>
 @endsection
