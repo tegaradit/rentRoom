@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\data_peminjaman;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ruangan;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PinjamRuanganController extends Controller
