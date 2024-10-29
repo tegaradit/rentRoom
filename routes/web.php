@@ -13,12 +13,14 @@ Route::get('/', function () {
     return view('pages.login');
 });
 Route::post('/login', [UserController::class, 'login'])->name('login.post');
+Route::get('/logout', [UserController::class, 'logout'])->name('logout.post');
 Route::get('/register', function(){
     return view('pages.register');
 });
 Route::post('/register', [UserController::class, 'register'])->name('register.post');
 
 Route::get('user/', [UserController::class, 'dashboard'])->name('user.dashboard');
+Route::get('myprofile/',[UserController::class, 'myprofile'])->name('myprofile');
 
 //Admin
 Route::get('admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');

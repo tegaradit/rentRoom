@@ -2,7 +2,6 @@
 
 @section('root-content')
 <div class="container">
-
     <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
             <div class="row justify-content-center">
@@ -39,7 +38,7 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="yourNis" class="form-label">NIS</label>
+                                    <label for="yourNis" class="form-label" id="nisLabel">NIS</label>
                                     <input type="number" name="nis" class="form-control" id="yourNis" required>
                                     <div class="invalid-feedback">NIS Kamu Belum di Isi!</div>
                                 </div>
@@ -49,10 +48,19 @@
                                     <input type="number" name="noTelepon" class="form-control" id="yourPhone" required>
                                     <div class="invalid-feedback">Nomor telepon kamu belum di isi!</div>
                                 </div>
-
+                                
                                 <div class="col-12">
+                                    <label for="role" class="form-label">Role</label>
+                                    <select name="role" id="role" class="form-select" required>
+                                        <option value="">Role</option>
+                                        <option value="guru">Guru</option>
+                                        <option value="siswa">Siswa</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12" id="jurusanContainer">
                                     <label for="yourJurusan" class="form-label">Jurusan</label>
-                                    <select name="jurusan" id="yourJurusan" class="form-select" required>
+                                    <select name="jurusan" id="yourJurusan" class="form-select">
                                         <option value="">Pilih Jurusan</option>
                                         <option value="X AKL 1">X AKL 1</option>
                                         <option value="X AKL 2">X AKL 2</option>
@@ -70,7 +78,6 @@
                                         <div class="invalid-feedback">Email Kamu belum di Isi!</div>
                                     </div>
                                 </div>
-
                                 <div class="col-12">
                                     <label for="yourPassword" class="form-label">Password</label>
                                     <input type="password" name="password" class="form-control" id="yourPassword" required>
@@ -103,6 +110,20 @@
         </div>
 
     </section>
-
 </div>
+
+<script>
+    document.getElementById('role').addEventListener('change', function() {
+        const nisLabel = document.getElementById('nisLabel');
+        const jurusanContainer = document.getElementById('jurusanContainer');
+        
+        if (this.value === 'guru') {
+            nisLabel.innerText = 'NIP/NIK';
+            jurusanContainer.style.display = 'none';
+        } else {
+            nisLabel.innerText = 'NIS';
+            jurusanContainer.style.display = 'block';
+        }
+    });
+</script>
 @endsection

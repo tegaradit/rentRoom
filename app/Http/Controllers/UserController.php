@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Roles;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,11 @@ class UserController extends Controller
         // Validasi input dari form register
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:100',
-            'nis' => 'required|integer|unique:users,nis',
-            'jurusan' => 'required|string',
+            'nis' => 'integer|unique:users,nis',
+            'nik' => 'integer|unique:users,nik',
+            'nip' => 'integer|unique:users,nip',
+            'role'=> 'integer|unique:users,role',  
+            'jurusan' => 'string',
             'noTelepon' => 'required|string|max:15',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
@@ -35,6 +39,9 @@ class UserController extends Controller
         $user = User::create([
             'nama_lengkap' => $request->name,
             'nis' => $request->nis,
+            'nik' => $request->nik,
+            'nip' => $request->nip,
+            'role'=>2,
             'jurusan_id' => $this->getJurusanId($request->jurusan), // Ambil jurusan_id dari nama jurusan
             'email' => $request->email,
             'no_hp' => $request->noTelepon,
@@ -96,5 +103,9 @@ class UserController extends Controller
     public function dashboard()
     {
         return view('pages.user.dashboard');
+    }
+
+    public function myProfile(){
+        return view('pages.my_profile');
     }
 }
