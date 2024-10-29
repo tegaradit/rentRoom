@@ -33,7 +33,7 @@ class PinjamRuanganController extends Controller
     public function pinjam($id)
     {
         $ruangan = Ruangan::findOrFail($id);
-        return view('pages.admin.pinjam_ruangan.form', compact('ruangan'));
+        return view('pages.user.pinjam_ruangan.form', compact('ruangan'));
     }
 
     public function store(Request $request)
