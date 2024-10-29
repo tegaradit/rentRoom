@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\data_peminjaman;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ruangan;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PinjamRuanganController extends Controller
@@ -34,7 +33,7 @@ class PinjamRuanganController extends Controller
     public function pinjam($id)
     {
         $ruangan = Ruangan::findOrFail($id);
-        return view('pages.admin.pinjam_ruangan.form', compact('ruangan'));
+        return view('pages.user.pinjam_ruangan.form', compact('ruangan'));
     }
 
     public function store(Request $request)

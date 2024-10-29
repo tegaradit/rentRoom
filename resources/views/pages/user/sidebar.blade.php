@@ -4,7 +4,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::getCurrentRoute()->uri == 'admin' ? 'active' : 'collapsed' }}" href="{{ route('user.dashboard') }}">
+            <a class="nav-link {{ Route::getCurrentRoute()->uri == 'user' ? 'active' : 'collapsed' }}" href="{{ route('user.dashboard') }}">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>

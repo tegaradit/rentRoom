@@ -28,25 +28,30 @@
                         <th>Tanggal peminjaman</th>
                         <th>Waktu mulai</th>
                         <th>Waktu selesai</th>
+                        <th>Sisa waktu</th>
                         <th>Keperluan</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $data->ruangan_id }}</td>
+                            <td>{{ $data->ruangan->nama_ruangan ?? 'Ruangan tidak tersedia' }}</td>
                             <td>{{ $data->tgl_peminjaman }}</td>
                             <td>{{ $data->waktu_mulai }}</td>
                             <td>{{ $data->waktu_selesai }}</td>
+                            <td>
+                                {{ $data->status === 'pending' ? '-' : 'calculated remaining time' }}
+                                <!-- Replace 'calculated remaining time' with the actual calculation if available -->
+                            </td>
                             <td>{{ $data->keperluan }}</td>
                             <td>{{ $data->status }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center alert alert-danger">Data Peminjaman masih
-                                Kosong</td>
+                            <td colspan="9">Tidak ada data peminjaman.</td>
                         </tr>
                     @endforelse
                 </tbody>
