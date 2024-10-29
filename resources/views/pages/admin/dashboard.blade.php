@@ -27,7 +27,7 @@
                            <i class="bi bi-book"></i>
                         </div>
                         <div class="ps-3">
-                           <h6>117</h6>
+                           <h6>{{ $availableRooms }}</h6>
                         </div>
                      </div>
                   </div>
@@ -43,7 +43,7 @@
                            <i class="bi bi-box"></i>
                         </div>
                         <div class="ps-3">
-                           <h6>4</h6>
+                           <h6>{{ $users->count() }}</h6>
                         </div>
                      </div>
                   </div>
@@ -60,7 +60,7 @@
                            <i class="bi bi-circle"></i>
                         </div>
                         <div class="ps-3">
-                           <h6>0</h6>
+                           <h6>{{ $jurusan->count() }}</h6>
                         </div>
                      </div>
                   </div>
@@ -78,7 +78,7 @@
                            <i class="bi bi-trash"></i>
                         </div>
                         <div class="ps-3">
-                           <h6>0</h6>
+                           <h6>{{ $totalBorrowingALlUsers->count() }}</h6>
                         </div>
                      </div>
                   </div>
@@ -110,14 +110,16 @@
 <script>
    // Room borrowing statistics chart
    const roomStatsCtx = document.getElementById('room-stats-chart').getContext('2d');
+   
+   const borrowingData = {!! $borrowingByDate !!}
    new Chart(roomStatsCtx, {
       type: 'line',
       data: {
-         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+         labels: Object.keys(borrowingData),
          datasets: [{
             label: 'Peminjaman Ruangan',
-            data: [12, 19, 3, 5, 2, 3],
-            borderColor: 'rgb(75, 192, 192)',
+            data: Object.values(borrowingData).map(data => data.total_peminjaman),
+            borderColor: 'teal',
             tension: 0.1
          }]
       },
@@ -138,16 +140,14 @@
 
    // Users per department chart
    const usersPerDeptCtx = document.getElementById('users-per-department-chart').getContext('2d');
+   const userData = {!! $userByJurusan !!}
    new Chart(usersPerDeptCtx, {
       type: 'pie',
       data: {
-         labels: ['Teknik Informatika', 'Arsitektur'],
+         labels: userData.map(data => data.nama_jurusan),
          datasets: [{
-            data: [300, 300],
-            backgroundColor: [
-               'rgb(54, 162, 235)',
-               'rgb(255, 99, 132)'
-            ]
+            data: userData.map(data => data.banyak_pengguna),
+            backgroundColor: userData.map(data => data.color)
          }]
       },
       options: {

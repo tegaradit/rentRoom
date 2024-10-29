@@ -73,7 +73,7 @@
 
         {{-- Tabel Data --}}
         <div class="col-lg-12">
-            <a href="{{ route('ruangan.create') }}" class="btn btn-primary">Tambah </a>
+            <a href="{{ route('ruangan.create') }}" class="btn btn-sm btn-primary">Tambah </a>
 
             @if (session('success'))
                 <div class="alert alert-success mt-3">

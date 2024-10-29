@@ -25,14 +25,16 @@ Route::get('user/', [UserController::class, 'dashboard'])->name('user.dashboard'
 Route::get('admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::resource('admin/ruangan', RuanganController::class);
 Route::resource('user/peminjaman_saya', PeminjamanSayaController::class);
+Route::get('/peminjaman-saya/riwayat', [PeminjamanSayaController::class, 'riwayat'])->name('pages.user.peminjaman_saya.riwayat');
 
 // data jurusan
 Route::resource('admin/data_jurusan', DataJurusanController::class);
 
 //pinjam ruangan
 Route::resource('admin/pinjam-ruangan', PinjamRuanganController::class);
-Route::get('/admin/pinjam-ruangan/pinjam/{id}', [PinjamRuanganController::class, 'pinjam'])->name('ruangan.pinjam');
-Route::post('/admin/pinjam-ruangan/store', [PinjamRuanganController::class, 'store'])->name('ruangan.peminjaman.store');
+Route::resource('user/pinjam-ruangan', PinjamRuanganController::class);
+Route::get('/user/pinjam-ruangan/pinjam/{id}', [PinjamRuanganController::class, 'pinjam'])->name('ruangan.pinjam');
+Route::post('/user/pinjam-ruangan/store', [PinjamRuanganController::class, 'store'])->name('ruangan.peminjaman.store');
 
 //data peminjaman
 Route::resource('admin/data_peminjaman', DataPeminjamanController::class);
