@@ -98,7 +98,7 @@ class UserController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        $roomBorrowed = data_peminjaman::join('users', 'data_peminjaman.id', '=', 'users.id')
+        $roomBorrowed = data_peminjaman::join('users', 'data_peminjaman.user_id', '=', 'users.id')
             ->join('ruangan', 'data_peminjaman.ruangan_id', '=', 'ruangan.id')
             ->where('data_peminjaman.user_id', '=', $user->id)
             ->get([
