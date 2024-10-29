@@ -23,7 +23,6 @@ Route::get('user/', [UserController::class, 'dashboard'])->name('user.dashboard'
 //Admin
 Route::get('admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::resource('admin/ruangan', RuanganController::class);
-Route::resource('admin/peminjaman_saya', PeminjamanSayaController::class);
 Route::resource('user/peminjaman_saya', PeminjamanSayaController::class);
 
 // data jurusan

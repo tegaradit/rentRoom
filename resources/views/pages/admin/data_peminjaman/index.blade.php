@@ -36,7 +36,7 @@
                 <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 revenue-card px-3">
                         <div class="card-body">
-                            <h5 class="card-title">Disetujui</h5>
+                            <h5 class="card-title">Diterima</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-calendar2-check-fill"></i>
@@ -97,6 +97,7 @@
             <table class="table datatable table-stripped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>No</th>
                         <th>Peminjam</th>
                         <th>Ruangan</th>
@@ -110,6 +111,30 @@
                 <tbody>
                     @forelse ($datas as $index => $data)
                         <tr>
+                            <td>
+                                <!-- Tombol lingkaran -->
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary rounded-circle" type="button"
+                                        id="dropdownMenuButton{{ $index }}" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class="bi bi-three-dots"></i> <!-- Icon atau teks pada tombol -->
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $index }}">
+                                        <li>
+                                            <form action="{{ route('peminjaman.setuju', $data->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item text-success">Diterima</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="{{ route('peminjaman.tolak', $data->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item text-danger">Ditolak</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $data->user->nama_lengkap }}</td>
                             <td>{{ $data->ruangan->nama_ruangan }}</td>
@@ -120,23 +145,11 @@
                             <td>
                                 @if ($data->status == 'pending')
                                     <span class="badge bg-warning">{{ $data->status }}</span>
-                                @elseif ($data->status == 'disetujui')
+                                @elseif ($data->status == 'diterima')
                                     <span class="badge bg-success">{{ $data->status }}</span>
                                 @else
                                     <span class="badge bg-danger">{{ $data->status }}</span>
                                 @endif
-                            </td>
-                            <td>
-                                <form action="{{ route('peminjaman.setuju', $data->id) }}" method="POST"
-                                    style="display: inline-block;">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary btn-sm">Setuju</button>
-                                </form>
-                                <form action="{{ route('peminjaman.tolak', $data->id) }}" method="POST"
-                                    style="display: inline-block;">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm">Tidak Setuju</button>
-                                </form>
                             </td>
                         </tr>
                     @empty
