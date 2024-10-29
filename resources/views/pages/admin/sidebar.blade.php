@@ -21,7 +21,7 @@
         <li class="nav-item">
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_jurusan') ? 'active' : 'collapsed' }}"
                 href="{{ route('data_jurusan.index') }}">
-                <i class="bi-files"></i>
+                <i class="bi-building"></i>
                 <span>Data Jurusan</span>
             </a>
         </li>
@@ -29,31 +29,31 @@
         <li class="nav-item">
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/ruangan') ? 'active' : 'collapsed' }}"
                 href="{{ route('ruangan.index') }}">
-                <i class="bi-file-earmark-text"></i>
+                <i class="bi-layout-wtf"></i>
                 <span>Data Ruangan</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_jurusan') ? 'active' : 'collapsed' }}"
+            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/#') ? 'active' : 'collapsed' }}"
                 href="#">
-                <i class="bi-files"></i>
+                <i class="bi-person-video"></i>
                 <span>Data Pengguna</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_jurusan') ? 'active' : 'collapsed' }}"
+            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/#') ? 'active' : 'collapsed' }}"
                 href="#">
-                <i class="bi-files"></i>
+                <i class="bi-inboxes"></i>
                 <span>Data Peminjaman</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_jurusan') ? 'active' : 'collapsed' }}"
+            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/#') ? 'active' : 'collapsed' }}"
                 href="#">
-                <i class="bi-files"></i>
+                <i class="bi-file-earmark-break"></i>
                 <span>Laporan</span>
             </a>
         </li>
@@ -69,15 +69,15 @@
         <li class="nav-item">
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/pinjam-ruangan') ? 'active' : 'collapsed' }}"
                 href="{{ route('pinjam-ruangan.index') }}">
-                <i class="bi-files"></i>
+                <i class="bi-calendar4-range"></i>
                 <span>Pinjam Ruangan</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_jurusan') ? 'active' : 'collapsed' }}"
+            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/#') ? 'active' : 'collapsed' }}"
                 href="#">
-                <i class="bi-files"></i>
+                <i class="bi-journal-bookmark"></i>
                 <span>Peminjaman Saya</span>
             </a>
         </li>
