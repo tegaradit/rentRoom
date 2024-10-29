@@ -17,12 +17,8 @@ class PeminjamanSayaController extends Controller
         $user = Auth::user();
 
         // Cek peran pengguna dan ambil data yang sesuai dengan user_id mereka
-        if ($user->role_id == 1) {
+        if ($user->role_id == 2) {
             // Jika pengguna adalah admin, tampilkan halaman admin
-            $datas = data_peminjaman::where('user_id', $user->id)->get();
-            return view('pages.admin.peminjaman_saya.index', compact('datas', 'menu', 'submenu'));
-        } elseif ($user->role_id == 2) {
-            // Jika pengguna adalah user biasa, tampilkan halaman user
             $datas = data_peminjaman::where('user_id', $user->id)->get();
             return view('pages.user.peminjaman_saya.index', compact('datas', 'menu', 'submenu'));
         } else {

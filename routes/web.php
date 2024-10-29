@@ -5,6 +5,7 @@ use App\Http\Controllers\DataJurusanController;
 use App\Http\Controllers\DataPeminjamanController;
 use App\Http\Controllers\PeminjamanSayaController;
 use App\Http\Controllers\PinjamRuanganController;
+use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
