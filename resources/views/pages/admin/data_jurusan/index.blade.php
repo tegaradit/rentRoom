@@ -35,7 +35,7 @@
         </div>
         {{-- end card --}}
         <div class="col-lg-12">
-            <a href="{{ route('data_jurusan.create') }}" class="btn btn-primary">Tambah</a>
+            <a href="{{ route('data_jurusan.create') }}" class="btn btn-sm btn-primary">Tambah</a>
             @if (session('success'))
                 <div class="alert alert-success mt-3">
                     {{ session('success') }}
