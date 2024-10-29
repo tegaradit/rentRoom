@@ -109,7 +109,8 @@
     <script src="/assets/themes/nice/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="/assets/themes/nice/vendor/tinymce/tinymce.min.js"></script>
     <script src="/assets/themes/nice/vendor/php-email-form/validate.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
     <script src="https://unpkg.com/feather-icons"></script>
     <!-- Template Main JS File -->
     <script src="/assets/themes/nice/js/main.js"></script>

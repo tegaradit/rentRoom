@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\data_peminjaman;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class PeminjamanSayaController extends Controller
 {
@@ -25,5 +24,13 @@ class PeminjamanSayaController extends Controller
             // Jika role_id tidak sesuai, arahkan ke halaman tidak diizinkan atau halaman error
             abort(403, 'Akses tidak diizinkan');
         }
+    }
+
+    public function riwayat()
+    {
+        $menu = 'data';
+        $submenu = 'pinjam-ruangan';
+        $riwayat = data_peminjaman::where('user_id', auth()->id())->get();
+        return view('pages.user.peminjaman_saya.riwayat', compact('menu', 'submenu', 'riwayat'));
     }
 }
