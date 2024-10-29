@@ -24,8 +24,10 @@ Route::get('user/', [UserController::class, 'dashboard'])->name('user.dashboard'
 //Admin
 Route::get('admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::resource('admin/ruangan', RuanganController::class);
+
 Route::resource('admin/peminjaman_saya', PeminjamanSayaController::class);
 Route::resource('user/peminjaman_saya', PeminjamanSayaController::class);
+Route::get('/peminjaman-saya/riwayat', [PeminjamanSayaController::class, 'riwayat'])->name('pages.user.peminjaman_saya.riwayat');
 
 // data jurusan
 Route::resource('admin/data_jurusan', DataJurusanController::class);

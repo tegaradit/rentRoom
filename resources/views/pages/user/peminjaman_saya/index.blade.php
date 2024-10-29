@@ -13,6 +13,7 @@
 
     <section class="section data_peminjaman">
         <div class="col-lg-12">
+            <a href="{{ route('pages.user.peminjaman_saya.riwayat') }}" class="btn btn-primary">Riwayat</a>
             @if (session('success'))
                 <div class="alert alert-success mt-3">
                     {{ session('success') }}

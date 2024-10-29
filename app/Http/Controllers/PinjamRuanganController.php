@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\data_peminjaman;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Ruangan;
 use Illuminate\Http\Request;
 
