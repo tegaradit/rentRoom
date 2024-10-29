@@ -22,7 +22,7 @@
                             <div class="d-flex align-items-center">
                                 <div style="background-color: rgba(63, 15, 235, 0.116);"
                                     class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill"></i>
+                                    <i class="bi bi-calendar2-week-fill"></i>
                                 </div>
                                 <div class="ps-3">
                                     <h6>{{ $totalPeminjaman }}</h6>
@@ -39,7 +39,7 @@
                             <h5 class="card-title">Disetujui</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill-check"></i>
+                                    <i class="bi bi-calendar2-check-fill"></i>
                                 </div>
                                 <div class="ps-3">
                                     <h6>{{ $disetujui }}</h6>
@@ -57,7 +57,7 @@
                             <div class="d-flex align-items-center">
                                 <div style="background-color: rgba(255,0,0,.1);"
                                     class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill-x"></i>
+                                    <i class="bi bi-calendar2-x-fill"></i>
                                 </div>
                                 <div class="ps-3">
                                     <h6>{{ $ditolak }}</h6>
@@ -75,7 +75,7 @@
                             <div class="d-flex align-items-center">
                                 <div style="background-color: rgba(255,0,0,.1);"
                                     class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill-exclamation"></i>
+                                    <i class="bi bi-calendar2-minus-fill"></i>
                                 </div>
                                 <div class="ps-3">
                                     <h6>{{ $dibatalkan }}</h6>
