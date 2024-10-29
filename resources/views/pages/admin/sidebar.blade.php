@@ -4,7 +4,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::getCurrentRoute()->uri == 'admin' ? 'active' : 'collapsed' }}" href="/">
+            <a class="nav-link {{ Route::getCurrentRoute()->uri == 'admin' ? 'active' : 'collapsed' }}" href="{{ route('admin.dashboard') }}">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>
@@ -21,7 +21,7 @@
         <li class="nav-item">
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_jurusan') ? 'active' : 'collapsed' }}"
                 href="{{ route('data_jurusan.index') }}">
-                <i class="bi-building"></i>
+                <i class="bi bi-journal-text"></i>
                 <span>Data Jurusan</span>
             </a>
         </li>
@@ -29,7 +29,7 @@
         <li class="nav-item">
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/ruangan') ? 'active' : 'collapsed' }}"
                 href="{{ route('ruangan.index') }}">
-                <i class="bi-layout-wtf"></i>
+                <i class="bi-building"></i>
                 <span>Data Ruangan</span>
             </a>
         </li>

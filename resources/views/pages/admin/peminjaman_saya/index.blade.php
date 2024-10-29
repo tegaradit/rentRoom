@@ -5,7 +5,7 @@
         <h1>Data Peminjaman</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="#">Peminjaman</a></li>
                 <li class="breadcrumb-item active"> Data Peminjaman</li>
             </ol>
         </nav>
