@@ -106,7 +106,8 @@ class UserController extends Controller
                 'data_peminjaman.tgl_peminjaman',
                 'data_peminjaman.waktu_mulai',
                 'data_peminjaman.waktu_selesai',
-                'data_peminjaman.status'
+                'data_peminjaman.status',
+                'data_peminjaman.id'
             ]);
         $availableRooms = Ruangan::all()->count();
 
