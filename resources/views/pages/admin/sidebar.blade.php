@@ -75,8 +75,8 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/#') ? 'active' : 'collapsed' }}"
-                href="#">
+            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/peminjaman_saya') ? 'active' : 'collapsed' }}"
+                href="{{ route('peminjaman_saya.index') }}">
                 <i class="bi-journal-bookmark"></i>
                 <span>Peminjaman Saya</span>
             </a>
