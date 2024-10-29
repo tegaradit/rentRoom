@@ -16,8 +16,8 @@ class DataPeminjamanController extends Controller
         $disetujui = data_peminjaman::where('status', 'diterima')->count();
         $ditolak = data_peminjaman::where('status', 'ditolak')->count();
         $dibatalkan = data_peminjaman::where('status', 'dibatalkan')->count();
-        $datas = data_peminjaman::all();
-        return view('pages.admin.data_peminjaman.index', compact('menu','submenu', 'totalPeminjaman', 'disetujui', 'ditolak', 'dibatalkan', 'datas'));
+        $riwayat = data_peminjaman::where('status', '!=', 'pending')->get();
+        return view('pages.admin.data_peminjaman.index', compact('menu', 'submenu', 'totalPeminjaman', 'disetujui', 'ditolak', 'dibatalkan', 'riwayat'));
     }
 
     public function setuju($id)
