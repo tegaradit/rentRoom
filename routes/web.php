@@ -28,6 +28,7 @@ Route::resource('user/peminjaman_saya', PeminjamanSayaController::class);
 
 // data jurusan
 Route::resource('admin/data_jurusan', DataJurusanController::class);
+Route::resource('admin/riwayat-peminjaman', DataJurusanController::class);
 
 //pinjam ruangan
 Route::resource('admin/pinjam-ruangan', PinjamRuanganController::class);
