@@ -52,7 +52,7 @@
 
         <li class="nav-item">
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/#') ? 'active' : 'collapsed' }}"
-                href="#">
+                href="{{route('laporan.index')}}">
                 <i class="bi-file-earmark-break"></i>
                 <span>Laporan</span>
             </a>

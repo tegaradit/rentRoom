@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DataJurusanController;
 use App\Http\Controllers\DataPeminjamanController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PeminjamanSayaController;
 use App\Http\Controllers\PinjamRuanganController;
 use App\Http\Controllers\RiwayatController;
@@ -40,3 +41,6 @@ Route::post('/user/pinjam-ruangan/store', [PinjamRuanganController::class, 'stor
 Route::resource('admin/data_peminjaman', DataPeminjamanController::class);
 Route::post('/data_peminjaman/{id}/setuju', [DataPeminjamanController::class, 'setuju'])->name('peminjaman.setuju');
 Route::post('/data_peminjaman/{id}/tolak', [DataPeminjamanController::class, 'tolak'])->name('peminjaman.tolak');
+
+//laporan
+Route::resource('admin/laporan', LaporanController::class);

@@ -98,10 +98,10 @@
                                 <!-- Tombol lingkaran -->
                                 <div class="dropdown">
                                     @if ($data->status == 'pending')
-                                        <button class="btn btn-outline-secondary rounded-circle" type="button"
+                                        <button class="btn" type="button"
                                             id="dropdownMenuButton{{ $index }}" data-bs-toggle="dropdown"
                                             aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i> <!-- Icon atau teks pada tombol -->
+                                            <i class="bi bi-plus-circle-fill text-primary"></i> <!-- Icon atau teks pada tombol -->
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $index }}">
                                             <li>
@@ -114,8 +114,7 @@
                                             <li>
                                                 <form action="{{ route('peminjaman.tolak', $data->id) }}" method="POST">
                                                     @csrf
-                                                    <button type="submit"
-                                                        class="dropdown-item text-danger">Tolak</button>
+                                                    <button type="submit" class="dropdown-item text-danger">Tolak</button>
                                                 </form>
                                             </li>
                                         </ul>
@@ -132,7 +131,38 @@
                             <td>{{ $data->tgl_peminjaman }}</td>
                             <td>{{ $data->waktu_mulai }}</td>
                             <td>{{ $data->waktu_selesai }}</td>
-                            <td>{{ $data->sisa_waktu }}</td>
+                            <td>
+                                @php
+                                    $currentTime = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
+                                    $startTime = \Carbon\Carbon::parse($data->waktu_mulai)->format('H:i');
+                                    $endTime = \Carbon\Carbon::parse($data->waktu_selesai)->format('H:i');
+                                @endphp
+
+                                @if ($data->status == 'diterima')
+                                    @if ($currentTime < $startTime)
+                                        belum mulai
+                                    @elseif ($currentTime > $endTime)
+                                        waktu habis
+                                    @else
+                                        @php
+                                            $remainingTimeInMinutes =
+                                                (strtotime($data->waktu_selesai) - strtotime($currentTime)) / 60;
+                                            $days = floor($remainingTimeInMinutes / 1440);
+                                            $hours = floor(($remainingTimeInMinutes % 1440) / 60);
+                                            $minutes = $remainingTimeInMinutes % 60;
+                                            $remainingTime = sprintf(
+                                                '%d hari, %02d jam, %02d menit',
+                                                $days,
+                                                $hours,
+                                                $minutes,
+                                            );
+                                        @endphp
+                                        {{ $remainingTime }}
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td>{{ $data->keperluan }}</td>
                             <td>
                                 @if ($data->status == 'pending')
