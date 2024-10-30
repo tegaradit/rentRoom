@@ -35,8 +35,8 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/#') ? 'active' : 'collapsed' }}"
-                href="#">
+            <a class="nav-link {{ str_contains(Route::getCurrentRoute()->uri, 'admin/pengguna') ? 'active' : 'collapsed' }}"
+                href="{{ route('pengguna.index') }}">
                 <i class="bi-person-video"></i>
                 <span>Data Pengguna</span>
             </a>

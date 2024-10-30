@@ -15,6 +15,7 @@
     <!-- SweetAlert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- Google Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
@@ -102,14 +103,14 @@
     <!-- End #main -->
     <!-- Vendor JS Files -->
     <script src="/assets/themes/nice/vendor/apexcharts/apexcharts.min.js"></script>
-    {{-- <script src="/assets/themes/nice/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="/assets/themes/nice/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/themes/nice/vendor/chart.js/chart.umd.js"></script>
     <script src="/assets/themes/nice/vendor/echarts/echarts.min.js"></script>
     <script src="/assets/themes/nice/vendor/quill/quill.min.js"></script>
     <script src="/assets/themes/nice/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="/assets/themes/nice/vendor/tinymce/tinymce.min.js"></script>
     <script src="/assets/themes/nice/vendor/php-email-form/validate.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>

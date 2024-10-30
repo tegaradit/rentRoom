@@ -34,4 +34,11 @@ class PeminjamanSayaController extends Controller
 
         return view('pages.user.peminjaman_saya.riwayat', compact('menu', 'submenu', 'riwayat'));
     }
+
+    public function destroy(string $id)
+    {
+        $gol = data_peminjaman::findOrFail($id);
+        $gol->delete();
+        return redirect()->back()->with('success', 'Peminjaman berhasil dibatalkan');
+    }
 }

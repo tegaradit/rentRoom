@@ -2,7 +2,6 @@
 
 @section('root-content')
 <div class="container">
-
     <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
             <div class="row justify-content-center">
@@ -25,7 +24,6 @@
                                 </ol>
                             </div>
                             @endif
-
                             <div class="pt-4 pb-2">
                                 <h5 class="card-title text-center pb-0 fs-4">Buat Akun</h5>
                                 <p class="text-center small">Masukan Data diri Pribadi kamu untuk mendaftar akun</p>
@@ -37,12 +35,29 @@
                                     <input type="text" name="name" class="form-control" id="yourName" required>
                                     <div class="invalid-feedback">Nama Kamu Belum di Isi!</div>
                                 </div>
-
                                 <div class="col-12">
-                                    <label for="yourNis" class="form-label">NIS</label>
+                                    <label for="role" class="form-label">Role</label>
+                                    <select name="role" id="role" class="form-select" required>
+                                        <option value="">Role</option>
+                                        <option value="guru">Guru</option>
+                                        <option value="siswa">Siswa</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12" id="nisContainer">
+                                    <label for="yourNis" class="form-label" id="nisLabel">NIS</label>
                                     <input type="number" name="nis" class="form-control" id="yourNis" required>
                                     <div class="invalid-feedback">NIS Kamu Belum di Isi!</div>
                                 </div>
+
+                                <div class="col-12" id="nipNikContainer" style="display: none;">
+                                    <label for="nipNikLabel" class="form-label">NIP</label>
+                                    <input type="number" name="nip" class="form-control mb-2" id="nip" placeholder="Masukkan NIP jika ada">
+                                    <label for="nikLabel" class="form-label">NIK</label>
+                                    <input type="number" name="nik" class="form-control" id="nik" placeholder="Masukkan NIK jika tidak memiliki NIP">
+                                    <div class="invalid-feedback">NIP atau NIK harus diisi!</div>
+                                </div>
+
 
                                 <div class="col-12">
                                     <label for="yourPhone" class="form-label">No Telepon</label>
@@ -50,9 +65,11 @@
                                     <div class="invalid-feedback">Nomor telepon kamu belum di isi!</div>
                                 </div>
 
-                                <div class="col-12">
+
+
+                                <div class="col-12" id="jurusanContainer">
                                     <label for="yourJurusan" class="form-label">Jurusan</label>
-                                    <select name="jurusan" id="yourJurusan" class="form-select" required>
+                                    <select name="jurusan" id="yourJurusan" class="form-select">
                                         <option value="">Pilih Jurusan</option>
                                         <option value="X AKL 1">X AKL 1</option>
                                         <option value="X AKL 2">X AKL 2</option>
@@ -70,7 +87,6 @@
                                         <div class="invalid-feedback">Email Kamu belum di Isi!</div>
                                     </div>
                                 </div>
-
                                 <div class="col-12">
                                     <label for="yourPassword" class="form-label">Password</label>
                                     <input type="password" name="password" class="form-control" id="yourPassword" required>
@@ -103,6 +119,46 @@
         </div>
 
     </section>
-
 </div>
+
+<script>
+    document.getElementById('role').addEventListener('change', function() {
+        const nisContainer = document.getElementById('nisContainer');
+        const nipNikContainer = document.getElementById('nipNikContainer');
+        const jurusanContainer = document.getElementById('jurusanContainer');
+        const nisInput = document.getElementById('yourNis');
+        const nipInput = document.getElementById('nip');
+        const nikInput = document.getElementById('nik');
+
+        if (this.value === 'guru') {
+            nisContainer.style.display = 'none';
+            nipNikContainer.style.display = 'block';
+            jurusanContainer.style.display = 'none';
+            nisInput.required = false;
+            nipInput.required = true;
+            nikInput.required = true;
+        } else {
+            nisContainer.style.display = 'block';
+            nipNikContainer.style.display = 'none';
+            jurusanContainer.style.display = 'block';
+            nisInput.required = true;
+            nipInput.required = false;
+            nikInput.required = false;
+        }
+    });
+
+    // Mengatur required jika salah satu input NIP atau NIK sudah terisi
+    document.getElementById('nip').addEventListener('input', function() {
+        const nikInput = document.getElementById('nik');
+        nikInput.required = !this.value; // Tidak required jika NIP diisi
+        nipInput.required = !nikInput.value; // Tidak required jika NIK diisi
+    });
+
+    document.getElementById('nik').addEventListener('input', function() {
+        const nipInput = document.getElementById('nip');
+        nipInput.required = !this.value; // Tidak required jika NIK diisi
+        nikInput.required = !nipInput.value; // Tidak required jika NIP diisi
+    });
+</script>
+
 @endsection

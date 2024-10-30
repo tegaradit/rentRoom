@@ -15,12 +15,14 @@ Route::get('/', function () {
     return view('pages.login');
 });
 Route::post('/login', [UserController::class, 'login'])->name('login.post');
+Route::get('/logout', [UserController::class, 'logout'])->name('logout.post');
 Route::get('/register', function(){
     return view('pages.register');
 });
 Route::post('/register', [UserController::class, 'register'])->name('register.post');
 
 Route::get('user/', [UserController::class, 'dashboard'])->name('user.dashboard');
+Route::get('myprofile/',[UserController::class, 'myprofile'])->name('myprofile');
 
 //Admin
 Route::get('admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -44,3 +46,9 @@ Route::post('/data_peminjaman/{id}/tolak', [DataPeminjamanController::class, 'to
 
 //laporan
 Route::resource('admin/laporan', LaporanController::class);
+
+Route::get('/admin/pengguna', [UserController::class, 'pengguna'])->name('pengguna.index');
+Route::get('/admin/pengguna/create',[UserController::class, 'create'])->name('pengguna.create');
+Route::post('/admin/pengguna/store/',[UserController::class, 'store'])->name('pengguna.store');
+Route::get('/admin/pengguna/edit/{id}',[UserController::class, 'edit'])->name('pengguna.edit');
+Route::put('/admin/pengguna/update/{id}',[UserController::class, 'update'])->name('pengguna.update');
