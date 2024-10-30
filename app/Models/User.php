@@ -38,7 +38,7 @@ class User extends Authenticatable
         return $this->belongsTo(Roles::class);
     }
 
-    // Relationship to the `data_jurusan` table
+    // Relationship to the `data_jurusan` tabPle
     public function jurusan()
     {
         return $this->belongsTo(data_jurusan::class, 'jurusan_id');

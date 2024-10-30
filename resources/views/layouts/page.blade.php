@@ -37,7 +37,7 @@
                   </a>
                </li>
                <li>
-                  <a id="logout-btn" class="dropdown-item d-flex align-items-center">
+                  <a id="logout-btn" class="dropdown-item d-flex align-items-center" href="{{ route('logout.post') }}" >
                      <i class="bi bi-box-arrow-right"></i>
                      <span>Sign Out</span>
                   </a>

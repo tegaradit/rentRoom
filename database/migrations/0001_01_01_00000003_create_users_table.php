@@ -17,7 +17,9 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('nama_lengkap', 100);
             $table->integer('nis')->unique()->nullable();
-            $table->unsignedBigInteger('jurusan_id');
+            $table->integer('nip')->unique()->nullable();
+            $table->integer('nik')->unique()->nullable();
+            $table->unsignedBigInteger('jurusan_id')->nullable();
             $table->foreign('jurusan_id')->references('id')->on('data_jurusan')->onDelete('cascade');
             $table->string('email', 255)->unique();
             $table->string('no_hp', 15); 
