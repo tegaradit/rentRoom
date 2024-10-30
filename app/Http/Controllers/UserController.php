@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\data_peminjaman;
 use App\Models\Roles;
+use App\Models\Ruangan;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
