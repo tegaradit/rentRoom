@@ -16,42 +16,47 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
-        // Validasi input dari form register
-        $validator = Validator::make($request->all(), [
+        $rules = [
             'name' => 'required|string|max:100',
-            'nis' => 'integer|unique:users,nis',
-            'nik' => 'integer|unique:users,nik',
-            'nip' => 'integer|unique:users,nip',
-            'role'=> 'integer|unique:users,role',  
-            'jurusan' => 'string',
+            'role' => 'required|string',
             'noTelepon' => 'required|string|max:15',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
             'terms' => 'accepted',
-        ]);
-
-        // Jika validasi gagal, return dengan error
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'akun gagal di buat');
+        ];
+    
+        // Kondisi berdasarkan role
+        if ($request->role === 'guru') {
+            $rules['nip'] = 'nullable|integer|unique:users,nip';
+            $rules['nik'] = 'nullable|integer|unique:users,nik';
+            $rules['nis'] = 'nullable';
+        } else if ($request->role === 'siswa') {
+        $rules['nis'] = 'required|integer|unique:users,nis';
+            $rules['nip'] = 'nullable';
+            $rules['nik'] = 'nullable';
         }
-
-        // Buat user baru
+    
+        // Validasi input dari form register
+        $validator = Validator::make($request->all(), $rules);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Akun gagal dibuat');
+        }
+    
         $user = User::create([
             'nama_lengkap' => $request->name,
             'nis' => $request->nis,
-            'nik' => $request->nik,
+            'nik' => $request->nik, 
             'nip' => $request->nip,
-            'role'=>2,
-            'jurusan_id' => $this->getJurusanId($request->jurusan), // Ambil jurusan_id dari nama jurusan
+            'role' => $request->role,
+            'jurusan_id' => $this->getJurusanId($request->jurusan),
             'email' => $request->email,
             'no_hp' => $request->noTelepon,
             'password' => Hash::make($request->password),
         ]);
-
-        // Redirect atau berikan pesan sukses
+    
         return redirect('/')->with('success', 'Akun berhasil dibuat. Silakan login.');
     }
-
     // Helper untuk mengambil ID jurusan dari nama jurusan
     private function getJurusanId($jurusan)
     {
