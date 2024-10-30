@@ -15,14 +15,14 @@
         <div class="col-lg-8 w-100 mb-3">
             <div class="row">
                 {{-- Total Peminjaman --}}
-                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 sales-card px-3">
                         <div class="card-body">
                             <h5 class="card-title">Total Peminjaman</h5>
                             <div class="d-flex align-items-center">
                                 <div style="background-color: rgba(63, 15, 235, 0.116);"
                                     class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill"></i>
+                                    <i class="bi bi-calendar2-week-fill"></i>
                                 </div>
                                 <div class="ps-3">
                                     <h6>{{ $totalPeminjaman }}</h6>
@@ -33,13 +33,13 @@
                 </div>
 
                 {{-- Disetujui --}}
-                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 revenue-card px-3">
                         <div class="card-body">
-                            <h5 class="card-title">Disetujui</h5>
+                            <h5 class="card-title">Diterima</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill-check"></i>
+                                    <i class="bi bi-calendar2-check-fill"></i>
                                 </div>
                                 <div class="ps-3">
                                     <h6>{{ $disetujui }}</h6>
@@ -50,35 +50,17 @@
                 </div>
 
                 {{-- Ditolak --}}
-                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
+                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 customers-card px-3">
                         <div class="card-body">
                             <h5 class="card-title">Ditolak</h5>
                             <div class="d-flex align-items-center">
                                 <div style="background-color: rgba(255,0,0,.1);"
                                     class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill-x"></i>
+                                    <i class="bi bi-calendar2-x-fill"></i>
                                 </div>
                                 <div class="ps-3">
                                     <h6>{{ $ditolak }}</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Dibatalkan --}}
-                <div class="col-xxl-3 col-md-6 mb-3" style="height: fit-content !important; min-height: 0 !important;">
-                    <div class="card info-card h-100 customers-card px-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Dibatalkan</h5>
-                            <div class="d-flex align-items-center">
-                                <div style="background-color: rgba(255,0,0,.1);"
-                                    class="text-danger card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-building-fill-exclamation"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>{{ $dibatalkan }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -97,12 +79,14 @@
             <table class="table datatable table-stripped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>No</th>
                         <th>Peminjam</th>
                         <th>Ruangan</th>
                         <th>Tanggal peminjaman</th>
                         <th>Waktu mulai</th>
                         <th>Waktu selesai</th>
+                        <th>Sisa Waktu</th>
                         <th>Keperluan</th>
                         <th>Status</th>
                     </tr>
@@ -110,18 +94,59 @@
                 <tbody>
                     @forelse ($datas as $index => $data)
                         <tr>
+                            <td>
+                                <!-- Tombol lingkaran -->
+                                <div class="dropdown">
+                                    @if ($data->status == 'pending')
+                                        <button class="btn btn-outline-secondary rounded-circle" type="button"
+                                            id="dropdownMenuButton{{ $index }}" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="bi bi-three-dots"></i> <!-- Icon atau teks pada tombol -->
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $index }}">
+                                            <li>
+                                                <form action="{{ route('peminjaman.setuju', $data->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="dropdown-item text-success">Terima</button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form action="{{ route('peminjaman.tolak', $data->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="dropdown-item text-danger">Tolak</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    @else
+                                        <!-- Jika status sudah tidak pending, tampilkan keterangan statusnya -->
+                                        <span class="text-muted"> <i class="bi bi-lock-fill text-danger"></i></span>
+                                    @endif
+                                </div>
+                            </td>
+
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $data->peminjam }}</td>
-                            <td>{{ $data->ruangan }}</td>
-                            <td>{{ $data->tanggal_peminjaman }}</td>
+                            <td>{{ $data->user->nama_lengkap }}</td>
+                            <td>{{ $data->ruangan->nama_ruangan }}</td>
+                            <td>{{ $data->tgl_peminjaman }}</td>
                             <td>{{ $data->waktu_mulai }}</td>
                             <td>{{ $data->waktu_selesai }}</td>
+                            <td>{{ $data->sisa_waktu }}</td>
                             <td>{{ $data->keperluan }}</td>
-                            <td>{{ $data->status }}</td>
+                            <td>
+                                @if ($data->status == 'pending')
+                                    <span class="badge bg-warning">{{ $data->status }}</span>
+                                @elseif ($data->status == 'diterima')
+                                    <span class="badge bg-success">{{ $data->status }}</span>
+                                @else
+                                    <span class="badge bg-danger">{{ $data->status }}</span>
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center alert alert-danger">Data Peminjaman masih
+                            <td colspan="9" class="text-center alert alert-danger">Data Peminjaman masih
                                 Kosong</td>
                         </tr>
                     @endforelse

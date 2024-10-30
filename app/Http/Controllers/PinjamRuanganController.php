@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\data_peminjaman;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Ruangan;
 use Illuminate\Http\Request;
 
@@ -12,14 +13,27 @@ class PinjamRuanganController extends Controller
     {
         $menu = 'data';
         $submenu = 'pinjam-ruangan';
-        $datas = Ruangan::latest()->paginate(10);
-        return view('pages.admin.pinjam_ruangan.index', compact('menu', 'submenu', 'datas'));
+        $user = Auth::user();
+
+        // Check the user's role and retrieve data accordingly
+        if ($user->role_id == 1) {
+            // If the user is an admin, fetch all data for the admin view
+            $datas = Ruangan::latest()->paginate(10);
+            return view('pages.admin.pinjam_ruangan.index', compact('menu', 'submenu', 'datas'));
+        } elseif ($user->role_id == 2) {
+            // If the user is a regular user, fetch only their data for the user view
+            $datas = Ruangan::latest()->paginate(10);
+            return view('pages.user.pinjam_ruangan.index', compact('menu', 'submenu', 'datas'));
+        } else {
+            // Redirect to an error page if the role_id is invalid
+            abort(403, 'Akses tidak diizinkan');
+        }
     }
 
     public function pinjam($id)
     {
         $ruangan = Ruangan::findOrFail($id);
-        return view('pages.admin.pinjam_ruangan.form', compact('ruangan'));
+        return view('pages.user.pinjam_ruangan.form', compact('ruangan'));
     }
 
     public function store(Request $request)

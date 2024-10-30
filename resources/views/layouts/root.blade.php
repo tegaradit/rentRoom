@@ -103,13 +103,14 @@
     <!-- End #main -->
     <!-- Vendor JS Files -->
     <script src="/assets/themes/nice/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="/assets/themes/nice/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="/assets/themes/nice/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
     <script src="/assets/themes/nice/vendor/chart.js/chart.umd.js"></script>
     <script src="/assets/themes/nice/vendor/echarts/echarts.min.js"></script>
     <script src="/assets/themes/nice/vendor/quill/quill.min.js"></script>
     <script src="/assets/themes/nice/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="/assets/themes/nice/vendor/tinymce/tinymce.min.js"></script>
     <script src="/assets/themes/nice/vendor/php-email-form/validate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
