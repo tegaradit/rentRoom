@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\data_peminjaman;
 use App\Models\Roles;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -107,7 +108,36 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        return view('pages.user.dashboard');
+        $user = Auth::user();
+        $roomBorrowed = data_peminjaman::join('users', 'data_peminjaman.user_id', '=', 'users.id')
+            ->join('ruangan', 'data_peminjaman.ruangan_id', '=', 'ruangan.id')
+            ->where('data_peminjaman.user_id', '=', $user->id)
+            ->get([
+                'ruangan.nama_ruangan',
+                'data_peminjaman.tgl_peminjaman',
+                'data_peminjaman.waktu_mulai',
+                'data_peminjaman.waktu_selesai',
+                'data_peminjaman.status',
+                'data_peminjaman.id'
+            ]);
+        $availableRooms = Ruangan::all()->count();
+
+        $rejectedBorrowing = 0;
+        $acceptedBorrowing = 0;
+        $totalBorrowing = $roomBorrowed->count();
+        
+        if ($totalBorrowing > 0) {
+            $rejectedBorrowing = $roomBorrowed->filter(function ($borrow) {
+                return $borrow->status === 'ditolak';
+            })->count();
+
+            $acceptedBorrowing = $roomBorrowed->filter(function ($borrow) {
+                return $borrow->status === 'diterima';
+            })->count();
+        }
+
+
+        return view('pages.user.dashboard', compact('availableRooms', 'rejectedBorrowing', 'acceptedBorrowing', 'totalBorrowing', 'roomBorrowed'));
     }
 
     public function myProfile(){
