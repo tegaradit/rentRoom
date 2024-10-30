@@ -96,7 +96,7 @@
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td><img src="{{ Storage::url($data->thumbnail) }}" style="width: 150px"></td>
+                            <td><img src="{{ Storage::url($data->thumbnail) }}" class="ruangan-thumbnail"></td>
                             <td>{{ $data->nama_ruangan }}</td>
                             <td>{{ $data->kapasitas }} orang</td>
                             <td>
@@ -149,4 +149,13 @@
             }
         </script>
     </section>
+    <style>
+        .ruangan-thumbnail {
+            width: 80px;
+            height: 60px;
+            border-radius: 4px;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+    </style>
 @endsection
