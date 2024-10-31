@@ -23,6 +23,7 @@ Route::post('/register', [UserController::class, 'register'])->name('register.po
 
 Route::get('user/', [UserController::class, 'dashboard'])->name('user.dashboard');
 Route::get('myprofile/',[UserController::class, 'myprofile'])->name('myprofile');
+Route::put('myprofile/update',[UserController::class, 'updateProfile'])->name('profile.update');
 
 //Admin
 Route::get('admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -49,6 +50,7 @@ Route::resource('admin/laporan', LaporanController::class);
 
 Route::get('/admin/pengguna', [UserController::class, 'pengguna'])->name('pengguna.index');
 Route::get('/admin/pengguna/create',[UserController::class, 'create'])->name('pengguna.create');
-Route::post('/admin/pengguna/store/',[UserController::class, 'store'])->name('pengguna.store');
+Route::post('/admin/pengguna/store',[UserController::class, 'store'])->name('pengguna.store');
 Route::get('/admin/pengguna/edit/{id}',[UserController::class, 'edit'])->name('pengguna.edit');
 Route::put('/admin/pengguna/update/{id}',[UserController::class, 'update'])->name('pengguna.update');
+Route::delete('/admin/pengguna/destroy/{id}',[UserController::class, 'destroy'])->name('pengguna.destroy');
