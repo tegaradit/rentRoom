@@ -12,13 +12,14 @@ class PeminjamanSayaController extends Controller
         $menu = 'peminjaman_saya';
         $submenu = 'peminjaman_saya';
         $user = Auth::user();
+        $canReturn = true;
 
         if ($user->role_id == 2) {
             $datas = data_peminjaman::where('user_id', $user->id)
                 ->with('ruangan')
                 ->get();
 
-            return view('pages.user.peminjaman_saya.index', compact('datas', 'menu', 'submenu'));
+            return view('pages.user.peminjaman_saya.index', compact('datas', 'menu', 'submenu', 'canReturn'));
         } else {
             abort(403, 'Akses tidak diizinkan');
         }

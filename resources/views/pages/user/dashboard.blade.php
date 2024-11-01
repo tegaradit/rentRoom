@@ -98,15 +98,14 @@
                         <td>{{ $borrowed->waktu_mulai }}</td>
                         <td>{{ $borrowed->waktu_selesai }}</td>
                         <td>
-                           @php
-                              $currentTime = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
-                              $startTime = \Carbon\Carbon::parse($borrowed->waktu_mulai)->format('H:i');
-                              $endTime = \Carbon\Carbon::parse($borrowed->waktu_selesai)->format('H:i');
-                              $currentDate = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d');
-                              $borrowingDate = \Carbon\Carbon::parse($borrowed->tgl_peminjaman)->format('Y-m-d');
-                           @endphp
-
                            @if ($borrowed->status == 'diterima')
+                              @php
+                                 $currentTime = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
+                                 $startTime = \Carbon\Carbon::parse($borrowed->waktu_mulai)->format('H:i');
+                                 $endTime = \Carbon\Carbon::parse($borrowed->waktu_selesai)->format('H:i');
+                                 $currentDate = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d');
+                                 $borrowingDate = \Carbon\Carbon::parse($borrowed->tgl_peminjaman)->format('Y-m-d');
+                              @endphp
                               @if ($borrowingDate >= $currentDate)
                                  @if ($currentTime < $startTime)
                                     belum mulai
