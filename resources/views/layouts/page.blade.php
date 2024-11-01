@@ -15,23 +15,27 @@
       <ul class="d-flex align-items-center">
          <li class="nav-item dropdown pe-3">
             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-               <div
-                  style="border-radius: 50%; width: 2.5rem; height: 2.5rem; background-color: gray; text-align: center; line-height: 2.5rem; color: white">
-                  Ad</div>
-               <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
+               <div>
+                  <img style="border-radius: 50%; width: 2.5rem; height: 2.5rem;aspect-ratio: 1/1; object-fit: cover; background-color: black; text-align: center; line-height: 2.5rem; color: white" src="{{ Auth::user()->photo ? asset('storage/'. Auth::user()->photo) : 'https://via.placeholder.com/150' }}" alt=""> 
+               </div>
+               <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->nama_lengkap }}</span>
             </a><!-- End Profile Iamge Icon -->
 
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                <li class="dropdown-header">
-                  <h6>Admin</h6>
-                  <span>Admin</span>
+                  <img src="{{ Auth::user()->photo ? asset('storage/'. Auth::user()->photo) : 'https://via.placeholder.com/150' }}" style="width: 50px; height: 50px; border-radius: 50%; aspect-ratio: 1/1; object-fit: cover;" alt="">
+                  @php
+                     $roleName = [1 => 'Admin', 2 => 'user'];
+                  @endphp
+                  <h6>{{ Auth::user()->nama_lengkap }}</h6>
+                  <span>{{ $roleName[Auth::user()->role_id] }}</span>
                </li>
                <li>
                   <hr class="dropdown-divider">
                </li>
 
                <li>
-                  <a class="dropdown-item d-flex align-items-center" href="http://simlogbookdiklat.test/my_profile">
+                  <a class="dropdown-item d-flex align-items-center" href="{{ route('myprofile') }}">
                      <i class="bi bi-person"></i>
                      <span>My Profile</span>
                   </a>
@@ -47,7 +51,11 @@
       </ul>
    </nav><!-- End Icons Navigation -->
 </header><!-- End Header -->
-@include('pages.admin.sidebar')
+@if (Auth::user()->role_id == 1)
+   @include('pages.admin.sidebar')
+@else
+   @include('pages.user.sidebar')
+@endif
 <main id="main" class="main">
    @yield('page-content')
 </main>

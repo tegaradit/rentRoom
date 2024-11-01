@@ -16,23 +16,35 @@ class DataJurusanSeeder extends Seeder
     {
         DB::table('data_jurusan')->insert([
             [
-                'nama_jurusan' => 'Teknik Informatika',
-                'ketua_jurusan' => 'Dr. Ahmad Surya',
+                'nama_jurusan' => 'PPLG',
+                'ketua_jurusan' => 'bu nuraeni',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'nama_jurusan' => 'Manajemen Informatika',
-                'ketua_jurusan' => 'Dr. Budi Santoso',
+                'nama_jurusan' => 'DKV',
+                'ketua_jurusan' => 'cahyo',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'nama_jurusan' => 'Teknik Elektro',
-                'ketua_jurusan' => 'Ir. Candra Wijaya',
+                'nama_jurusan' => 'MPLB',
+                'ketua_jurusan' => 'bu asih',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
+            [
+                'nama_jurusan' => 'PMS',
+                'ketua_jurusan' => 'bu dwi',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nama_jurusan' => 'AKL',
+                'ketua_jurusan' => 'bu nur',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
