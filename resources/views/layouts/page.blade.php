@@ -15,9 +15,8 @@
       <ul class="d-flex align-items-center">
          <li class="nav-item dropdown pe-3">
             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-               <div
-                  >
-                 <img   style="border-radius: 50%; width: 2.5rem; height: 2.5rem;aspect-ratio: 1/1; object-fit: cover; background-color: black; text-align: center; line-height: 2.5rem; color: white" src="{{ Auth::user()->photo ? asset('storage/'. Auth::user()->photo) : 'https://via.placeholder.com/150' }}" alt=""> 
+               <div>
+                  <img style="border-radius: 50%; width: 2.5rem; height: 2.5rem;aspect-ratio: 1/1; object-fit: cover; background-color: black; text-align: center; line-height: 2.5rem; color: white" src="{{ Auth::user()->photo ? asset('storage/'. Auth::user()->photo) : 'https://via.placeholder.com/150' }}" alt=""> 
                </div>
                <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->nama_lengkap }}</span>
             </a><!-- End Profile Iamge Icon -->
@@ -52,7 +51,11 @@
       </ul>
    </nav><!-- End Icons Navigation -->
 </header><!-- End Header -->
-@include('pages.admin.sidebar')
+@if (Auth::user()->role_id == 1)
+   @include('pages.admin.sidebar')
+@else
+   @include('pages.user.sidebar')
+@endif
 <main id="main" class="main">
    @yield('page-content')
 </main>
