@@ -20,7 +20,6 @@ class laporan extends Model
         'waktu_mulai',
         'waktu_selesai',
         'keperluan',
-        'status',
     ];
 
     // Relasi ke model User

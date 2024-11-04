@@ -54,7 +54,6 @@
                         <th>Waktu Mulai</th>
                         <th>Waktu Selesai</th>
                         <th>Keperluan</th>
-                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,13 +66,6 @@
                             <td>{{ $data->waktu_mulai }}</td>
                             <td>{{ $data->waktu_selesai }}</td>
                             <td>{{ $data->keperluan }}</td>
-                            <td>
-                                @if ($data->status == 'diterima')
-                                    <span class="badge bg-success">{{ $data->status }}</span>
-                                @else
-                                    <span class="badge bg-danger">{{ $data->status }}</span>
-                                @endif
-                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -95,7 +87,7 @@
                 const doc = new jsPDF();
 
                 // URL gambar
-                const imageUrl = '/storage/kopSurat/logo smenza.png';
+                const imageUrl = '{{ asset('assets/themes/nice/img/logo smenza.png') }}';
                 const imgBase64 = await getBase64ImageFromUrl(imageUrl);
                 doc.addImage(imgBase64, 'PNG', 10, 10, 30, 30);
 
@@ -117,19 +109,14 @@
                 centerText('SEKOLAH MENENGAH KEJURUAN NEGERI 1 KEBUMEN', 27);
 
                 doc.setFont("times", "normal");
-                centerText('Jalan Cemara No.37 Karangsari Kebumen Kode Pos 54351', 33);
-                centerText('Telepon 0287-381132 Faksimile 0287-381132', 39);
-                centerText('Surat Elektronik: smkn1.kebumen@yahoo.com', 45);
+                centerText('Jalan Cemara No.37 Karangsari Kebumen Kode Pos 54351 Telepon 0287-381132', 33);
+                centerText('Faksimile 0287-381132 Surat Elektronik: smkn1.kebumen@yahoo.com', 45);
 
                 // Menambahkan garis bawah ganda
-                const lineYPosition1 = 50; // Posisi Y untuk garis atas
-                const lineYPosition2 = 52; // Posisi Y untuk garis bawah
+                const lineYPosition1 = 52; // Posisi Y untuk garis atas
 
                 doc.setLineWidth(0.5); // Lebar garis pertama
                 doc.line(20, lineYPosition1, pageWidth - 20, lineYPosition1); // Garis pertama (atas)
-
-                doc.setLineWidth(0.8); // Lebar garis kedua
-                doc.line(20, lineYPosition2, pageWidth - 20, lineYPosition2); // Garis kedua (bawah)
 
                 // Menambahkan judul laporan
                 doc.setFont("times", "bold");
@@ -150,7 +137,7 @@
                 doc.autoTable({
                     head: [
                         ['No', 'Peminjam', 'Ruangan', 'Tanggal Peminjaman', 'Waktu Mulai', 'Waktu Selesai',
-                            'Keperluan', 'Status'
+                            'Keperluan'
                         ]
                     ],
                     body: data,
