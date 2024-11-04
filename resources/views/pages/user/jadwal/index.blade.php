@@ -35,6 +35,12 @@
     .time-slot.selected {
         background-color: #ffeeba;
     }
+
+    .time-slot.past {
+        color: #888;
+        background-color: #ddd;
+        pointer-events: none;
+    }
 </style>
 
 <div class="container my-5">
@@ -53,7 +59,7 @@
         <div class="col">
             <label for="year">Pilih Tahun:</label>
             <select id="year" class="form-control" onchange="generateTable()">
-                @for ($y = 2023; $y <= 2025; $y++)
+                @for ($y = 2024; $y <= 2030; $y++)
                     <option value="{{ $y }}">{{ $y }}</option>
                     @endfor
             </select>
@@ -164,74 +170,91 @@
     const bookedSlots = JSON.parse('{!! $peminjaman !!}');
 
     function generateTable() {
-        const _year = document.getElementById('year');
-        const year = _year.value;
+    const _year = document.getElementById('year');
+    const year = _year.value;
 
-        const _month = document.getElementById('month');
-        const month = String(_month.value).padStart(2, '0');
-        
-        const _roomId = document.getElementById('room');
-        const roomId = _roomId.value;
-        
-        localStorage.setItem('curenttime',JSON.stringify({year: _year.selectedIndex, month: _month.selectedIndex, roomId: _roomId.selectedIndex}));
+    const _month = document.getElementById('month');
+    const month = String(_month.value).padStart(2, '0');
+    
+    const _roomId = document.getElementById('room');
+    const roomId = _roomId.value;
+    
+    localStorage.setItem('curenttime', JSON.stringify({year: _year.selectedIndex, month: _month.selectedIndex, roomId: _roomId.selectedIndex}));
 
-        const tbody = document.getElementById('schedule-body');
-        tbody.innerHTML = '';
+    const tbody = document.getElementById('schedule-body');
+    tbody.innerHTML = '';
 
-        const daysInMonth = new Date(year, month, 0).getDate();
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const today = new Date(); // Tanggal saat ini
+    today.setHours(0, 0, 0, 0); // Set waktu ke awal hari
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayFormatted = String(day).padStart(2, '0');
-            const date = new Date(year, month - 1, day);
-            const dayOfWeek = days[date.getDay()];
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayFormatted = String(day).padStart(2, '0');
+        const date = new Date(year, month - 1, day);
+        const dayOfWeek = days[date.getDay()];
 
-            let row = `<tr>
-                <td>${dayFormatted}/${month}/${year}</td>
-                <td>${dayOfWeek}</td>`;
+        let row = `<tr>
+            <td>${dayFormatted}/${month}/${year}</td>
+            <td>${dayOfWeek}</td>`;
 
-             let hour = 7;
-            while (hour <= 16) {
-                let isBooked = false;
-                let bookingDetails = null;
-                let slotColor = "#f0f0f0";
-                let colspan = 1;
+        let hour = 7;
+        while (hour <= 16) {
+            let isBooked = false;
+            let bookingDetails = null;
+            let slotColor = "#f0f0f0"; // Default color for available slots
+            let colspan = 1;
 
-                bookedSlots.forEach((slot, index) => {
-                    if (
-                        slot.ruangan_id == roomId &&
-                        slot.tanggal === `${year}-${month}-${dayFormatted}` &&
-                        parseInt(slot.jam_mulai) <= hour &&
-                        parseInt(slot.jam_selesai) >= hour
-                    ) {
-                        isBooked = true;
-                        bookingDetails = slot;
-                        slotColor = colors[index % colors.length];
+            bookedSlots.forEach((slot, index) => {
+                if (
+                    slot.ruangan_id == roomId &&
+                    slot.tanggal === `${year}-${month}-${dayFormatted}` &&
+                    parseInt(slot.jam_mulai) <= hour &&
+                    parseInt(slot.jam_selesai) >= hour
+                ) {
+                    isBooked = true;
+                    bookingDetails = slot;
+                    slotColor = colors[index % colors.length]; // Use color based on index
+                    colspan = parseInt(slot.jam_selesai) - parseInt(slot.jam_mulai) + 1;
+                }
+            });
 
-                        colspan = parseInt(slot.jam_selesai) - parseInt(slot.jam_mulai) + 1;
-                    }
-                });
+            if (isBooked) {
+                // Jika sudah dibooking, tampilkan dengan warna sesuai
+                row += `<td colspan="${colspan}" class="time-slot booked" 
+                            style="background-color: ${slotColor};"
+                            onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id})">
+                            ${bookingDetails.user_name}
+                        </td>`;
+                hour += colspan; // Lewati jam yang sudah dibooking
+            } else {
+                // Cek apakah tanggal adalah tanggal di bawah hari ini
+                const isPastDate = date < today;
 
-                if (isBooked) {
-                    row += `<td colspan="${colspan}" class="time-slot booked" 
-                                style="background-color: ${slotColor};"
-                                onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id})">
-                                ${bookingDetails.user_name}
-                            </td>`;
-                    hour += colspan;
-                } else {
+                if (isPastDate) {
+                    // Jika tanggal sudah lewat, tampilkan slot dengan warna abu-abu dan non-klik
                     const slotTime = `${hour}:00 - ${hour}:59`;
-                    const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`
-                    row += `<td id="${timeSlotId}" class="time-slot" ${`onclick="selectTimeSlot('${timeSlotId}')"`}>
+                    const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
+                    row += `<td id="${timeSlotId}" class="time-slot" style="background-color: #d3d3d3; cursor: not-allowed;" title="Tanggal ini tidak dapat dibooking.">
+                                ${slotTime}
+                            </td>`;
+                    hour++; // Lanjutkan ke jam berikutnya
+                } else {
+                    // Tampilkan slot yang dapat dibooking
+                    const slotTime = `${hour}:00 - ${hour}:59`;
+                    const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
+                    row += `<td id="${timeSlotId}" class="time-slot" onclick="selectTimeSlot('${timeSlotId}')">
                                 ${slotTime}
                             </td>`;
                     hour++;
                 }
             }
-
-            row += '</tr>';
-            tbody.innerHTML += row;
         }
+
+        row += '</tr>';
+        tbody.innerHTML += row;
     }
+}
+
 
     function toggleMultiSelect() {
         multiSelectMode = !multiSelectMode;
@@ -241,17 +264,20 @@
         multiSelectBtn.textContent = multiSelectMode ? 'Disable Multi-Select' : 'Enable Multi-Select';
         document.getElementById('bookSelectedBtn').style.display = multiSelectMode ? 'inline-block' : 'none';
 
-        // Hide or show selected time slots based on the multi-select mode
+        // Unselect all selected time slots when multi-select is disabled
         const tbody = document.getElementById('schedule-body');
         const selectedSlots = tbody.querySelectorAll('.selected');
 
-        selectedSlots.forEach(slot => {
-            if (multiSelectMode) {
+        if (!multiSelectMode) {
+            selectedSlots.forEach(slot => {
+                slot.classList.remove('selected'); // Unselect the slots when multi-select is disabled
+            });
+        } else {
+            // If multi-select is enabled, you may want to show hidden slots or do other actions
+            selectedSlots.forEach(slot => {
                 slot.classList.remove('hidden'); // Show selected slots when multi-select is enabled
-            } else {
-                slot.classList.add('hidden'); // Hide selected slots when multi-select is disabled
-            }
-        });
+            });
+        }
     }
 
 
