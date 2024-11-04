@@ -60,7 +60,7 @@
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $data->nama_peminjam  }}</td>
+                            <td>{{ $data->user->nama_lengkap }}</td>
                             <td>{{ $data->ruangan->nama_ruangan }}</td>
                             <td>{{ \Carbon\Carbon::parse($data->tgl_peminjaman)->format('d-m-Y') }}</td>
                             <td>{{ $data->waktu_mulai }}</td>
@@ -89,7 +89,7 @@
                 // URL gambar
                 const imageUrl = '{{ asset('assets/themes/nice/img/logo smenza.png') }}';
                 const imgBase64 = await getBase64ImageFromUrl(imageUrl);
-                doc.addImage(imgBase64, 'PNG', 10, 10, 30, 30);
+                doc.addImage(imgBase64, 'PNG', 22, 10, 25, 25);
 
                 // Kop surat di kanan
                 doc.setFontSize(12);
@@ -99,28 +99,32 @@
                 const pageWidth = doc.internal.pageSize.width;
                 const centerX = pageWidth / 2;
 
-                function centerText(text, yPosition) {
+                function centerText(text, yPosition, offsetX = 0) {
                     const textWidth = doc.getTextWidth(text);
-                    doc.text(text, centerX - textWidth / 2, yPosition);
+                    doc.text(text, centerX - textWidth / 2 + offsetX, yPosition);
                 }
 
-                centerText('PEMERINTAH PROVINSI JAWA TENGAH', 15);
-                centerText('DINAS PENDIDIKAN DAN KEBUDAYAAN', 21);
-                centerText('SEKOLAH MENENGAH KEJURUAN NEGERI 1 KEBUMEN', 27);
+                const offsetX = 10;
 
+                centerText('PEMERINTAH PROVINSI JAWA TENGAH', 15, offsetX);
+                centerText('DINAS PENDIDIKAN DAN KEBUDAYAAN', 21, offsetX);
+                centerText('SEKOLAH MENENGAH KEJURUAN NEGERI 1 KEBUMEN', 27, offsetX);
+
+                doc.setFontSize(11);
                 doc.setFont("times", "normal");
-                centerText('Jalan Cemara No.37 Karangsari Kebumen Kode Pos 54351 Telepon 0287-381132', 33);
-                centerText('Faksimile 0287-381132 Surat Elektronik: smkn1.kebumen@yahoo.com', 45);
+                centerText('Jalan Cemara No.37 Karangsari Kebumen Kode Pos 54351 Telepon 0287-381132', 33, offsetX);
+                centerText('Faksimile 0287-381132 Surat Elektronik: smkn1.kebumen@yahoo.com', 37, offsetX);
 
                 // Menambahkan garis bawah ganda
-                const lineYPosition1 = 52; // Posisi Y untuk garis atas
+                const lineYPosition1 = 40; // Posisi Y untuk garis atas
 
                 doc.setLineWidth(0.5); // Lebar garis pertama
                 doc.line(20, lineYPosition1, pageWidth - 20, lineYPosition1); // Garis pertama (atas)
 
                 // Menambahkan judul laporan
+                doc.setFontSize(12);
                 doc.setFont("times", "bold");
-                doc.text('Laporan Peminjaman Ruangan', 105, 60, null, null, 'center');
+                doc.text('Laporan Peminjaman Ruangan', 105, 55, null, null, 'center');
 
                 // Mengambil data tabel
                 const table = document.getElementById("tableID");
@@ -141,7 +145,7 @@
                         ]
                     ],
                     body: data,
-                    startY: 70,
+                    startY: 63,
                     theme: 'striped',
                     margin: {
                         top: 10
