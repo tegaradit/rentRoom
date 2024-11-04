@@ -60,7 +60,7 @@ Route::prefix('peminjaman')->group(function () {
     Route::get('/{id}/edit', [jadwalController::class, 'edit'])->name('peminjaman.edit');
     Route::put('/{id}', [jadwalController::class, 'update'])->name('peminjaman.update');
     Route::delete('/{id}', [jadwalController::class, 'destroy'])->name('peminjaman.destroy');
-});
+})->middleware(RouterGuard::class);
 
-Route::get('/user/peminjaman/',[jadwalController::class, 'index'])->name('peminjaman.index');
-Route::post('/user/peminjaman/store', [jadwalController::class, 'store'])->name('peminjaman.store');
+Route::get('/user/peminjaman/',[jadwalController::class, 'index'])->name('peminjaman.index')->middleware(RouterGuard::class);
+Route::post('/user/peminjaman/store', [jadwalController::class, 'store'])->name('peminjaman.store')->middleware(RouterGuard::class);
