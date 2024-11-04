@@ -30,7 +30,6 @@ class RouterGuard
         }
         $user = $auth->user();
         if ($request->path() === '/') {
-            return Response(['hitted']);
             if ($user->role_id == $this->roleId['admin']) {
                 return redirect()->intended('admin/')->with('username', $user->nama_lengkap);
             } else if ($user->role_id == $this->roleId['guru']) {
