@@ -56,9 +56,9 @@ Route::put('/admin/pengguna/update/{id}',[UserController::class, 'update'])->nam
 Route::delete('/admin/pengguna/destroy/{id}',[UserController::class, 'destroy'])->name('pengguna.destroy')->middleware(RouterGuard::class);
 
 
-Route::get('/user/peminjaman/',[jadwalController::class, 'index'])->name('peminjaman.index');
-Route::post('/user/peminjaman/store', [jadwalController::class, 'store'])->name('peminjaman.store');
+Route::get('/user/peminjaman/',[jadwalController::class, 'index'])->name('peminjaman.index')->middleware(RouterGuard::class);
+Route::post('/user/peminjaman/store', [jadwalController::class, 'store'])->name('peminjaman.store')->middleware(RouterGuard::class);
 
-Route::get('admin/peminjaman/',[jadwalController::class, 'indexAdmin'])->name('peminjamanAdmin.index');
-Route::post('/admin/peminjaman/store', [jadwalController::class, 'storeAdmin'])->name('peminjamanAdmin.store');
-Route::delete('/admin/peminjaman/{id}', [jadwalController::class, 'delete'])->name('peminjamanAdmin.delete');
+Route::get('admin/peminjaman/',[jadwalController::class, 'indexAdmin'])->name('peminjamanAdmin.index')->middleware(RouterGuard::class);
+Route::post('/admin/peminjaman/store', [jadwalController::class, 'storeAdmin'])->name('peminjamanAdmin.store')->middleware(RouterGuard::class);
+Route::delete('/admin/peminjaman/{id}', [jadwalController::class, 'destroy'])->name('peminjamanAdmin.delete')->middleware(RouterGuard::class);

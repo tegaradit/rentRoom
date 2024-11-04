@@ -34,9 +34,9 @@ class RouterGuard
             if ($user->role_id == $this->roleId['admin']) {
                 return redirect()->intended('admin/')->with('username', $user->nama_lengkap);
             } else if ($user->role_id == $this->roleId['guru']) {
-                return redirect()->intended('user/')->with('username', $user->nama_lengkap);
+                return redirect()->intended('user/peminjaman')->with('username', $user->nama_lengkap);
             } else {
-                return redirect()->intended('user/')->with('username', $user->nama_lengkap);
+                return redirect()->intended('user/peminjaman')->with('username', $user->nama_lengkap);
             }
         }
 

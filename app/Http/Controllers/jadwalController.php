@@ -6,6 +6,7 @@ use App\Models\data_peminjaman;
 use App\Models\Ruangan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Response;
 
 class jadwalController extends Controller
 {
@@ -28,6 +29,7 @@ class jadwalController extends Controller
     public function indexAdmin() {
         $ruangan = Ruangan::all(); // Pastikan model Ruangan sesuai dengan nama model Anda
         $peminjaman = data_peminjaman::all([
+            "id",
             "tgl_peminjaman AS tanggal", 
             "waktu_mulai AS jam_mulai", 
             "waktu_selesai AS jam_selesai",
@@ -221,6 +223,6 @@ class jadwalController extends Controller
         $peminjaman = data_peminjaman::findOrFail($id);
         $peminjaman->delete();
 
-        return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil dihapus.');
+        return response()->json(['message' => 'Peminjaman berhasil dihapus'], 200);
     }
 }
