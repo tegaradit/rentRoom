@@ -55,9 +55,6 @@
                                 <div class="col-12">
                                     <button class="btn btn-primary w-100" type="submit">Login</button>
                                 </div>
-                                <div class="col-12">
-                                    <p class="small mb-0">Belum Punya akun? <a href="/register">Daftar Sekarang</a></p>
-                                </div>
                             </form>
                         </div>
                     </div>
