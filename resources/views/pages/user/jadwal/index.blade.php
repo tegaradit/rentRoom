@@ -154,6 +154,7 @@
 <script>
     let FIRST_START = true
 
+    const colors = ["#FF6666", "#FFB266", "#FFDA66", "#66FF66", "#66FFDA", "#66B2FF", "#DA66FF", "#FF66B2"];
     const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
     let selectedTimeSlots = [];
     let multiSelectMode = false;
@@ -188,12 +189,14 @@
                 <td>${dayFormatted}/${month}/${year}</td>
                 <td>${dayOfWeek}</td>`;
 
-            for (let hour = 7; hour <= 16; hour++) {
-                const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
+             let hour = 7;
+            while (hour <= 16) {
                 let isBooked = false;
                 let bookingDetails = null;
+                let slotColor = "#f0f0f0";
+                let colspan = 1;
 
-                bookedSlots.forEach(slot => {
+                bookedSlots.forEach((slot, index) => {
                     if (
                         slot.ruangan_id == roomId &&
                         slot.tanggal === `${year}-${month}-${dayFormatted}` &&
@@ -202,14 +205,27 @@
                     ) {
                         isBooked = true;
                         bookingDetails = slot;
+                        slotColor = colors[index % colors.length];
+
+                        colspan = parseInt(slot.jam_selesai) - parseInt(slot.jam_mulai) + 1;
                     }
                 });
 
-                row += `<td id="${timeSlotId}" class="time-slot ${isBooked ? 'booked' : ''}" 
-    ${isBooked ? `onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}')" ` : 
-    `onclick="selectTimeSlot('${timeSlotId}', '${dayFormatted}/${month}/${year} ${hour}:00')"`}>
-</td>`;
-
+                if (isBooked) {
+                    row += `<td colspan="${colspan}" class="time-slot booked" 
+                                style="background-color: ${slotColor};"
+                                onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id})">
+                                ${bookingDetails.user_name}
+                            </td>`;
+                    hour += colspan;
+                } else {
+                    const slotTime = `${hour}:00 - ${hour}:59`;
+                    const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`
+                    row += `<td id="${timeSlotId}" class="time-slot" ${`onclick="selectTimeSlot('${timeSlotId}')"`}>
+                                ${slotTime}
+                            </td>`;
+                    hour++;
+                }
             }
 
             row += '</tr>';
@@ -319,15 +335,15 @@
     }
 
     function updateSelectedTimeList() {
-        document.getElementById('selected-times-list').innerHTML = selectedTimeSlots.map(slot => `<li>${slot}</li>`).join('');
+        document.getElementById('selected-times-list').innerHTML = selectedTimeSlots.map(slot => `<li>${slot}:00</li>`).join('');
         document.getElementById('selected_dates').value = JSON.stringify(selectedTimeSlots);
     }
 
     function showBookingDetails(namaPeminjam, keperluan) {
-    document.getElementById('booking-user').textContent = namaPeminjam;
-    document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
-    $('#showBookingModal').modal('show');
-}
+        document.getElementById('booking-user').textContent = namaPeminjam;
+        document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
+        $('#showBookingModal').modal('show');
+    }
 
 
     window.addEventListener('DOMContentLoaded', () => {

@@ -128,6 +128,10 @@
     </div>
 </div>
 
+
+@endsection
+
+@section('javascript')
 <script>
     const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
     const bookedSlots = JSON.parse('{!! $peminjaman !!}');
@@ -209,5 +213,4 @@
         generateTable();
     });
 </script>
-
 @endsection
