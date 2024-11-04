@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\data_jurusan;
 use App\Models\data_peminjaman;
-use App\Models\Roles;
 use App\Models\Ruangan;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -14,6 +13,20 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    private $roleId = [
+        'admin' => 1, 
+        'siswa' => 2,
+        'guru' => 3
+    ];
+
+    public function loginPage (Request $request) {
+        if ($request->has(['email', 'password'])) {
+            $csrfToken = csrf_token();
+            return redirect(route('login.post') . "?email=$request->email&password=$request->password&_token=$csrfToken");
+        } else {
+            return view('pages.login');
+        }
+    }
     /**
      * Handle user registration.
      */
@@ -22,21 +35,16 @@ class UserController extends Controller
         $rules = [
             'name' => 'required|string|max:100',
             'role' => 'required|string',
-            'noTelepon' => 'required|string|max:15',
+            'noTelepon' => 'nullable|string|max:15',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'terms' => 'accepted',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
 
-        if ($request->role === 'guru') {
-            $rules['nip'] = 'nullable|integer|unique:users,nip';
-            $rules['nik'] = 'nullable|integer|unique:users,nik';
-            $rules['nis'] = 'nullable';
-        } else if ($request->role === 'siswa') {
-            $rules['nis'] = 'required|integer|unique:users,nis';
-            $rules['nip'] = 'nullable';
-            $rules['nik'] = 'nullable';
+        if ($request->role == 'guru') {
+            $rules['nip'] = 'nullable|numeric|unique:users,nip';
+            $rules['nik'] = 'nullable|numeric|unique:users,nik';
+            $rules['jurusan'] = 'required|exists:data_jurusan,id';
         }
 
         $validator = Validator::make($request->all(), $rules);
@@ -48,32 +56,42 @@ class UserController extends Controller
         // File upload for photo
         $path = null;
         if ($request->hasFile('photo')) {
-            $path = $request->file('photo')->store('photos');
+            $path = $request->file('photo')->store('photos', 'public');
         }
 
-        $user = User::create([
+        User::create([
             'nama_lengkap' => $request->name,
-            'nis' => $request->nis,
             'nik' => $request->nik,
             'nip' => $request->nip,
-            'role' => $request->role,
-            'jurusan_id' => $this->getJurusanId($request->jurusan),
+            'role_id' => $this->roleId[strtolower($request->role)],
+            'jurusan_id' => $request->jurusan,
             'email' => $request->email,
             'no_hp' => $request->noTelepon,
             'password' => Hash::make($request->password),
             'photo' => $path,
         ]);
 
-        return redirect('/')->with('success', 'Akun berhasil dibuat. Silakan login.');
+        return redirect('/')->withInput()->with('success', 'Akun berhasil dibuat. Silakan login.');
     }
     // Helper untuk mengambil ID jurusan dari nama jurusan
 
     public function login(Request $request)
     {
-        $request->validate([
+        if (!$request->has('_token') || $request->input('_token') !== csrf_token()) {
+            return redirect('/')->withErrors([
+                'error' => 'Invalid CSRF token',
+                ])->withHeaders(['status' => 419]);
+        }
+            
+        $rules = [
             'email' => 'required|email',
             'password' => 'required',
-        ]);
+        ];
+        
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return redirect('/')->withErrors($validator->errors());
+        }
 
         // Ambil data email dan password
         $credentials = $request->only('email', 'password');
@@ -82,10 +100,12 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             // Autentikasi berhasil
             $user = Auth::user();
-            if ($user->role_id == 1) {
+            if ($user->role_id == $this->roleId['admin']) {
                 return redirect()->intended('admin/')->with('username', $user->nama_lengkap);
+            } else if ($user->role_id == $this->roleId['guru']) {
+                return redirect()->intended('user/peminjaman')->with('username', $user->nama_lengkap);
             } else {
-                return redirect()->intended('user/')->with('username', $user->nama_lengkap);
+                return redirect()->intended('user/peminjaman')->with('username', $user->nama_lengkap);
             }
         }
 
@@ -153,28 +173,44 @@ class UserController extends Controller
     
             // Verify the current password
             if (!Hash::check($request->current_password, $user->password)) {
-                dd("Current password is incorrect.");
                 return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
             }
     
             // Update the password
             $user->password = Hash::make($request->new_password);
-            $user->save();
-    
-            return redirect()->back()->with('message', 'Password updated successfully!');
         }
     
         // Otherwise, handle profile update
-        $request->validate([
+        $rules = [
             'nama_lengkap' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'no_hp' => 'nullable|string|max:15',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        ];
+
+        if ($user->role_id == 3) { //--> "3" it's mean a "guru"
+            $rules['nip'] = 'nullable|numeric|unique:users,nip,' . $user->id;
+            $rules['nik'] = 'nullable|numeric|unique:users,nik,' . $user->id;
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'gagal memperbarui');
+        }
     
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('photos');
+            // If there was a previous photo, delete it
+            if ($user->photo && \Illuminate\Support\Facades\Storage::exists($user->photo)) {
+                \Illuminate\Support\Facades\Storage::delete($user->photo);
+            }
             $user->photo = $path;
+        }
+
+        if ($user->role_id === 3) { //--> "3" it's mean a "guru"
+            $user->nik = $request->nik;
+            $user->nip = $request->nip;
         }
     
         $user->nama_lengkap = $request->nama_lengkap;
@@ -210,40 +246,39 @@ class UserController extends Controller
             'noTelepon' => 'nullable|string|max:15',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'terms' => 'accepted',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi untuk foto
         ];
     
         // Validasi tambahan sesuai role
         if ($request->role === 'guru') {
-            $rules['nip'] = 'nullable|integer|unique:users,nip';
-            $rules['nik'] = 'nullable|integer|unique:users,nik';
+            $rules['nip'] = 'nullable|numeric|unique:users,nip';
+            $rules['nik'] = 'nullable|numeric|unique:users,nik';
             $rules['nis'] = 'nullable';
             $rules['jurusan'] = 'nullable|string';
         } else if ($request->role === 'siswa') {
-            $rules['nis'] = 'required|integer|unique:users,nis';
+            $rules['nis'] = 'required|numeric|unique:users,nis';
             $rules['nip'] = 'nullable';
             $rules['nik'] = 'nullable';
             $rules['jurusan'] = 'required|string';
         } elseif ($request->role === 'admin') {
-            $rules['nip'] = 'nullable|integer|unique:users,nip';
-            $rules['nik'] = 'nullable|integer|unique:users,nik';
+            $rules['nip'] = 'nullable|numeric|unique:users,nip';
+            $rules['nik'] = 'nullable|numeric|unique:users,nik';
             $rules['nis'] = 'nullable';
             $rules['jurusan'] = 'nullable|string';
         }
     
         // Validasi input
         $validator = Validator::make($request->all(), $rules);
-    
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Akun gagal dibuat');
         }
-    
+
         // Simpan foto jika di-upload
         $photoPath = $request->hasFile('photo') ? $request->file('photo')->store('photos') : null;
-    
+
         // Buat pengguna baru
-        $user = User::create([
+        User::create([
             'nama_lengkap' => $request->nama_lengkap,
             'nis' => $request->nis,
             'nik' => $request->nik,
@@ -284,18 +319,18 @@ class UserController extends Controller
 
         // Additional validation based on role
         if ($request->role === 'guru') {
-            $rules['nip'] = 'nullable|integer|unique:users,nip,' . $user->id;
-            $rules['nik'] = 'nullable|integer|unique:users,nik,' . $user->id;
+            $rules['nip'] = 'nullable|numeric|unique:users,nip,' . $user->id;
+            $rules['nik'] = 'nullable|numeric|unique:users,nik,' . $user->id;
             $rules['nis'] = 'nullable';
             $rules['jurusan'] = 'nullable|string';
         } elseif ($request->role === 'siswa') {
-            $rules['nis'] = 'required|integer|unique:users,nis,' . $user->id;
+            $rules['nis'] = 'required|numeric|unique:users,nis,' . $user->id;
             $rules['nip'] = 'nullable';
             $rules['nik'] = 'nullable';
             $rules['jurusan'] = 'required|string';
         } elseif ($request->role === 'admin') {
-            $rules['nip'] = 'nullable|integer|unique:users,nip,' . $user->id;
-            $rules['nik'] = 'nullable|integer|unique:users,nik,' . $user->id;
+            $rules['nip'] = 'nullable|numeric|unique:users,nip,' . $user->id;
+            $rules['nik'] = 'nullable|numeric|unique:users,nik,' . $user->id;
             $rules['nis'] = 'nullable';
             $rules['jurusan'] = 'nullable|string';
         }
@@ -309,14 +344,15 @@ class UserController extends Controller
         // Handle photo upload
         if ($request->hasFile('photo')) {
             // If there was a previous photo, delete it
-            \Illuminate\Support\Facades\Storage::delete($user->photo);
-            $user->photo = $request->file('photo')->store('photos');
+            if ($user->photo && \Illuminate\Support\Facades\Storage::exists($user->photo)) {
+                \Illuminate\Support\Facades\Storage::delete($user->photo);
+            }
+            $user->photo = $request->file('photo')->store('photos', 'public');
         }
 
         // Update user details
         $user->nama_lengkap = $request->nama_lengkap;
         $user->role_id = ($request->role === 'admin') ? 1 : 2;
-        $user->nis = $request->nis;
         $user->nik = $request->nik;
         $user->nip = $request->nip;
         $user->jurusan_id = $this->getJurusanId($request->jurusan);

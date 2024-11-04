@@ -59,9 +59,9 @@
                     <td>{{ $data->nama_lengkap }}</td>
                     <td>{{ $data->email }}</td>
                     <td>
-                        @if ($data->nis)
+                        @if ($data->role_id == '2')
                         Siswa
-                        @elseif ($data->nip || $data->nik)
+                        @elseif ($data->role_id == '3')
                         Guru
                         @else
                         Admin

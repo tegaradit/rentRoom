@@ -21,17 +21,19 @@
                         @endif
                             
                         <div class="card-body">
-                            @if($errors->any())
-                            <div class="alert alert-danger">
-                                {{ $errors->first('error') }}
-                            </div>
+                            @if ($errors->any())
+                                <ul class="alert alert-danger" style="padding-left: 2rem;">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             @endif
 
                             <div class="pt-4 pb-2">
                                 <h5 class="card-title text-center pb-0 fs-4">Login Ke akun anda</h5>
                                 <p class="text-center small">Masukan Email dan Password</p>
                             </div>
-                            <form class="row g-3 needs-validation" novalidate method="post" action="{{ route('login.post') }}">
+                            <form class="row g-3 needs-validation" novalidate enctype="application/x-www-form-urlencoded" action="{{ route('login.post') }}">
                                 @csrf
                                 <div class="col-12">
                                     <label for="yourUsername" class="form-label">Email</label>
@@ -52,9 +54,6 @@
 
                                 <div class="col-12">
                                     <button class="btn btn-primary w-100" type="submit">Login</button>
-                                </div>
-                                <div class="col-12">
-                                    <p class="small mb-0">Belum Punya akun? <a href="/register">Daftar Sekarang</a></p>
                                 </div>
                             </form>
                         </div>

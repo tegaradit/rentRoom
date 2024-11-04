@@ -44,7 +44,7 @@
 
         <li class="nav-item">
             <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/data_peminjaman') ? 'active' : 'collapsed' }}"
-                href="{{route('data_peminjaman.index') }}">
+                href="{{route('peminjamanAdmin.index') }}">
                 <i class="bi-inboxes"></i>
                 <span>Data Peminjaman</span>
             </a>
@@ -73,15 +73,6 @@
                 <span>Pinjam Ruangan</span>
             </a>
         </li>
-
-        <li class="nav-item">
-            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'admin/peminjaman_saya') ? 'active' : 'collapsed' }}"
-                href="{{ route('peminjaman_saya.index') }}">
-                <i class="bi-journal-bookmark"></i>
-                <span>Peminjaman Saya</span>
-            </a>
-        </li>
-
     </ul>
 
 </aside><!-- End Sidebar-->

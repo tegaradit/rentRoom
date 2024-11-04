@@ -28,6 +28,12 @@ class RolesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Guru',
+                'canApprove' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ]);
     }
 }

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('kapasitas');
             $table->text('deskripsi')->nullable();
             $table->string('thumbnail', 255)->nullable();
-            $table->enum('status', ['tersedia', 'terpinjam'])->default('tersedia');  // Menambahkan kolom enum status
             $table->timestamps();
         });
     }

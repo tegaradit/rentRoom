@@ -19,6 +19,7 @@ class LaporanController extends Controller
 
         // Ambil data peminjaman
         $datas = $query->with(['user', 'ruangan'])->get();
+        // return $datas;
 
         return view('pages.admin.laporan.index', compact('datas'));
     }

@@ -25,7 +25,7 @@
                <li class="dropdown-header">
                   <img src="{{ Auth::user()->photo ? asset('storage/'. Auth::user()->photo) : 'https://via.placeholder.com/150' }}" style="width: 50px; height: 50px; border-radius: 50%; aspect-ratio: 1/1; object-fit: cover;" alt="">
                   @php
-                     $roleName = [1 => 'Admin', 2 => 'user'];
+                     $roleName = [1 => 'Admin', 2 => 'User', 3 => 'Guru'];
                   @endphp
                   <h6>{{ Auth::user()->nama_lengkap }}</h6>
                   <span>{{ $roleName[Auth::user()->role_id] }}</span>
@@ -34,25 +34,29 @@
                   <hr class="dropdown-divider">
                </li>
 
-               <li>
-                  <a class="dropdown-item d-flex align-items-center" href="{{ route('myprofile') }}">
-                     <i class="bi bi-person"></i>
-                     <span>My Profile</span>
-                  </a>
-               </li>
+               @if (Auth::user()->role_id != 2)
+                  <li>
+                     <a class="dropdown-item d-flex align-items-center" href="{{ route('myprofile') }}">
+                        <i class="bi bi-person"></i>
+                        <span>My Profile</span>
+                     </a>
+                  </li>
+               @endif
                <li>
                   <a id="logout-btn" class="dropdown-item d-flex align-items-center" href="{{ route('logout.post') }}" >
                      <i class="bi bi-box-arrow-right"></i>
                      <span>Sign Out</span>
                   </a>
                </li>
-            </ul><!-- End Profile Dropdown Items -->
+            </ul>
          </li><!-- End Profile Nav -->
       </ul>
    </nav><!-- End Icons Navigation -->
 </header><!-- End Header -->
 @if (Auth::user()->role_id == 1)
    @include('pages.admin.sidebar')
+@elseif (Auth::user()->role_id == 3)
+   @include('pages.user.sidebar') 
 @else
    @include('pages.user.sidebar')
 @endif

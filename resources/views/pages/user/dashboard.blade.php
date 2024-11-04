@@ -99,59 +99,59 @@
                         <td>{{ $borrowed->waktu_selesai }}</td>
                         <td>
                            @if ($borrowed->status == 'diterima')
-                              @php
-                                 $currentTime = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
-                                 $startTime = \Carbon\Carbon::parse($borrowed->waktu_mulai)->format('H:i');
-                                 $endTime = \Carbon\Carbon::parse($borrowed->waktu_selesai)->format('H:i');
-                                 $currentDate = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d');
-                                 $borrowingDate = \Carbon\Carbon::parse($borrowed->tgl_peminjaman)->format('Y-m-d');
-                              @endphp
-                              @if ($borrowingDate >= $currentDate)
-                                 @if ($currentTime < $startTime)
-                                    belum mulai
-                                 @elseif ($currentTime > $endTime)
-                                    waktu habis
-                                 @else
-                                    @php
-                                       $remainingTimeInMinutes = (strtotime($borrowed->waktu_selesai) - strtotime($currentTime)) / 60;
-                                       $days = floor($remainingTimeInMinutes / 1440);
-                                       $hours = floor(($remainingTimeInMinutes % 1440) / 60);
-                                       $minutes = $remainingTimeInMinutes % 60;
-                                       $remainingTime = sprintf('%d hari, %02d jam, %02d menit', $days, $hours, $minutes);
-                                    @endphp
-                                    {{ $remainingTime }}
-                                 @endif
+                           @php
+                           $currentTime = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
+                           $startTime = \Carbon\Carbon::parse($borrowed->waktu_mulai)->format('H:i');
+                           $endTime = \Carbon\Carbon::parse($borrowed->waktu_selesai)->format('H:i');
+                           $currentDate = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d');
+                           $borrowingDate = \Carbon\Carbon::parse($borrowed->tgl_peminjaman)->format('Y-m-d');
+                           @endphp
+                           @if ($borrowingDate >= $currentDate)
+                           @if ($currentTime < $startTime)
+                              belum mulai
+                              @elseif ($currentTime> $endTime)
+                              waktu habis
                               @else
-                                 waktu habis
+                              @php
+                              $remainingTimeInMinutes = (strtotime($borrowed->waktu_selesai) - strtotime($currentTime)) / 60;
+                              $days = floor($remainingTimeInMinutes / 1440);
+                              $hours = floor(($remainingTimeInMinutes % 1440) / 60);
+                              $minutes = $remainingTimeInMinutes % 60;
+                              $remainingTime = sprintf('%d hari, %02d jam, %02d menit', $days, $hours, $minutes);
+                              @endphp
+                              {{ $remainingTime }}
                               @endif
-                           @else
-                           -
-                           @endif
+                              @else
+                              waktu habis
+                              @endif
+                              @else
+                              -
+                              @endif
                         </td>
                         <td>
                            @php
-                              $statusColor = [
-                                 'pending' => 'bg-warning',
-                                 'diterima' => 'bg-success',
-                                 'ditolak' => 'bg-danger'
-                              ];
+                           $statusColor = [
+                           'pending' => 'bg-warning',
+                           'diterima' => 'bg-success',
+                           'ditolak' => 'bg-danger'
+                           ];
                            @endphp
                            <span class="badge {{ $statusColor[$borrowed->status] }}">{{ $borrowed->status }}</span>
                         </td>
                         <td>
                            @if ($borrowed->status != 'pending')
-                              -
+                           -
                            @else
-                              <button onclick="confirmDelete({{ $borrowed->id }})" class="btn btn-sm btn-danger">Batalkan</button>
-                              <form id="delete-form-{{ $borrowed->id }}" action="{{ route('peminjaman_saya.destroy', $borrowed->id) }}" method="POST" style="display: none;">
-                                 @csrf
-                                 @method('DELETE')
-                              </form>
+                           <button onclick="confirmDelete({{ $borrowed->id }})" class="btn btn-sm btn-danger">Batalkan</button>
+                           <form id="delete-form-{{ $borrowed->id }}" action="{{ route('peminjaman_saya.destroy', $borrowed->id) }}" method="POST" style="display: none;">
+                              @csrf
+                              @method('DELETE')
+                           </form>
                            @endif
                         </td>
                      </tr>
                      @empty
-                        <h2 class="text-center">Belum Ada Peminjaman</h2>
+                     <h2 class="text-center">Belum Ada Peminjaman</h2>
                      @endforelse
                   </tbody>
                </table>
@@ -165,20 +165,38 @@
 @section('javascript')
 <script>
    function confirmDelete(id) {
-         Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Anda tidak akan dapat mengembalikan ini!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Batal'
-         }).then((result) => {
-            if (result.isConfirmed) {
-               document.getElementById('delete-form-' + id).submit();
-            }
-         });
+      Swal.fire({
+         title: 'Apakah Anda yakin?',
+         text: "Anda tidak akan dapat mengembalikan ini!",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Ya',
+         cancelButtonText: 'Batal'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+         }
+      });
    }
+
+   function saveCurrentMonthAndYear(year, month) {
+      localStorage.setItem('currentYear', year);
+      localStorage.setItem('currentMonth', month);
+   }
+   document.addEventListener('DOMContentLoaded', function() {
+      const currentYear = localStorage.getItem('currentYear');
+      const currentMonth = localStorage.getItem('currentMonth');
+
+      if (currentYear && currentMonth) {
+         // Fungsi untuk menampilkan bulan dan tahun yang tersimpan
+         displayCalendar(currentYear, currentMonth);
+      } else {
+         // Jika tidak ada data di localStorage, tampilkan bulan dan tahun saat ini
+         const today = new Date();
+         displayCalendar(today.getFullYear(), today.getMonth() + 1); // bulan dimulai dari 0
+      }
+   });
 </script>
 @endsection

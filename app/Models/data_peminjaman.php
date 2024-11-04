@@ -14,7 +14,7 @@ class data_peminjaman extends Model
 
     // Kolom yang bisa diisi (mass assignable)
     protected $fillable = [
-        'user_id',
+        'nama_peminjam',
         'ruangan_id',
         'tgl_peminjaman',
         'waktu_mulai',
