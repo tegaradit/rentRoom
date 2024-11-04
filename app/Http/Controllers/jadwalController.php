@@ -25,6 +25,21 @@ class jadwalController extends Controller
         // return $peminjaman;
         return view('pages.user.jadwal.index', compact('ruangan','peminjaman'));
     }
+    public function indexAdmin() {
+        $ruangan = Ruangan::all(); // Pastikan model Ruangan sesuai dengan nama model Anda
+        $peminjaman = data_peminjaman::all([
+            "tgl_peminjaman AS tanggal", 
+            "waktu_mulai AS jam_mulai", 
+            "waktu_selesai AS jam_selesai",
+            "ruangan_id AS ruangan_id", 
+            "nama_peminjam AS user_name",
+            "keperluan AS keperluan",
+        ]);
+        // ->toJson(); // Pastikan model Peminjaman sesuai dengan nama model Anda
+    
+        // return $peminjaman;
+        return view('pages.admin.jadwal.index', compact('ruangan','peminjaman'));
+    }
 
     /**
      * Tampilkan form untuk membuat peminjaman baru.
@@ -39,6 +54,51 @@ class jadwalController extends Controller
      * Simpan peminjaman baru ke database.
      */
     public function store(Request $request)
+    {
+        // Decode the JSON from `selected_dates`
+        $dateTimeParts = json_decode($request->input('selected_dates'), true);
+        // return $dateTimeParts;
+        $startTime = null;
+        $endtTime = null;
+        $_dateTimeParts = explode('-', $dateTimeParts[0]);
+        $date = \Carbon\Carbon::createFromFormat('d-m-Y', "{$_dateTimeParts[0]}-{$_dateTimeParts[1]}-{$_dateTimeParts[2]}")->format('Y-m-d');
+        if ($dateTimeParts > 1) {
+            $startTime = explode('-', $dateTimeParts[0])[3] . ":00:00";
+            $endtTime = explode('-', $dateTimeParts[count($dateTimeParts) - 1])[3] . ":00:00";
+        } else {
+
+            $startTime = explode('-', $dateTimeParts[0])[3] . ":00:00";
+            $endtTime = (int)$startTime + 1 . ":00:00";
+        }
+        // return [$startTime, $endtTime];
+        // Validate the remaining fields
+        $validatedData = $request->validate([
+            'user_name' => 'required|string',
+            'room_id' => 'required|integer|exists:ruangan,id',
+            'keperluan' => 'nullable|string',
+        ]);
+        
+        // Add `tanggal`, `jam_mulai`, and `jam_selesai` to the validated data array
+        $validatedData['tanggal'] = $date;
+        $validatedData['jam_mulai'] = $startTime;
+        $validatedData['jam_selesai'] = $endtTime;
+        
+        // return $validatedData;
+        // Save the data to the database
+        data_peminjaman::create([
+            'nama_peminjam' => $validatedData['user_name'],
+            'ruangan_id' => $validatedData['room_id'],
+            'tgl_peminjaman' => $validatedData['tanggal'],
+            'waktu_mulai' => $validatedData['jam_mulai'],
+            'waktu_selesai' => $validatedData['jam_selesai'],
+            'keperluan' => $validatedData['keperluan'],
+        ]);
+    
+        // Redirect with success message
+        return redirect()->back()->with('success', 'Peminjaman berhasil disimpan');
+    }
+
+    public function storeAdmin(Request $request)
     {
         // Decode the JSON from `selected_dates`
         $dateTimeParts = json_decode($request->input('selected_dates'), true);

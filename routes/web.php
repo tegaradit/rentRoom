@@ -54,12 +54,10 @@ Route::get('/admin/pengguna/edit/{id}',[UserController::class, 'edit'])->name('p
 Route::put('/admin/pengguna/update/{id}',[UserController::class, 'update'])->name('pengguna.update');
 Route::delete('/admin/pengguna/destroy/{id}',[UserController::class, 'destroy'])->name('pengguna.destroy');
 
-Route::prefix('peminjaman')->group(function () {
-    Route::get('/{id}', [jadwalController::class, 'show'])->name('peminjaman.show');
-    Route::get('/{id}/edit', [jadwalController::class, 'edit'])->name('peminjaman.edit');
-    Route::put('/{id}', [jadwalController::class, 'update'])->name('peminjaman.update');
-    Route::delete('/{id}', [jadwalController::class, 'destroy'])->name('peminjaman.destroy');
-});
 
 Route::get('/user/peminjaman/',[jadwalController::class, 'index'])->name('peminjaman.index');
 Route::post('/user/peminjaman/store', [jadwalController::class, 'store'])->name('peminjaman.store');
+
+Route::get('admin/peminjaman/',[jadwalController::class, 'indexAdmin'])->name('peminjamanAdmin.index');
+Route::post('/admin/peminjaman/store', [jadwalController::class, 'storeAdmin'])->name('peminjamanAdmin.store');
+Route::delete('/admin/peminjaman/{id}', [jadwalController::class, 'delete'])->name('peminjamanAdmin.delete');

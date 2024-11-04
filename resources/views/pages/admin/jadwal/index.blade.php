@@ -92,7 +92,7 @@
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="{{ route('peminjaman.store') }}">
+            <form method="POST" action="{{ route('peminjamanAdmin.store') }}">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="bookingModalLabel">Confirm Booking</h5>
@@ -141,6 +141,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" onclick="deleteBooking(bookingId)">Delete Booking</button>
+
             </div>
         </div>
     </div>
@@ -168,11 +170,15 @@
 
         const _month = document.getElementById('month');
         const month = String(_month.value).padStart(2, '0');
-        
+
         const _roomId = document.getElementById('room');
         const roomId = _roomId.value;
-        
-        localStorage.setItem('curenttime',JSON.stringify({year: _year.selectedIndex, month: _month.selectedIndex, roomId: _roomId.selectedIndex}));
+
+        localStorage.setItem('curenttime', JSON.stringify({
+            year: _year.selectedIndex,
+            month: _month.selectedIndex,
+            roomId: _roomId.selectedIndex
+        }));
 
         const tbody = document.getElementById('schedule-body');
         tbody.innerHTML = '';
@@ -188,27 +194,35 @@
                 <td>${dayFormatted}/${month}/${year}</td>
                 <td>${dayOfWeek}</td>`;
 
-            for (let hour = 7; hour <= 16; hour++) {
-                const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
-                let isBooked = false;
-                let bookingDetails = null;
+                for (let hour = 7; hour <= 16; hour++) {
+    const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
+    let isBooked = false;
+    let bookingDetails = null;
 
-                bookedSlots.forEach(slot => {
-                    if (
-                        slot.ruangan_id == roomId &&
-                        slot.tanggal === `${year}-${month}-${dayFormatted}` &&
-                        parseInt(slot.jam_mulai) <= hour &&
-                        parseInt(slot.jam_selesai) >= hour
-                    ) {
-                        isBooked = true;
-                        bookingDetails = slot;
-                    }
-                });
+    bookedSlots.forEach(slot => {
+        if (
+            slot.ruangan_id == roomId &&
+            slot.tanggal === `${year}-${month}-${dayFormatted}` &&
+            parseInt(slot.jam_mulai) <= hour &&
+            parseInt(slot.jam_selesai) >= hour
+        ) {
+            isBooked = true;
+            bookingDetails = slot;
+        }
+    });
 
-                row += `<td id="${timeSlotId}" class="time-slot ${isBooked ? 'booked' : ''}" 
-    ${isBooked ? `onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}')" ` : 
-    `onclick="selectTimeSlot('${timeSlotId}', '${dayFormatted}/${month}/${year} ${hour}:00')"`}>
-</td>`;
+    // Log bookingDetails.id to ensure it's not undefined
+    if (bookingDetails) {
+        console.log('Booking ID:', bookingDetails.id);
+    }
+
+    row += `<td id="${timeSlotId}" class="time-slot ${isBooked ? 'booked' : ''}" 
+        ${isBooked ? `onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id})"` : 
+        `onclick="selectTimeSlot('${timeSlotId}', '${dayFormatted}/${month}/${year} ${hour}:00')"`}>
+    </td>`;
+
+
+
 
             }
 
@@ -324,10 +338,51 @@
     }
 
     function showBookingDetails(namaPeminjam, keperluan) {
+        document.getElementById('booking-user').textContent = namaPeminjam;
+        document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
+        $('#showBookingModal').modal('show');
+    }
+    let bookingId = null;
+
+    function showBookingDetails(namaPeminjam, keperluan, id) {
     document.getElementById('booking-user').textContent = namaPeminjam;
     document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
+
+    // Set delete button onclick to include the id
+    document.querySelector('#showBookingModal .btn-danger').setAttribute('onclick', `deleteBooking(${id})`);
+
     $('#showBookingModal').modal('show');
 }
+
+
+
+function deleteBooking(id) {
+    if (!id) {
+        alert('Invalid booking ID');
+        return;
+    }
+
+    if (confirm('Are you sure you want to delete this booking?')) {
+        $.ajax({
+            url: `/admin/peminjaman/${id}`, // Ensure a leading slash is here
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                $('#showBookingModal').modal('hide');
+                alert('Booking deleted successfully');
+                generateTable(); // Refresh the table to remove deleted booking
+            },
+            error: function(xhr) {
+                alert('Failed to delete booking');
+            }
+        });
+    }
+}
+
+
+
 
 
     window.addEventListener('DOMContentLoaded', () => {
