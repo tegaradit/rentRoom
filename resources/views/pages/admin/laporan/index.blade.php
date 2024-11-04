@@ -60,7 +60,7 @@
                     @forelse ($datas as $index => $data)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $data->user->nama_lengkap }}</td>
+                            <td>{{ $data->namaPeminjam }}</td>
                             <td>{{ $data->ruangan->nama_ruangan }}</td>
                             <td>{{ \Carbon\Carbon::parse($data->tgl_peminjaman)->format('d-m-Y') }}</td>
                             <td>{{ $data->waktu_mulai }}</td>
