@@ -19,27 +19,23 @@ class UsersSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'nama_lengkap' => 'Admin User',
-                'nis' => null, // No NIS for admin
                 'jurusan_id' => 1, // Assuming 1 is a valid jurusan_id in data_jurusan table
                 'email' => 'admin@example.com',
                 'no_hp' => '081234567890',
                 'role_id' => 1, // Assuming 1 corresponds to Admin role
                 'password' => Hash::make('password'), // Use hashed passwords
                 'photo' => null,
-                'ttd' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'nama_lengkap' => 'Regular User',
-                'nis' => 12345, // NIS for regular user
                 'jurusan_id' => 2, // Assuming 2 is a valid jurusan_id in data_jurusan table
                 'email' => 'user@example.com',
                 'no_hp' => '081298765432',
                 'role_id' => 2, // Assuming 2 corresponds to User role
                 'password' => Hash::make('password'), // Use hashed passwords
                 'photo' => null,
-                'ttd' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -12,6 +12,14 @@
     </nav>
 </div>
 
+@if ($errors->any())
+<ul class="alert alert-danger" style="padding-left: 2rem;">
+    @foreach ($errors->all() as $error)
+    <li>{{ $error }}</li>
+    @endforeach
+</ul>
+@endif
+
 <section class="section data_user">
     <div class="col-lg-12"> 
         <form action="{{ route('pengguna.update', $data_pengguna->id) }}" method="post" enctype="multipart/form-data" class="row g-3 needs-validation" novalidate>
@@ -37,7 +45,7 @@
                 </div>
                 <div class="form-group">
                     <label for="role">Role</label>
-                    <input type="text" name="role" id="role" class="form-control" readonly value="{{ $data_pengguna->role_id == 1 ? 'admin' : ($data_pengguna->nis == null ? 'guru' : 'siswa') }}">
+                    <input type="text" name="role" id="role" class="form-control" readonly value="{{ $data_pengguna->role_id == 1 ? 'admin' : ($data_pengguna->role_id == 3 ? 'guru' : 'siswa') }}">
                     <div class="invalid-feedback">Role harus dipilih!</div>
                 </div>
                 <div class="form-group">
@@ -52,40 +60,41 @@
                     <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
                 </div>
 
-                @if ($data_pengguna->role_id != 1)
-                <div id="nisContainer" style="{{ $data_pengguna->nis != null ? '' : 'display: none;' }}">
-                    <label for="nis" class="form-label">NIS</label>
-                    <input type="number" name="nis" id="nis" class="form-control" value="{{ old('nis', $data_pengguna->nis) }}" {{ $data_pengguna->nis != null ? 'required' : '' }}>
-                    <div class="invalid-feedback">NIS harus diisi untuk siswa!</div>
-                </div>
+                @if ($data_pengguna->role_id != 2)
+                    <div class="form-group">
+                        <label for="noTelepon">No Telepon</label>
+                        <input type="number" name="noTelepon" id="noTelepon" class="form-control" value="{{ old('noTelepon', $data_pengguna->no_hp) }}">
+                        <div class="invalid-feedback">Nomor telepon harus diisi!</div>
+                    </div>
+                @endif
 
-                <div id="nipNikContainer" style="{{ $data_pengguna->nis == null ? '' : 'display: none;' }}">
-                    <label for="nip" class="form-label">NIP</label>
-                    <input type="number" name="nip" id="nip" class="form-control mb-2" placeholder="Masukkan NIP jika ada" value="{{ old('nip', $data_pengguna->nip) }}">
-                    <label for="nik" class="form-label">NIK</label>
-                    <input type="number" name="nik" id="nik" class="form-control" placeholder="Masukkan NIK jika tidak memiliki NIP" value="{{ old('nik', $data_pengguna->nik) }}">
-                    <div class="invalid-feedback">NIP atau NIK harus diisi untuk guru!</div>
-                </div>
+                @if ($data_pengguna->role_id == 3)
+                    <div id="nisContainer" style="{{ $data_pengguna->nis != null ? '' : 'display: none;' }}">
+                        <label for="nis" class="form-label">NIS</label>
+                        <input type="number" name="nis" id="nis" class="form-control" value="{{ old('nis', $data_pengguna->nis) }}" {{ $data_pengguna->nis != null ? 'required' : '' }}>
+                        <div class="invalid-feedback">NIS harus diisi untuk siswa!</div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="noTelepon">No Telepon</label>
-                    <input type="number" name="noTelepon" id="noTelepon" class="form-control" value="{{ old('noTelepon', $data_pengguna->no_hp) }}" required>
-                    <div class="invalid-feedback">Nomor telepon harus diisi!</div>
-                </div>
+                    <div id="nipNikContainer" style="{{ $data_pengguna->nis == null ? '' : 'display: none;' }}">
+                        <label for="nip" class="form-label">NIP</label>
+                        <input type="number" name="nip" id="nip" class="form-control mb-2" placeholder="Masukkan NIP jika ada" value="{{ old('nip', $data_pengguna->nip) }}">
+                        <label for="nik" class="form-label">NIK</label>
+                        <input type="number" name="nik" id="nik" class="form-control" placeholder="Masukkan NIK jika tidak memiliki NIP" value="{{ old('nik', $data_pengguna->nik) }}">
+                        <div class="invalid-feedback">NIP atau NIK harus diisi untuk guru!</div>
+                    </div>
 
-                <div class="form-group" id="jurusanContainer" style="{{ $data_pengguna->nis != null ? '' : 'display: none;' }}">
-                    <label for="jurusan">Jurusan</label>
-                    <select name="jurusan" id="jurusan" class="form-select">
-                        <option value="">Pilih Jurusan</option>
-                        @foreach($data_jurusan as $jurusan)
-                        <option value="{{ $jurusan->id }}" {{ $data_pengguna->jurusan_id == $jurusan->id ? 'selected' : '' }}>
-                            {{ $jurusan->nama_jurusan }}
-                        </option>
-                        @endforeach
-                    </select>
-                    <div class="invalid-feedback">Jurusan harus dipilih untuk siswa!</div>
-                </div>
-
+                    <div class="form-group" id="jurusanContainer" style="{{ $data_pengguna->nis != null ? '' : 'display: none;' }}">
+                        <label for="jurusan">Jurusan</label>
+                        <select name="jurusan" id="jurusan" class="form-select">
+                            <option value="">Pilih Jurusan</option>
+                            @foreach($data_jurusan as $jurusan)
+                            <option value="{{ $jurusan->id }}" {{ $data_pengguna->jurusan_id == $jurusan->id ? 'selected' : '' }}>
+                                {{ $jurusan->nama_jurusan }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback">Jurusan harus dipilih untuk siswa!</div>
+                    </div>
                 @endif
 
                 <div class="form-group mt-4">
