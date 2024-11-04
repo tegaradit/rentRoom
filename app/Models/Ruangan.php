@@ -18,7 +18,6 @@ class Ruangan extends Model
         'kapasitas',
         'deskripsi',
         'thumbnail',
-        'status',
     ];
 
     // Menentukan jika 'id' bersifat auto-increment

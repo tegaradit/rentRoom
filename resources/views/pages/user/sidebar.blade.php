@@ -9,6 +9,13 @@
                 <span>Dashboard</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link  {{ str_contains(Route::getCurrentRoute()->uri, 'user/pinjam-ruangan') ? 'active' : 'collapsed' }}"
+                href="{{ route('pinjam-ruangan.index') }}">
+                <i class="bi-calendar4-range"></i>
+                <span>Jadwal</span>
+            </a>
+        </li>
 
         <li class="nav-link"
             style="color: rgb(169, 169, 169); margin-top: 20px; margin-bottom: 20px; padding-left: 20px; position: relative;"
@@ -36,4 +43,4 @@
 
     </ul>
 
-</aside><!-- End Sidebar-->
+</aside>
