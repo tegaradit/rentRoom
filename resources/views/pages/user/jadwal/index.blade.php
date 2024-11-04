@@ -5,14 +5,17 @@
 <style>
     /* Styling Table */
     .hidden {
-        display: none; /* This class will hide elements */
+        display: none;
+        /* This class will hide elements */
     }
+
     table {
         width: 100%;
         border-collapse: collapse;
     }
 
-    th, td {
+    th,
+    td {
         padding: 8px;
         border: 1px solid #ccc;
         text-align: center;
@@ -25,7 +28,8 @@
 
     .time-slot.booked {
         background-color: #ffcccc;
-        pointer-events: auto; /* Enable click on booked slots */
+        pointer-events: auto;
+        /* Enable click on booked slots */
     }
 
     .time-slot.selected {
@@ -51,7 +55,7 @@
             <select id="year" class="form-control" onchange="generateTable()">
                 @for ($y = 2023; $y <= 2025; $y++)
                     <option value="{{ $y }}">{{ $y }}</option>
-                @endfor
+                    @endfor
             </select>
         </div>
         <div class="col">
@@ -75,7 +79,7 @@
                 <th>Hari</th>
                 @for ($hour = 7; $hour <= 16; $hour++)
                     <th>{{ sprintf('%02d:00', $hour) }}</th>
-                @endfor
+                    @endfor
             </tr>
         </thead>
         <tbody id="schedule-body">
@@ -105,11 +109,11 @@
                         <input type="hidden" id="modal-room-id" name="room_id">
                     </div>
                     <div class="form-group">
-                        <label for="user">User Name</label>
+                        <label for="user">Nama peminjam</label>
                         <input type="text" class="form-control" name="user_name" id="user" required>
                     </div>
                     <div class="form-group">
-                        <label for="keperluan">Purpose</label>
+                        <label for="keperluan">keperluan</label>
                         <input type="text" class="form-control" id="keperluan" name="keperluan">
                     </div>
                 </div>
@@ -132,8 +136,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>User:</strong> <span id="booking-user"></span></p>
-                <p><strong>Purpose:</strong> <span id="booking-purpose"></span></p>
+                <p><strong>nama peminjam:</strong> <span id="booking-user"></span></p>
+                <p><strong>keperluan:</strong> <span id="booking-purpose"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -141,6 +145,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- JavaScript Bootstrap & jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -191,9 +196,10 @@
                 });
 
                 row += `<td id="${timeSlotId}" class="time-slot ${isBooked ? 'booked' : ''}" 
-                    ${isBooked ? `onclick="showBookingDetails(${JSON.stringify(bookingDetails)})"` : 
-                    `onclick="selectTimeSlot('${timeSlotId}', '${dayFormatted}/${month}/${year} ${hour}:00')"`}>
-                </td>`;
+    ${isBooked ? `onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}')" ` : 
+    `onclick="selectTimeSlot('${timeSlotId}', '${dayFormatted}/${month}/${year} ${hour}:00')"`}>
+</td>`;
+
             }
 
             row += '</tr>';
@@ -202,90 +208,90 @@
     }
 
     function toggleMultiSelect() {
-    multiSelectMode = !multiSelectMode;
-    const multiSelectBtn = document.getElementById('multiSelectBtn');
-    multiSelectBtn.classList.toggle('btn-warning', multiSelectMode);
-    multiSelectBtn.classList.toggle('btn-primary', !multiSelectMode);
-    multiSelectBtn.textContent = multiSelectMode ? 'Disable Multi-Select' : 'Enable Multi-Select';
-    document.getElementById('bookSelectedBtn').style.display = multiSelectMode ? 'inline-block' : 'none';
+        multiSelectMode = !multiSelectMode;
+        const multiSelectBtn = document.getElementById('multiSelectBtn');
+        multiSelectBtn.classList.toggle('btn-warning', multiSelectMode);
+        multiSelectBtn.classList.toggle('btn-primary', !multiSelectMode);
+        multiSelectBtn.textContent = multiSelectMode ? 'Disable Multi-Select' : 'Enable Multi-Select';
+        document.getElementById('bookSelectedBtn').style.display = multiSelectMode ? 'inline-block' : 'none';
 
-    // Hide or show selected time slots based on the multi-select mode
-    const tbody = document.getElementById('schedule-body');
-    const selectedSlots = tbody.querySelectorAll('.selected');
+        // Hide or show selected time slots based on the multi-select mode
+        const tbody = document.getElementById('schedule-body');
+        const selectedSlots = tbody.querySelectorAll('.selected');
 
-    selectedSlots.forEach(slot => {
-        if (multiSelectMode) {
-            slot.classList.remove('hidden'); // Show selected slots when multi-select is enabled
+        selectedSlots.forEach(slot => {
+            if (multiSelectMode) {
+                slot.classList.remove('hidden'); // Show selected slots when multi-select is enabled
+            } else {
+                slot.classList.add('hidden'); // Hide selected slots when multi-select is disabled
+            }
+        });
+    }
+
+
+    function selectTimeSlot(timeSlotId, timeDisplay) {
+        if (!multiSelectMode) {
+            startSlot = endSlot = timeSlotId;
+            selectedTimeSlots = [timeSlotId];
+            updateSelectedTimeList();
+            showBookingModal();
         } else {
-            slot.classList.add('hidden'); // Hide selected slots when multi-select is disabled
-        }
-    });
-}
+            if (startSlot && endSlot) {
+                const rangeSlots = getRangeSlots(startSlot, endSlot);
+                rangeSlots.forEach(slot => {
+                    const slotElement = document.getElementById(slot);
+                    if (slotElement) {
+                        slotElement.classList.remove('selected');
+                    }
+                });
+                selectedTimeSlots = selectedTimeSlots.filter(slot => !rangeSlots.includes(slot)); // Remove previously selected
+                startSlot = endSlot = null; // Reset slots
+            }
 
-
-function selectTimeSlot(timeSlotId, timeDisplay) {
-    if (!multiSelectMode) {
-        startSlot = endSlot = timeSlotId;
-        selectedTimeSlots = [timeSlotId];
-        updateSelectedTimeList();
-        showBookingModal();
-    } else {
-        if (startSlot && endSlot) {
-            const rangeSlots = getRangeSlots(startSlot, endSlot);
-            rangeSlots.forEach(slot => {
-                const slotElement = document.getElementById(slot);
-                if (slotElement) {
-                    slotElement.classList.remove('selected');
-                }
-            });
-            selectedTimeSlots = selectedTimeSlots.filter(slot => !rangeSlots.includes(slot)); // Remove previously selected
-            startSlot = endSlot = null; // Reset slots
-        }
-
-        if (!startSlot) {
-            startSlot = timeSlotId;
-            selectedTimeSlots.push(timeSlotId);
-            const slotElement = document.getElementById(timeSlotId);
-            slotElement.classList.add('selected');
-            slotElement.classList.remove('hidden'); // Ensure it is shown
-        } else {
-            endSlot = timeSlotId;
-            const rangeSlots = getRangeSlots(startSlot, endSlot);
-            rangeSlots.forEach(slot => {
-                const slotElement = document.getElementById(slot);
-                if (slotElement && !selectedTimeSlots.includes(slot)) {
-                    selectedTimeSlots.push(slot);
-                    slotElement.classList.add('selected');
-                    slotElement.classList.remove('hidden'); // Ensure it is shown
-                }
-            });
+            if (!startSlot) {
+                startSlot = timeSlotId;
+                selectedTimeSlots.push(timeSlotId);
+                const slotElement = document.getElementById(timeSlotId);
+                slotElement.classList.add('selected');
+                slotElement.classList.remove('hidden'); // Ensure it is shown
+            } else {
+                endSlot = timeSlotId;
+                const rangeSlots = getRangeSlots(startSlot, endSlot);
+                rangeSlots.forEach(slot => {
+                    const slotElement = document.getElementById(slot);
+                    if (slotElement && !selectedTimeSlots.includes(slot)) {
+                        selectedTimeSlots.push(slot);
+                        slotElement.classList.add('selected');
+                        slotElement.classList.remove('hidden'); // Ensure it is shown
+                    }
+                });
+            }
         }
     }
-}
 
-function getRangeSlots(startId, endId) {
-    const [startDay, startMonth, startYear, startHour] = startId.split('-');
-    const [endDay, endMonth, endYear, endHour] = endId.split('-');
+    function getRangeSlots(startId, endId) {
+        const [startDay, startMonth, startYear, startHour] = startId.split('-');
+        const [endDay, endMonth, endYear, endHour] = endId.split('-');
 
-    const slotsInRange = [];
-    const startHourNum = parseInt(startHour);
-    const endHourNum = parseInt(endHour);
+        const slotsInRange = [];
+        const startHourNum = parseInt(startHour);
+        const endHourNum = parseInt(endHour);
 
-    const startDate = new Date(`${startYear}-${startMonth}-${startDay}T00:00:00`);
-    const endDate = new Date(`${endYear}-${endMonth}-${endDay}T00:00:00`);
+        const startDate = new Date(`${startYear}-${startMonth}-${startDay}T00:00:00`);
+        const endDate = new Date(`${endYear}-${endMonth}-${endDay}T00:00:00`);
 
-    for (let hour = startHourNum; hour <= endHourNum; hour++) {
-        for (let dayOffset = 0; dayOffset <= Math.abs((endDate - startDate) / (1000 * 60 * 60 * 24)); dayOffset++) {
-            const currentDate = new Date(startDate);
-            currentDate.setDate(startDate.getDate() + dayOffset);
-            const day = String(currentDate.getDate()).padStart(2, '0');
-            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-            const year = currentDate.getFullYear();
-            slotsInRange.push(`${day}-${month}-${year}-${hour}`);
+        for (let hour = startHourNum; hour <= endHourNum; hour++) {
+            for (let dayOffset = 0; dayOffset <= Math.abs((endDate - startDate) / (1000 * 60 * 60 * 24)); dayOffset++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + dayOffset);
+                const day = String(currentDate.getDate()).padStart(2, '0');
+                const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                const year = currentDate.getFullYear();
+                slotsInRange.push(`${day}-${month}-${year}-${hour}`);
+            }
         }
+        return slotsInRange;
     }
-    return slotsInRange;
-}
 
     function showBookingModal() {
         if (selectedTimeSlots.length === 0) {
@@ -307,11 +313,12 @@ function getRangeSlots(startId, endId) {
         document.getElementById('selected_dates').value = JSON.stringify(selectedTimeSlots);
     }
 
-    function showBookingDetails(details) {
-        document.getElementById('booking-user').textContent = details.nama_peminjam;
-        document.getElementById('booking-purpose').textContent = details.keperluan;
-        $('#showBookingModal').modal('show');
-    }
+    function showBookingDetails(namaPeminjam, keperluan) {
+    document.getElementById('booking-user').textContent = namaPeminjam;
+    document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
+    $('#showBookingModal').modal('show');
+}
+
 
     document.addEventListener("DOMContentLoaded", generateTable);
 </script>
