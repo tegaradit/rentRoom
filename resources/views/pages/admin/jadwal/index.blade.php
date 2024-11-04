@@ -3,10 +3,8 @@
 @section('page-content')
 
 <style>
-    /* Styling Table */
     .hidden {
         display: none;
-        /* This class will hide elements */
     }
 
     table {
@@ -24,12 +22,11 @@
     .time-slot {
         background-color: #f0f0f0;
         cursor: pointer;
+        color: white;
     }
 
     .time-slot.booked {
-        background-color: #ffcccc;
-        pointer-events: auto;
-        /* Enable click on booked slots */
+        font-weight: bold;
     }
 
     .time-slot.selected {
@@ -39,6 +36,9 @@
 
 <div class="container my-5">
     <h1>Jadwal Peminjaman Ruangan</h1>
+
+    <!-- Peringatan tentang durasi peminjaman -->
+    <p class="text-warning"><strong>Perhatian:</strong> Peminjaman ruangan dilakukan per 1 jam. Misalnya, peminjaman mulai jam 7 akan selesai pada jam 7.59, dan jam 8 akan selesai pada jam 8.59.</p>
 
     <!-- Dropdown untuk memilih ruangan -->
     <div class="form-row mb-4">
@@ -84,7 +84,6 @@
     </table>
 </div>
 
-
 <!-- Modal for showing booking details -->
 <div class="modal fade" id="showBookingModal" tabindex="-1" aria-labelledby="showBookingModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -94,49 +93,50 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>nama peminjam:</strong> <span id="booking-user"></span></p>
-                <p><strong>keperluan:</strong> <span id="booking-purpose"></span></p>
+                <p><strong>Nama Peminjam:</strong> <span id="booking-user"></span></p>
+                <p><strong>Keperluan:</strong> <span id="booking-purpose"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-danger" onclick="deleteBooking(bookingId)">Delete Booking</button>
-
             </div>
         </div>
     </div>
 </div>
 
-
-<!-- JavaScript Bootstrap & jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<!-- Modal for creating a new booking -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingModalLabel">Booking Ruangan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Ruangan:</strong> <span id="modal-room"></span></p>
+                <p><strong>Waktu yang dipilih:</strong> <span id="selected-time-info"></span></p>
+                <p class="text-warning"><strong>Catatan:</strong> Peminjaman maksimal 1 jam per slot. Jika Anda memilih mulai jam 7, peminjaman akan selesai pada 7.59.</p>
+                <form id="bookingForm">
+                    <!-- Additional booking form fields here -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-    let FIRST_START = true
-
     const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    let selectedTimeSlots = [];
-    let multiSelectMode = false;
-    let startSlot = null;
-    let endSlot = null;
-
     const bookedSlots = JSON.parse('{!! $peminjaman !!}');
+    const colors = ["#FF6666", "#FFB266", "#FFDA66", "#66FF66", "#66FFDA", "#66B2FF", "#DA66FF", "#FF66B2"];
 
     function generateTable() {
-        const _year = document.getElementById('year');
-        const year = _year.value;
-
-        const _month = document.getElementById('month');
-        const month = String(_month.value).padStart(2, '0');
-
-        const _roomId = document.getElementById('room');
-        const roomId = _roomId.value;
-
-        localStorage.setItem('curenttime', JSON.stringify({
-            year: _year.selectedIndex,
-            month: _month.selectedIndex,
-            roomId: _roomId.selectedIndex
-        }));
+        const year = document.getElementById('year').value;
+        const month = String(document.getElementById('month').value).padStart(2, '0');
+        const roomId = document.getElementById('room').value;
 
         const tbody = document.getElementById('schedule-body');
         tbody.innerHTML = '';
@@ -152,12 +152,14 @@
                 <td>${dayFormatted}/${month}/${year}</td>
                 <td>${dayOfWeek}</td>`;
 
-            for (let hour = 7; hour <= 16; hour++) {
-                const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
+            let hour = 7;
+            while (hour <= 16) {
                 let isBooked = false;
                 let bookingDetails = null;
+                let slotColor = "#f0f0f0";
+                let colspan = 1;
 
-                bookedSlots.forEach(slot => {
+                bookedSlots.forEach((slot, index) => {
                     if (
                         slot.ruangan_id == roomId &&
                         slot.tanggal === `${year}-${month}-${dayFormatted}` &&
@@ -166,17 +168,26 @@
                     ) {
                         isBooked = true;
                         bookingDetails = slot;
+                        slotColor = colors[index % colors.length];
+
+                        colspan = parseInt(slot.jam_selesai) - parseInt(slot.jam_mulai) + 1;
                     }
                 });
 
-                // Log bookingDetails.id to ensure it's not undefined
-                if (bookingDetails) {
-                    console.log('Booking ID:', bookingDetails.id);
+                if (isBooked) {
+                    row += `<td colspan="${colspan}" class="time-slot booked" 
+                            style="background-color: ${slotColor};"
+                            onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id})">
+                            ${bookingDetails.user_name}
+                        </td>`;
+                    hour += colspan;
+                } else {
+                    const slotTime = `${hour}:00 - ${hour}:59`;
+                    row += `<td class="time-slot" onclick="showBookingModal('${dayFormatted}', '${month}', '${year}', '${hour}')">
+                                ${slotTime}
+                            </td>`;
+                    hour++;
                 }
-
-                row += `<td id="${timeSlotId}" class="time-slot ${isBooked ? 'booked' : ''}" 
-                    ${isBooked && `onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id})"`}>
-                    </td>`
             }
 
             row += '</tr>';
@@ -184,77 +195,19 @@
         }
     }
 
-    function showBookingModal() {
-        if (selectedTimeSlots.length === 0) {
-            alert("Please select at least one time slot.");
-            return;
-        }
-
+    function showBookingModal(day, month, year, hour) {
         const roomId = document.getElementById('room').value;
         const roomName = document.getElementById('room').selectedOptions[0].text;
+        const endTime = hour + ":59";
 
-        document.getElementById('modal-room-id').value = roomId;
-        document.getElementById('modal-room').value = roomName;
-        updateSelectedTimeList();
+        document.getElementById('modal-room').textContent = roomName;
+        document.getElementById('selected-time-info').textContent = `${hour}:00 - ${endTime}`;
         $('#bookingModal').modal('show');
     }
 
-    function updateSelectedTimeList() {
-        document.getElementById('selected-times-list').innerHTML = selectedTimeSlots.map(slot => `<li>${slot}</li>`).join('');
-        document.getElementById('selected_dates').value = JSON.stringify(selectedTimeSlots);
-    }
-
-    let bookingId = null;
-
-    function showBookingDetails(namaPeminjam, keperluan, id) {
-        document.getElementById('booking-user').textContent = namaPeminjam;
-        document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
-
-        // Set delete button onclick to include the id
-        document.querySelector('#showBookingModal .btn-danger').setAttribute('onclick', `deleteBooking(${id})`);
-
-        $('#showBookingModal').modal('show');
-    }
-
-
-
-    function deleteBooking(id) {
-        if (!id) {
-            alert('Invalid booking ID');
-            return;
-        }
-
-        if (confirm('Are you sure you want to delete this booking?')) {
-            $.ajax({
-                url: `/admin/peminjaman/${id}`, // Ensure a leading slash is here
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                success: function (response) {
-                    $('#showBookingModal').modal('hide');
-                    alert('Booking deleted successfully');
-                    window.location.reload();
-                },
-                error: function (err) {
-                    console.log(err);
-                    alert('Failed to delete booking');
-                }
-            });
-        }
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
-        const current_time = JSON.parse(localStorage.getItem('curenttime'))
-        // console.log(current_time)
-        if (current_time instanceof Object) {
-            document.getElementById('year').selectedIndex = current_time.year;
-            document.getElementById('month').selectedIndex = current_time.month;
-            document.getElementById('room').selectedIndex = current_time.roomId;
-        }
-
-        generateTable()
-    })
+        generateTable();
+    });
 </script>
 
 @endsection

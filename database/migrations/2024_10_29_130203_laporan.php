@@ -19,7 +19,6 @@ return new class extends Migration
             $table->time('waktu_mulai');
             $table->time('waktu_selesai');
             $table->text('keperluan');
-            $table->enum('status', ['diterima', 'ditolak']);
             $table->timestamps();
 
             // Definisi Foreign Key
