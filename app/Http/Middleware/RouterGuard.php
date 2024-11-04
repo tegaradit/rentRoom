@@ -40,9 +40,9 @@ class RouterGuard
             }
         }
 
-        if ($user->role_id == $this->roleId['guru'] && strpos($request->path(), 'user') === false) {
+        if ($user->role_id == $this->roleId['guru'] && strpos($request->path(), 'user') === false && $request->path() !== 'logout') {
             return redirect()->intended('user/')->with('username', $user->nama_lengkap);
-        } else if ($user->role_id == $this->roleId['siswa'] && strpos($request->path(), 'user') === false) {
+        } else if ($user->role_id == $this->roleId['siswa'] && strpos($request->path(), 'user') === false && $request->path() !== 'logout') {
             return redirect()->intended('user/')->with('username', $user->nama_lengkap);
         }
         return $next($request);
