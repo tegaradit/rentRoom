@@ -60,15 +60,14 @@
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
                 <li class="nav-item dropdown pe-3">
-                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
-                        data-bs-toggle="dropdown">
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                         @if (isset(Auth::user()->profile_photo))
-                            <img src="{{ Storage::url(Auth::user()->profile_photo) }}" alt="Profile"
-                                style="object-fit: cover;" class="rounded-circle">
+                        <img src="{{ Storage::url(Auth::user()->profile_photo) }}" alt="Profile"
+                            style="object-fit: cover;" class="rounded-circle">
                         @else
-                            <div
-                                style="border-radius: 50%; width: 2.5rem; height: 2.5rem; background-color: gray; text-align: center; line-height: 2.5rem; color: white">
-                                {{ substr(Auth::user()->name, 0, 2) }}</div>
+                        <div
+                            style="border-radius: 50%; width: 2.5rem; height: 2.5rem; background-color: gray; text-align: center; line-height: 2.5rem; color: white">
+                            {{ substr(Auth::user()->name, 0, 2) }}</div>
                         @endif
                         <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
                     </a><!-- End Profile Iamge Icon -->
@@ -118,12 +117,11 @@
     <!-- Template Main JS File -->
     <script src="/assets/themes/nice/js/main.js"></script>
 
-    @yield('javascript')
     <!-- Feather Icons script -->
 
     <script>
         feather.replace(); // Inisialisasi Feather Icons setelah DOM selesai dimuat
     </script>
+    @yield('javascript')
 </body>
-
 </html>

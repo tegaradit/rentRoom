@@ -14,21 +14,16 @@
     <section class="section dashboard">
         <form method="GET" action="{{ route('laporan.index') }}" class="mb-3">
             <div class="row">
-                <!-- Tanggal Awal -->
                 <div class="col-md-3">
                     <label for="tanggal_awal" class="form-label">Tanggal Awal</label>
                     <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal"
                         value="{{ request('tanggal_awal') }}">
                 </div>
-
-                <!-- Tanggal Akhir -->
                 <div class="col-md-3">
                     <label for="tanggal_akhir" class="form-label">Tanggal Akhir</label>
                     <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir"
                         value="{{ request('tanggal_akhir') }}">
                 </div>
-
-                <!-- Tombol Filter dan Bersihkan -->
                 <div class="col-md-6 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary me-2">
                         <i class="bi bi-filter me-1"></i> Filter
@@ -40,10 +35,8 @@
             </div>
         </form>
 
-        <!-- Tombol Export ke Excel -->
-        <button class="btn btn-success" onclick="exportTableToExcel()">Export to Excel</button>
-        
-        <!-- Tabel Laporan -->
+        <button class="btn btn-danger" onclick="exportToPDF()"><i class="bi bi-filetype-pdf"></i> Export to PDF</button>
+
         <div class="col-lg-12">
             @if (session('success'))
                 <div class="alert alert-success mt-3">
@@ -51,7 +44,7 @@
                 </div>
             @endif
 
-            <table id="tableID" class="table datatable table-striped">
+            <table id="tableID" class="table datatable table-stripped">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -70,7 +63,7 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $data->user->nama_lengkap }}</td>
                             <td>{{ $data->ruangan->nama_ruangan }}</td>
-                            <td>{{ $data->tgl_peminjaman }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data->tgl_peminjaman)->format('d-m-Y') }}</td>
                             <td>{{ $data->waktu_mulai }}</td>
                             <td>{{ $data->waktu_selesai }}</td>
                             <td>{{ $data->keperluan }}</td>
@@ -91,52 +84,111 @@
             </table>
         </div>
 
-        <!-- Script untuk Export ke Excel -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+        <!-- jsPDF dan autoTable -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
         <script>
-            function exportTableToExcel() {
-                var table = document.getElementById("tableID");
-                var tableData = [];
+            async function exportToPDF() {
+                const {
+                    jsPDF
+                } = window.jspdf;
+                const doc = new jsPDF();
 
-                // Kop surat berdasarkan gambar
-                var kopSurat = [
-                    ['PEMERINTAH PROVINSI JAWA TENGAH'],
-                    ['DINAS PENDIDIKAN DAN KEBUDAYAAN'],
-                    ['SEKOLAH MENENGAH KEJURUAN NEGERI 1 KEBUMEN'],
-                    ['Jalan Cemara No.37 Karangsari Kebumen Kode Pos 54351 Telepon 0287-381132'],
-                    ['Faksimile 0287-381132 Surat Elektronik smkn1.kebumen@yahoo.com'],
-                    ['']
-                ];
+                // URL gambar
+                const imageUrl = '/storage/kopSurat/logo smenza.png';
+                const imgBase64 = await getBase64ImageFromUrl(imageUrl);
+                doc.addImage(imgBase64, 'PNG', 10, 10, 30, 30);
 
-                var namaPemakai = [
-                    ['Nama Peminjam: ' + document.querySelector("#tableID tbody tr td:nth-child(2)").innerText],
-                    ['']
-                ];
+                // Kop surat di kanan
+                doc.setFontSize(12);
+                doc.setFont("times", "bold");
 
-                // Menambahkan kop surat dan nama pemakai ke dalam data yang akan diekspor
-                tableData = tableData.concat(kopSurat);
-                tableData = tableData.concat(namaPemakai);
+                //untuk center teks
+                const pageWidth = doc.internal.pageSize.width;
+                const centerX = pageWidth / 2;
 
-                // Mengambil data dari tabel
-                for (var i = 0, row; row = table.rows[i]; i++) {
-                    var rowData = [];
+                function centerText(text, yPosition) {
+                    const textWidth = doc.getTextWidth(text);
+                    doc.text(text, centerX - textWidth / 2, yPosition);
+                }
+
+                centerText('PEMERINTAH PROVINSI JAWA TENGAH', 15);
+                centerText('DINAS PENDIDIKAN DAN KEBUDAYAAN', 21);
+                centerText('SEKOLAH MENENGAH KEJURUAN NEGERI 1 KEBUMEN', 27);
+
+                doc.setFont("times", "normal");
+                centerText('Jalan Cemara No.37 Karangsari Kebumen Kode Pos 54351', 33);
+                centerText('Telepon 0287-381132 Faksimile 0287-381132', 39);
+                centerText('Surat Elektronik: smkn1.kebumen@yahoo.com', 45);
+
+                // Menambahkan garis bawah ganda
+                const lineYPosition1 = 50; // Posisi Y untuk garis atas
+                const lineYPosition2 = 52; // Posisi Y untuk garis bawah
+
+                doc.setLineWidth(0.5); // Lebar garis pertama
+                doc.line(20, lineYPosition1, pageWidth - 20, lineYPosition1); // Garis pertama (atas)
+
+                doc.setLineWidth(0.8); // Lebar garis kedua
+                doc.line(20, lineYPosition2, pageWidth - 20, lineYPosition2); // Garis kedua (bawah)
+
+                // Menambahkan judul laporan
+                doc.setFont("times", "bold");
+                doc.text('Laporan Peminjaman Ruangan', 105, 60, null, null, 'center');
+
+                // Mengambil data tabel
+                const table = document.getElementById("tableID");
+                const data = [];
+                for (var i = 1, row; row = table.rows[i]; i++) {
+                    const rowData = [];
                     for (var j = 0, col; col = row.cells[j]; j++) {
                         rowData.push(col.innerText);
                     }
-                    tableData.push(rowData);
+                    data.push(rowData);
                 }
 
-                // Membuat worksheet dari data
-                var ws = XLSX.utils.aoa_to_sheet(tableData);
+                // Menambahkan tabel ke PDF menggunakan autoTable
+                doc.autoTable({
+                    head: [
+                        ['No', 'Peminjam', 'Ruangan', 'Tanggal Peminjaman', 'Waktu Mulai', 'Waktu Selesai',
+                            'Keperluan', 'Status'
+                        ]
+                    ],
+                    body: data,
+                    startY: 70,
+                    theme: 'striped',
+                    margin: {
+                        top: 10
+                    },
+                    styles:{
+                        halign:'center'
+                    },
+                    headStyles:{
+                        halign:'center'
+                    }
+                });
 
-                // Membuat workbook baru
-                var wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Laporan");
+                // Simpan PDF
+                doc.save('Laporan_Peminjaman.pdf');
+            }
 
-                // Ekspor workbook ke file Excel
-                XLSX.writeFile(wb, "Laporan_Peminjaman.xlsx");
+            // Fungsi untuk mengkonversi gambar ke base64
+            function getBase64ImageFromUrl(url) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.crossOrigin = 'Anonymous';
+                    img.src = url;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        const dataURL = canvas.toDataURL('image/png');
+                        resolve(dataURL);
+                    };
+                    img.onerror = error => reject(error);
+                });
             }
         </script>
-
     </section>
 @endsection

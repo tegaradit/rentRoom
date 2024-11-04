@@ -45,23 +45,33 @@
                             <td>
                                 @if ($data->status == 'diterima')
                                     @php
-                                        $currentDateTime = \Carbon\Carbon::now('Asia/Jakarta');
-                                        $startDateTime = \Carbon\Carbon::parse($data->tgl_peminjaman . ' ' . $data->waktu_mulai, 'Asia/Jakarta');
-                                        $endDateTime = \Carbon\Carbon::parse($data->tgl_peminjaman . ' ' . $data->waktu_selesai, 'Asia/Jakarta');
-                                    
-                                        // Kondisi untuk menentukan sisa waktu atau waktu habis
-                                        if ($currentDateTime->between($startDateTime, $endDateTime)) {
-                                            $remainingTime = $currentDateTime->diffForHumans($endDateTime, true);
-                                            $canReturn = true;
-                                        } else {
-                                            $remainingTime = 'Waktu habis';
-                                            $canReturn = false;
-                                        }
+                                        $currentTime = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
+                                        $startTime = \Carbon\Carbon::parse($data->waktu_mulai)->format('H:i');
+                                        $endTime = \Carbon\Carbon::parse($data->waktu_selesai)->format('H:i');
+                                        $currentDate = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d');
+                                        $borrowingDate = \Carbon\Carbon::parse($data->tgl_peminjaman)->format('Y-m-d');
                                     @endphp
-                                    {{ $remainingTime }}
+                                    @if ($borrowingDate >= $currentDate)
+                                        @if ($currentTime < $startTime)
+                                            belum mulai
+                                        @elseif ($currentTime > $endTime)
+                                            waktu habis
+                                        @else
+                                            @php
+                                            $remainingTimeInMinutes = (strtotime($data->waktu_selesai) - strtotime($currentTime)) / 60;
+                                            $days = floor($remainingTimeInMinutes / 1440);
+                                            $hours = floor(($remainingTimeInMinutes % 1440) / 60);
+                                            $minutes = $remainingTimeInMinutes % 60;
+                                            $remainingTime = sprintf('%d hari, %02d jam, %02d menit', $days, $hours, $minutes);
+                                            @endphp
+                                            {{ $remainingTime }}
+                                        @endif
+                                    @else
+                                        waktu habis
+                                    @endif
                                 @else
-                                    -
-                                    @php $canReturn = false; @endphp
+                                -
+                                @php $canReturn = false @endphp
                                 @endif
                             </td>                                                    
                             <td>{{ $data->keperluan }}</td>

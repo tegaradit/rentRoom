@@ -98,26 +98,31 @@
                         <td>{{ $borrowed->waktu_mulai }}</td>
                         <td>{{ $borrowed->waktu_selesai }}</td>
                         <td>
-                           @php
-                              $currentTime = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
-                              $startTime = \Carbon\Carbon::parse($borrowed->waktu_mulai)->format('H:i');
-                              $endTime = \Carbon\Carbon::parse($borrowed->waktu_selesai)->format('H:i');
-                           @endphp
-
                            @if ($borrowed->status == 'diterima')
-                              @if ($currentTime < $startTime)
-                                 belum mulai
-                              @elseif ($currentTime > $endTime)
-                                 waktu habis
+                              @php
+                                 $currentTime = \Carbon\Carbon::now('Asia/Jakarta')->format('H:i');
+                                 $startTime = \Carbon\Carbon::parse($borrowed->waktu_mulai)->format('H:i');
+                                 $endTime = \Carbon\Carbon::parse($borrowed->waktu_selesai)->format('H:i');
+                                 $currentDate = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d');
+                                 $borrowingDate = \Carbon\Carbon::parse($borrowed->tgl_peminjaman)->format('Y-m-d');
+                              @endphp
+                              @if ($borrowingDate >= $currentDate)
+                                 @if ($currentTime < $startTime)
+                                    belum mulai
+                                 @elseif ($currentTime > $endTime)
+                                    waktu habis
+                                 @else
+                                    @php
+                                       $remainingTimeInMinutes = (strtotime($borrowed->waktu_selesai) - strtotime($currentTime)) / 60;
+                                       $days = floor($remainingTimeInMinutes / 1440);
+                                       $hours = floor(($remainingTimeInMinutes % 1440) / 60);
+                                       $minutes = $remainingTimeInMinutes % 60;
+                                       $remainingTime = sprintf('%d hari, %02d jam, %02d menit', $days, $hours, $minutes);
+                                    @endphp
+                                    {{ $remainingTime }}
+                                 @endif
                               @else
-                                 @php
-                                    $remainingTimeInMinutes = (strtotime($borrowed->waktu_selesai) - strtotime($currentTime)) / 60;
-                                    $days = floor($remainingTimeInMinutes / 1440);
-                                    $hours = floor(($remainingTimeInMinutes % 1440) / 60);
-                                    $minutes = $remainingTimeInMinutes % 60;
-                                    $remainingTime = sprintf('%d hari, %02d jam, %02d menit', $days, $hours, $minutes);
-                                 @endphp
-                                 {{ $remainingTime }}
+                                 waktu habis
                               @endif
                            @else
                            -
