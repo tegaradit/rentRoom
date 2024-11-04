@@ -56,7 +56,7 @@
 @if (Auth::user()->role_id == 1)
    @include('pages.admin.sidebar')
 @elseif (Auth::user()->role_id == 3)
-   @include('pages.admin.sidebar') <!-- //! THIS SECTION IS PROBABLY NOT RELEVANCE  -->
+   @include('pages.user.sidebar') 
 @else
    @include('pages.user.sidebar')
 @endif
