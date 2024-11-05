@@ -25,9 +25,4 @@ class Ruangan extends Model
 
     // Menentukan tipe kunci utama sebagai integer
     protected $keyType = 'int';
-
-    // Nilai default untuk kolom status
-    protected $attributes = [
-        'status' => 'tersedia',
-    ];
 }
