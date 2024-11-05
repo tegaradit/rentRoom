@@ -45,6 +45,7 @@
 
 <div class="container my-5">
     <h1>Jadwal Peminjaman Ruangan</h1>
+    <p class="text-warning"><strong>Perhatian:</strong> Peminjaman ruangan dilakukan per 1 jam. Misalnya, peminjaman mulai jam 7 akan selesai pada jam 7.59, dan jam 8 akan selesai pada jam 8.59.</p>
 
     <!-- Dropdown untuk memilih ruangan -->
     <div class="form-row mb-4">
