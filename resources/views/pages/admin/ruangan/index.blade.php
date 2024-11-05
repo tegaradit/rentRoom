@@ -16,7 +16,7 @@
         <div class="col-lg-8 w-100 mb-3">
             <div class="row">
                 {{-- Total Ruangan --}}
-                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
+                <div class="col-xxl-12 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 sales-card px-3">
                         <div class="card-body">
                             <h5 class="card-title">Total Ruangan</h5>
@@ -33,7 +33,7 @@
                 </div>
 
                 {{-- Tersedia --}}
-                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
+                {{-- <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 revenue-card px-3">
                         <div class="card-body">
                             <h5 class="card-title">Tersedia</h5>
@@ -47,10 +47,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 {{-- Tidak Tersedia --}}
-                <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
+                {{-- <div class="col-xxl-4 col-md-6" style="height: fit-content !important; min-height: 0 !important;">
                     <div class="card info-card h-100 customers-card px-3">
                         <div class="card-body">
                             <h5 class="card-title">Tidak Tersedia</h5>
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
         {{-- end card --}}
@@ -88,7 +88,7 @@
                         <th>Thumbnail</th>
                         <th>Nama</th>
                         <th>Kapasitas</th>
-                        <th>Status</th>
+                        {{-- <th>Status</th> --}}
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -99,7 +99,7 @@
                             <td><img src="{{ Storage::url($data->thumbnail) }}" class="ruangan-thumbnail"></td>
                             <td>{{ $data->nama_ruangan }}</td>
                             <td>{{ $data->kapasitas }} orang</td>
-                            <td>
+                            {{-- <td>
                                 @if ($data->status === 'tersedia')
                                     <span class="badge bg-success">Tersedia</span>
                                 @elseif ($data->status === 'terpinjam')
@@ -107,7 +107,7 @@
                                 @else
                                     <span class="badge bg-secondary">Tidak diketahui</span>
                                 @endif
-                            </td>
+                            </td> --}}
                             <td>
                                 <a href="{{ route('ruangan.edit', $data->id) }}" class="btn btn-warning btn-sm edit ms-1">
                                     <i data-feather="edit"></i></a>
