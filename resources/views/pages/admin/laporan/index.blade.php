@@ -95,7 +95,7 @@
                 doc.setFontSize(12);
                 doc.setFont("times", "bold");
 
-                //untuk center teks
+                // Untuk center teks
                 const pageWidth = doc.internal.pageSize.width;
                 const centerX = pageWidth / 2;
 
@@ -117,7 +117,6 @@
 
                 // Menambahkan garis bawah ganda
                 const lineYPosition1 = 40; // Posisi Y untuk garis atas
-
                 doc.setLineWidth(0.5); // Lebar garis pertama
                 doc.line(20, lineYPosition1, pageWidth - 20, lineYPosition1); // Garis pertama (atas)
 
@@ -150,13 +149,24 @@
                     margin: {
                         top: 10
                     },
-                    styles:{
-                        halign:'center'
+                    styles: {
+                        halign: 'center'
                     },
-                    headStyles:{
-                        halign:'center'
+                    headStyles: {
+                        halign: 'center'
                     }
                 });
+
+                // Menambahkan tanda tangan di pojok kanan bawah
+                const pageHeight = doc.internal.pageSize.height;
+                const signatureX = pageWidth - 70;
+
+                doc.setFontSize(12);
+                doc.text('Kebumen, ........................', pageWidth - 70, pageHeight -
+                67); // Posisi tanda tangan kanan bawah
+                doc.text('Mengetahui:', signatureX + 10, pageHeight - 60);
+                doc.text('(......................................)', signatureX + 0, pageHeight -
+                30); // Nama penanda tangan
 
                 // Simpan PDF
                 doc.save('Laporan_Peminjaman.pdf');
@@ -181,5 +191,6 @@
                 });
             }
         </script>
+
     </section>
 @endsection
