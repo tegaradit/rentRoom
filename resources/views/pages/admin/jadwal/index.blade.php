@@ -122,16 +122,16 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+                <button type="button" class="btn btn-danger" onclick="deleteBooking('asdklm')">Delete</button>
             </div>
         </div>
     </div>
 </div>
-
-
 @endsection
 
 @section('javascript')
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script>
     const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
     const bookedSlots = JSON.parse('{!! $peminjaman !!}');
@@ -199,18 +199,43 @@
         }
     }
 
-    function showBookingModal(day, month, year, hour) {
-        const roomId = document.getElementById('room').value;
-        const roomName = document.getElementById('room').selectedOptions[0].text;
-        const endTime = hour + ":59";
+    function showBookingDetails(namaPeminjam, keperluan, id) {
+        document.getElementById('booking-user').textContent = namaPeminjam;
+        document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
 
-        document.getElementById('modal-room').textContent = roomName;
-        document.getElementById('selected-time-info').textContent = `${hour}:00 - ${endTime}`;
-        $('#bookingModal').modal('show');
+        // Set delete button onclick to include the id
+        document.querySelector('#showBookingModal .btn-danger').setAttribute('onclick', `deleteBooking(${id})`);
+
+        $('#showBookingModal').modal('show');
     }
 
     window.addEventListener('DOMContentLoaded', () => {
         generateTable();
     });
+
+    function deleteBooking(id) {
+        if (!id) {
+            alert('Invalid booking ID');
+            return;
+        }
+
+        if (confirm('Are you sure you want to delete this booking?')) {
+            $.ajax({
+                url: `/admin/peminjaman/${id}`, // Ensure a leading slash is here
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $('#showBookingModal').modal('hide');
+                    alert('Booking deleted successfully');
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    alert('Failed to delete booking');
+                }
+            });
+        }
+    }
 </script>
 @endsection
