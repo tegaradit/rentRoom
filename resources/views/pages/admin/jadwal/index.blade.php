@@ -53,7 +53,7 @@
         <div class="col">
             <label for="year">Pilih Tahun:</label>
             <select id="year" class="form-control" onchange="generateTable()">
-                @for ($y = 2023; $y <= 2025; $y++)
+                @for ($y = 2024; $y <= 2030; $y++)
                     <option value="{{ $y }}">{{ $y }}</option>
                 @endfor
             </select>

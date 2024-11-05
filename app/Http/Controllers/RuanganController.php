@@ -15,12 +15,12 @@ class RuanganController extends Controller
         // Mengambil total ruangan
         $totalRuangan = Ruangan::count();
         // Menghitung jumlah ruangan yang tersedia
-        $ruanganTersedia = Ruangan::where('status', 'tersedia')->count();
+        // $ruanganTersedia = Ruangan::where('status', 'tersedia')->count();
         // Menghitung jumlah ruangan yang terpinjam
-        $ruanganTerpinjam = Ruangan::where('status', 'terpinjam')->count();
+        // $ruanganTerpinjam = Ruangan::where('status', 'terpinjam')->count();
 
         $datas = Ruangan::all();
-        return view('pages.admin.ruangan.index', compact('menu','submenu','totalRuangan', 'ruanganTersedia', 'ruanganTerpinjam', 'datas'));
+        return view('pages.admin.ruangan.index', compact('menu','submenu','totalRuangan','datas'));
     }
 
 
@@ -40,8 +40,6 @@ class RuanganController extends Controller
             'thumbnail' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Set default status to 'tersedia'
-        $validatedData['status'] = 'tersedia';
 
         // Handle thumbnail upload if file is provided
         if ($request->hasFile('thumbnail')) {
@@ -69,9 +67,6 @@ class RuanganController extends Controller
             'deskripsi' => 'nullable|string',
             'thumbnail' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
-
-        // Set default status to 'tersedia' (if status needs to remain unchanged)
-        $validatedData['status'] = $ruangan->status ?? 'tersedia';
 
         // Handle thumbnail upload if file is provided
         if ($request->hasFile('thumbnail')) {
