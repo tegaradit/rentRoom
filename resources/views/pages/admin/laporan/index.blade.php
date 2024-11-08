@@ -69,7 +69,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center alert alert-danger">Data Laporan masih Kosong</td>
+                            <td colspan="7" class="text-center alert alert-danger">Data Laporan masih Kosong</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -136,7 +136,8 @@
                     data.push(rowData);
                 }
 
-                // Menambahkan tabel ke PDF menggunakan autoTable
+
+                // Menambahkan tabel ke PDF menggunakan autoTable dengan auto-pagination
                 doc.autoTable({
                     head: [
                         ['No', 'Peminjam', 'Ruangan', 'Tanggal Peminjaman', 'Waktu Mulai', 'Waktu Selesai',
@@ -144,7 +145,7 @@
                         ]
                     ],
                     body: data,
-                    startY: 63,
+                    startY: 63, // Posisi awal tabel
                     theme: 'striped',
                     margin: {
                         top: 10
@@ -154,19 +155,42 @@
                     },
                     headStyles: {
                         halign: 'center'
-                    }
+                    },
+                    // pageBreak:'auto';
+                    // Halaman otomatis
+                    didDrawPage: function(data) {
+                        // Jika halaman baru, tambahkan kop surat di setiap halaman
+                        if (data.pageNumber > 1) {
+                            doc.addImage(imgBase64, 'PNG', 22, 10, 25, 25);
+                            doc.setFontSize(12);
+                            doc.setFont("times", "bold");
+                            centerText('PEMERINTAH PROVINSI JAWA TENGAH', 15, offsetX);
+                            centerText('DINAS PENDIDIKAN DAN KEBUDAYAAN', 21, offsetX);
+                            centerText('SEKOLAH MENENGAH KEJURUAN NEGERI 1 KEBUMEN', 27, offsetX);
+
+                            doc.setFontSize(11);
+                            doc.setFont("times", "normal");
+                            centerText(
+                                'Jalan Cemara No.37 Karangsari Kebumen Kode Pos 54351 Telepon 0287-381132',
+                                33, offsetX);
+                            centerText('Faksimile 0287-381132 Surat Elektronik: smkn1.kebumen@yahoo.com', 37,
+                                offsetX);
+
+                            const lineYPosition1 = 40; // Posisi Y untuk garis atas di halaman baru
+                            doc.setLineWidth(0.5); // Lebar garis pertama
+                            doc.line(20, lineYPosition1, pageWidth - 20,
+                            lineYPosition1); // Garis pertama (atas)
+                        }
+                    },
                 });
 
-                // Menambahkan tanda tangan di pojok kanan bawah
+                // Menambahkan tanda tangan di pojok kanan bawah halaman terakhir
                 const pageHeight = doc.internal.pageSize.height;
                 const signatureX = pageWidth - 70;
-
                 doc.setFontSize(12);
-                doc.text('Kebumen, ........................', pageWidth - 70, pageHeight -
-                67); // Posisi tanda tangan kanan bawah
+                doc.text('Kebumen, ........................', signatureX, pageHeight - 67);
                 doc.text('Mengetahui:', signatureX + 10, pageHeight - 60);
-                doc.text('(......................................)', signatureX + 0, pageHeight -
-                30); // Nama penanda tangan
+                doc.text('(......................................)', signatureX, pageHeight - 30);
 
                 // Simpan PDF
                 doc.save('Laporan_Peminjaman.pdf');
