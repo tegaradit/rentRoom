@@ -126,59 +126,10 @@
             doc.text('Laporan Peminjaman Ruangan', 105, 55, null, null, 'center')
 
             // Mengambil data tabel
-            // const data = JSON.parse('{!! $datas !!}').map((item, ix) => {
-            //     return [`${ix + 1}`, item.nama_peminjam, item.ruangan.nama_ruangan, item.tgl_peminjaman, item.waktu_mulai, item.waktu_selesai, item.keperluan]
-            // })
+            const data = JSON.parse('{!! $datas !!}').map((item, ix) => {
+                return [`${ix + 1}`, item.nama_peminjam, item.ruangan.nama_ruangan, item.tgl_peminjaman, item.waktu_mulai, item.waktu_selesai, item.keperluan]
+            })
 
-            const data = [
-                ['1', 'lklkmlkmqlkmlkml', 'indoor', '2024-01-03', '07:00:00', '11:00:00', 'kjnkjnjknk'],
-                ['2', 'knjkn', 'indoor', '2024-01-05', '07:00:00', '07:00:00', 'kjnjkn'],
-                ['3', 'kjjknkj', 'indoor', '2024-01-08', '07:00:00', '10:00:00', 'nkjnkjn'],
-                ['4', 'kjjnjk', 'indoor', '2024-01-05', '11:00:00', '11:00:00', 'knkjnkj'],
-                ['5', 'pak khabib', 'indoor', '2024-11-05', '07:00:00', '10:00:00', 'jhasdasdj'],
-                ['6', 'nugroho', 'ruang sidang', '2024-11-11', '07:00:00', '08:00:00', 'rapat'],
-                ['7', 'nugroho', 'ruang sidang', '2024-11-11', '11:00:00', '13:00:00', 'rapat'],
-                ['8', 'nugroho', 'tribun', '2024-11-08', '13:00:00', '13:00:00', 'kombel'],
-                ['9', 'nugroho', 'tribun', '2024-11-15', '13:00:00', '13:00:00', 'binroh'],
-                ['10', 'nugroho', 'tribun', '2024-11-22', '13:00:00', '13:00:00', 'kurikulum'],
-                ['11', 'nugroho', 'tribun', '2024-11-05', '07:00:00', '16:00:00', 'muk'],
-                ['12', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['13', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['14', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['15', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['16', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['17', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['18', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['19', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['20', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['21', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['22', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk'],
-                ['23', 'lkmlkmlmlm', 'ruang sidang', '2024-11-13', '08:26:26', '12:57:37', 'knjknjk']
-            ]
             // Menambahkan tabel ke PDF menggunakan autoTable dengan auto-pagination
             doc.autoTable({
                 head: [
