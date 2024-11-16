@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('data_peminjaman', function (Blueprint $table) {
                 $table->bigIncrements('id'); // Primary key 
                 $table->unsignedBigInteger('ruangan_id'); 
+                $table->enum('status', ['approved', 'pending', 'rejected']);
                 $table->string('nama_peminjam');
                 $table->date('tgl_peminjaman');
                 $table->time('waktu_mulai');

@@ -95,10 +95,18 @@
             <div class="modal-body">
                 <p><strong>Nama Peminjam:</strong> <span id="booking-user"></span></p>
                 <p><strong>Keperluan:</strong> <span id="booking-purpose"></span></p>
+                <p><strong>status:</strong> <span id="booking-status"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-danger" onclick="deleteBooking(bookingId)">Delete Booking</button>
+                <form action="{{ route('confirmBooking') }}" method="post" id="decision-form">
+                    @method('put')
+                    @csrf
+                    <input type="hidden" name="id" id="inpBookingId">
+                    <input type="submit" name="decision" class="btn btn-success" value="approved" />
+                    <input type="submit" name="decision" class="btn btn-warning" value="rejected" />
+                </form>
             </div>
         </div>
     </div>
@@ -133,14 +141,22 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script>
+    const inpBookingId = document.getElementById('inpBookingId');
     const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
     const bookedSlots = JSON.parse('{!! $peminjaman !!}');
     const colors = ["#FF6666", "#FFB266", "#FFDA66", "#66FF66", "#66FFDA", "#66B2FF", "#DA66FF", "#FF66B2"];
 
     function generateTable() {
-        const year = document.getElementById('year').value;
-        const month = String(document.getElementById('month').value).padStart(2, '0');
-        const roomId = document.getElementById('room').value;
+        const _year = document.getElementById('year');
+        const year = _year.value;
+
+        const _month = document.getElementById('month');
+        const month = String(_month.value).padStart(2, '0');
+
+        const _roomId = document.getElementById('room');
+        const roomId = _roomId.value;
+
+        localStorage.setItem('curenttime', JSON.stringify({ year: _year.selectedIndex, month: _month.selectedIndex, roomId: _roomId.selectedIndex }));
 
         const tbody = document.getElementById('schedule-body');
         tbody.innerHTML = '';
@@ -179,10 +195,20 @@
                 });
 
                 if (isBooked) {
-                    row += `<td colspan="${colspan}" class="time-slot booked" 
-                            style="background-color: ${slotColor};"
-                            onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id})">
+                    const status = {
+                        pending: { color: 'yellow', title: 'pendding' },
+                        approved: { color: 'green', title: 'diterima' },
+                        rejected: { color: 'red', title: 'ditolak' }
+                    }
+
+                    row += `
+                        <td 
+                            colspan="${colspan}" class="time-slot booked" 
+                            style="background-color: ${slotColor}; position: relative;"
+                            onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id}, '${bookingDetails.status}')"
+                        >
                             ${bookingDetails.user_name}
+                            <div style="position: absolute; right: .3rem; top: .3rem; border: solid white .5px; background-color: ${status[bookingDetails.status].color}; width: .75rem; height: .75rem; border-radius: 50%; cursor: pointer" title="${status[bookingDetails.status].title}"></div>
                         </td>`;
                     hour += colspan;
                 } else {
@@ -199,19 +225,18 @@
         }
     }
 
-    function showBookingDetails(namaPeminjam, keperluan, id) {
+    function showBookingDetails(namaPeminjam, keperluan, id, status) {
         document.getElementById('booking-user').textContent = namaPeminjam;
+        document.getElementById('booking-status').textContent = status;
         document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
-
+        document.getElementById('decision-form').style.display = status != 'pending' ? 'none' : 'block'
+        inpBookingId.value = id
         // Set delete button onclick to include the id
         document.querySelector('#showBookingModal .btn-danger').setAttribute('onclick', `deleteBooking(${id})`);
 
+
         $('#showBookingModal').modal('show');
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        generateTable();
-    });
 
     function deleteBooking(id) {
         if (!id) {
@@ -237,5 +262,17 @@
             });
         }
     }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const current_time = JSON.parse(localStorage.getItem('curenttime'))
+        // console.log(current_time)
+        if (current_time instanceof Object) {
+            document.getElementById('year').selectedIndex = current_time.year;
+            document.getElementById('month').selectedIndex = current_time.month;
+            document.getElementById('room').selectedIndex = current_time.roomId;
+        }
+
+        generateTable()
+    })
 </script>
 @endsection

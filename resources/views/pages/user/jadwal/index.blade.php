@@ -45,7 +45,8 @@
 
 <div class="container my-5">
     <h1>Jadwal Peminjaman Ruangan</h1>
-    <p class="text-warning"><strong>Perhatian:</strong> Peminjaman ruangan dilakukan per 1 jam. Misalnya, peminjaman mulai jam 7 akan selesai pada jam 7.59, dan jam 8 akan selesai pada jam 8.59.</p>
+    <p class="text-warning"><strong>Perhatian:</strong> Peminjaman ruangan dilakukan per 1 jam. Misalnya, peminjaman
+        mulai jam 7 akan selesai pada jam 7.59, dan jam 8 akan selesai pada jam 8.59.</p>
 
     <!-- Dropdown untuk memilih ruangan -->
     <div class="form-row mb-4">
@@ -53,7 +54,7 @@
             <label for="room">Pilih Ruangan:</label>
             <select id="room" class="form-control" onchange="generateTable()">
                 @foreach ($ruangan as $room)
-                <option value="{{ $room->id }}">{{ $room->nama_ruangan }}</option>
+                    <option value="{{ $room->id }}">{{ $room->nama_ruangan }}</option>
                 @endforeach
             </select>
         </div>
@@ -62,14 +63,14 @@
             <select id="year" class="form-control" onchange="generateTable()">
                 @for ($y = 2024; $y <= 2030; $y++)
                     <option value="{{ $y }}">{{ $y }}</option>
-                    @endfor
+                @endfor
             </select>
         </div>
         <div class="col">
             <label for="month">Pilih Bulan:</label>
             <select id="month" class="form-control" onchange="generateTable()">
                 @foreach (['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] as $index => $month)
-                <option value="{{ $index + 1 }}">{{ $month }}</option>
+                    <option value="{{ $index + 1 }}">{{ $month }}</option>
                 @endforeach
             </select>
         </div>
@@ -77,7 +78,8 @@
 
     <!-- Multi-select and Booking buttons -->
     <button id="multiSelectBtn" class="btn btn-primary mb-3" onclick="toggleMultiSelect()">Enable Multi-Select</button>
-    <button id="bookSelectedBtn" class="btn btn-success mb-3" onclick="showBookingModal()" style="display: none;">Book Selected</button>
+    <button id="bookSelectedBtn" class="btn btn-success mb-3" onclick="showBookingModal()" style="display: none;">Book
+        Selected</button>
 
     <table class="table table-bordered">
         <thead>
@@ -86,7 +88,7 @@
                 <th>Hari</th>
                 @for ($hour = 7; $hour <= 16; $hour++)
                     <th>{{ sprintf('%02d:00', $hour) }}</th>
-                    @endfor
+                @endfor
             </tr>
         </thead>
         <tbody id="schedule-body">
@@ -145,6 +147,7 @@
             <div class="modal-body">
                 <p><strong>nama peminjam:</strong> <span id="booking-user"></span></p>
                 <p><strong>keperluan:</strong> <span id="booking-purpose"></span></p>
+                <p><strong>status:</strong> <span id="booking-status"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -168,93 +171,102 @@
     let startSlot = null;
     let endSlot = null;
 
-    const bookedSlots = JSON.parse('{!! $peminjaman !!}');
+    const bookedSlots = JSON.parse(`{!! $peminjaman !!}`);
 
     function generateTable() {
-    const _year = document.getElementById('year');
-    const year = _year.value;
+        const _year = document.getElementById('year');
+        const year = _year.value;
 
-    const _month = document.getElementById('month');
-    const month = String(_month.value).padStart(2, '0');
-    
-    const _roomId = document.getElementById('room');
-    const roomId = _roomId.value;
-    
-    localStorage.setItem('curenttime', JSON.stringify({year: _year.selectedIndex, month: _month.selectedIndex, roomId: _roomId.selectedIndex}));
+        const _month = document.getElementById('month');
+        const month = String(_month.value).padStart(2, '0');
 
-    const tbody = document.getElementById('schedule-body');
-    tbody.innerHTML = '';
+        const _roomId = document.getElementById('room');
+        const roomId = _roomId.value;
 
-    const daysInMonth = new Date(year, month, 0).getDate();
-    const today = new Date(); // Tanggal saat ini
-    today.setHours(0, 0, 0, 0); // Set waktu ke awal hari
+        localStorage.setItem('curenttime', JSON.stringify({ year: _year.selectedIndex, month: _month.selectedIndex, roomId: _roomId.selectedIndex }));
 
-    for (let day = 1; day <= daysInMonth; day++) {
-        const dayFormatted = String(day).padStart(2, '0');
-        const date = new Date(year, month - 1, day);
-        const dayOfWeek = days[date.getDay()];
+        const tbody = document.getElementById('schedule-body');
+        tbody.innerHTML = '';
 
-        let row = `<tr>
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const today = new Date(); // Tanggal saat ini
+        today.setHours(0, 0, 0, 0); // Set waktu ke awal hari
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayFormatted = String(day).padStart(2, '0');
+            const date = new Date(year, month - 1, day);
+            const dayOfWeek = days[date.getDay()];
+
+            let row = `<tr>
             <td>${dayFormatted}/${month}/${year}</td>
             <td>${dayOfWeek}</td>`;
 
-        let hour = 7;
-        while (hour <= 16) {
-            let isBooked = false;
-            let bookingDetails = null;
-            let slotColor = "#f0f0f0"; // Default color for available slots
-            let colspan = 1;
+            let hour = 7;
+            while (hour <= 16) {
+                let isBooked = false;
+                let bookingDetails = null;
+                let slotColor = "#f0f0f0"; // Default color for available slots
+                let colspan = 1;
 
-            bookedSlots.forEach((slot, index) => {
-                if (
-                    slot.ruangan_id == roomId &&
-                    slot.tanggal === `${year}-${month}-${dayFormatted}` &&
-                    parseInt(slot.jam_mulai) <= hour &&
-                    parseInt(slot.jam_selesai) >= hour
-                ) {
-                    isBooked = true;
-                    bookingDetails = slot;
-                    slotColor = colors[index % colors.length]; // Use color based on index
-                    colspan = parseInt(slot.jam_selesai) - parseInt(slot.jam_mulai) + 1;
-                }
-            });
+                bookedSlots.forEach((slot, index) => {
+                    if (
+                        slot.ruangan_id == roomId &&
+                        slot.tanggal === `${year}-${month}-${dayFormatted}` &&
+                        parseInt(slot.jam_mulai) <= hour &&
+                        parseInt(slot.jam_selesai) >= hour
+                    ) {
+                        isBooked = true;
+                        bookingDetails = slot;
+                        slotColor = colors[index % colors.length]; // Use color based on index
+                        colspan = parseInt(slot.jam_selesai) - parseInt(slot.jam_mulai) + 1;
+                    }
+                });
 
-            if (isBooked) {
-                // Jika sudah dibooking, tampilkan dengan warna sesuai
-                row += `<td colspan="${colspan}" class="time-slot booked" 
-                            style="background-color: ${slotColor};"
-                            onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id})">
+                if (isBooked) {
+                    const status = {
+                        pending: { color: 'yellow', title: 'pendding' },
+                        approved: { color: 'green', title: 'diterima' },
+                        rejected: { color: 'red', title: 'ditolak' }
+                    }
+                    // Jika sudah dibooking, tampilkan dengan warna sesuai
+                    row += `
+                        <td 
+                            colspan="${colspan}" class="time-slot booked" 
+                            style="background-color: ${slotColor}; position: relative;"
+                            onclick="showBookingDetails('${bookingDetails.user_name}', '${bookingDetails.keperluan}', ${bookingDetails.id}, '${bookingDetails.status}')"
+                        >
                             ${bookingDetails.user_name}
+                            <div style="position: absolute; right: .3rem; top: .3rem; border: solid white 1px; background-color: ${status[bookingDetails.status].color}; width: .75rem; height: .75rem; border-radius: 50%; cursor: pointer" title="${status[bookingDetails.status].title}"></div>
                         </td>`;
-                hour += colspan; // Lewati jam yang sudah dibooking
-            } else {
-                // Cek apakah tanggal adalah tanggal di bawah hari ini
-                const isPastDate = date < today;
-
-                if (isPastDate) {
-                    // Jika tanggal sudah lewat, tampilkan slot dengan warna abu-abu dan non-klik
-                    const slotTime = `${hour}:00 - ${hour}:59`;
-                    const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
-                    row += `<td id="${timeSlotId}" class="time-slot" style="background-color: #d3d3d3; cursor: not-allowed;" title="Tanggal ini tidak dapat dibooking.">
-                                ${slotTime}
-                            </td>`;
-                    hour++; // Lanjutkan ke jam berikutnya
+                    hour += colspan; // Lewati jam yang sudah dibooking
                 } else {
-                    // Tampilkan slot yang dapat dibooking
-                    const slotTime = `${hour}:00 - ${hour}:59`;
-                    const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
-                    row += `<td id="${timeSlotId}" class="time-slot" onclick="selectTimeSlot('${timeSlotId}')">
+                    // Cek apakah tanggal adalah tanggal di bawah hari ini
+                    const isPastDate = date < today;
+
+                    if (isPastDate) {
+                        // Jika tanggal sudah lewat, tampilkan slot dengan warna abu-abu dan non-klik
+                        const slotTime = `${hour}:00 - ${hour}:59`;
+                        const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
+                        row += `<td id="${timeSlotId}" class="time-slot" style="background-color: #d3d3d3; cursor: not-allowed;" title="Tanggal ini tidak dapat dibooking.">
                                 ${slotTime}
                             </td>`;
-                    hour++;
+                        hour++; // Lanjutkan ke jam berikutnya
+                    } else {
+                        // Tampilkan slot yang dapat dibooking
+                        const slotTime = `${hour}:00 - ${hour}:59`;
+                        const timeSlotId = `${dayFormatted}-${month}-${year}-${hour}`;
+                        row += `<td id="${timeSlotId}" class="time-slot" onclick="selectTimeSlot('${timeSlotId}')">
+                                ${slotTime}
+                            </td>`;
+                        hour++;
+                    }
                 }
             }
-        }
 
-        row += '</tr>';
-        tbody.innerHTML += row;
+            row += '</tr>';
+            tbody.innerHTML += row;
+        }
     }
-}
 
 
     function toggleMultiSelect() {
@@ -366,8 +378,9 @@
         document.getElementById('selected_dates').value = JSON.stringify(selectedTimeSlots);
     }
 
-    function showBookingDetails(namaPeminjam, keperluan) {
+    function showBookingDetails(namaPeminjam, keperluan, id, status) {
         document.getElementById('booking-user').textContent = namaPeminjam;
+        document.getElementById('booking-status').textContent = status;
         document.getElementById('booking-purpose').textContent = keperluan || "Tidak ada keperluan yang tercatat";
         $('#showBookingModal').modal('show');
     }

@@ -61,4 +61,5 @@ Route::post('/user/peminjaman/store', [jadwalController::class, 'store'])->name(
 
 Route::get('admin/peminjaman/',[jadwalController::class, 'indexAdmin'])->name('peminjamanAdmin.index')->middleware(RouterGuard::class);
 Route::post('/admin/peminjaman/store', [jadwalController::class, 'storeAdmin'])->name('peminjamanAdmin.store')->middleware(RouterGuard::class);
+Route::put('/admin/confirmBooking', [jadwalController::class, 'confirmBooking'])->name('confirmBooking')->middleware(RouterGuard::class);
 Route::delete('/admin/peminjaman/{id}', [jadwalController::class, 'destroy'])->name('peminjamanAdmin.delete')->middleware(RouterGuard::class);

@@ -14,12 +14,14 @@ class jadwalController extends Controller
     {
         $ruangan = Ruangan::all(); // Pastikan model Ruangan sesuai dengan nama model Anda
         $peminjaman = data_peminjaman::all([
+            "id",
+            "status",
             "tgl_peminjaman AS tanggal", 
             "waktu_mulai AS jam_mulai", 
             "waktu_selesai AS jam_selesai",
             "ruangan_id AS ruangan_id", 
             "nama_peminjam AS user_name",
-            "keperluan AS keperluan",
+            "keperluan AS keperluan"
         ]);
         // ->toJson(); // Pastikan model Peminjaman sesuai dengan nama model Anda
     
@@ -30,6 +32,7 @@ class jadwalController extends Controller
         $ruangan = Ruangan::all(); // Pastikan model Ruangan sesuai dengan nama model Anda
         $peminjaman = data_peminjaman::all([
             "id",
+            "status",
             "tgl_peminjaman AS tanggal", 
             "waktu_mulai AS jam_mulai", 
             "waktu_selesai AS jam_selesai",
@@ -64,27 +67,27 @@ class jadwalController extends Controller
         $endtTime = null;
         $_dateTimeParts = explode('-', $dateTimeParts[0]);
         $date = \Carbon\Carbon::createFromFormat('d-m-Y', "{$_dateTimeParts[0]}-{$_dateTimeParts[1]}-{$_dateTimeParts[2]}")->format('Y-m-d');
+        
         if ($dateTimeParts > 1) {
             $startTime = explode('-', $dateTimeParts[0])[3] . ":00:00";
             $endtTime = explode('-', $dateTimeParts[count($dateTimeParts) - 1])[3] . ":00:00";
         } else {
-
             $startTime = explode('-', $dateTimeParts[0])[3] . ":00:00";
             $endtTime = (int)$startTime + 1 . ":00:00";
         }
-        // return [$startTime, $endtTime];
+
         // Validate the remaining fields
         $validatedData = $request->validate([
             'user_name' => 'required|string',
             'room_id' => 'required|integer|exists:ruangan,id',
             'keperluan' => 'nullable|string',
         ]);
-        
+
         // Add `tanggal`, `jam_mulai`, and `jam_selesai` to the validated data array
         $validatedData['tanggal'] = $date;
         $validatedData['jam_mulai'] = $startTime;
         $validatedData['jam_selesai'] = $endtTime;
-        
+
         // return $validatedData;
         // Save the data to the database
         data_peminjaman::create([
@@ -93,11 +96,27 @@ class jadwalController extends Controller
             'tgl_peminjaman' => $validatedData['tanggal'],
             'waktu_mulai' => $validatedData['jam_mulai'],
             'waktu_selesai' => $validatedData['jam_selesai'],
+            'status' => 'pending',
             'keperluan' => $validatedData['keperluan'],
         ]);
     
         // Redirect with success message
         return redirect()->back()->with('success', 'Peminjaman berhasil disimpan');
+    }
+
+    public function confirmBooking (Request $request) {
+        // return $request->all();
+        $request->validate([
+            'id' => 'required',
+            'decision' => 'required|in:approved,rejected'
+        ]);
+
+        $id = $request->id;
+        $decision = $request->decision;
+
+        data_peminjaman::findOrFail($id)->update(['status' => $decision]);
+
+        return redirect()->back();
     }
 
     public function storeAdmin(Request $request)
