@@ -143,7 +143,7 @@
 <script>
     const inpBookingId = document.getElementById('inpBookingId');
     const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    const bookedSlots = JSON.parse('{!! $peminjaman !!}');
+    const bookedSlots = JSON.parse(`{!! $peminjaman !!}`);
     const colors = ["#FF6666", "#FFB266", "#FFDA66", "#66FF66", "#66FFDA", "#66B2FF", "#DA66FF", "#FF66B2"];
 
     function generateTable() {
