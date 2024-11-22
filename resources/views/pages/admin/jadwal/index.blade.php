@@ -184,7 +184,8 @@
                         slot.ruangan_id == roomId &&
                         slot.tanggal === `${year}-${month}-${dayFormatted}` &&
                         parseInt(slot.jam_mulai) <= hour &&
-                        parseInt(slot.jam_selesai) >= hour
+                        parseInt(slot.jam_selesai) >= hour &&
+                        slot.status && slot.status != 'rejected'
                     ) {
                         isBooked = true;
                         bookingDetails = slot;
